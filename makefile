@@ -2,16 +2,16 @@ CC = g++
 
 all : main
 
-main : lexical.o Term.o preprocess.o 
+main : bin/lexical.o bin/Term.o bin/preprocess.o 
 	$(CC) -o $@ $^
 	
-lexical.o : lexical.cpp
+bin/lexical.o : src/lexical.cpp
 	$(CC) -o $@ -c $^
 	
-preprocess.o : preprocess.cpp
+bin/preprocess.o : src/preprocess.cpp
 	$(CC) -o $@ -c $^
 
-Term.o : Term.cpp
+bin/Term.o : src/Term.cpp
 	$(CC) -o $@ -c $^
 	
 
