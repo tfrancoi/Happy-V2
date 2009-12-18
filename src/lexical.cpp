@@ -32,24 +32,27 @@ int main(int argc, char** argv) {
 	vector<string> directive;
 	while ((c = is.get()) != -1)  {
 
-		if(isSpace(c)) {
+		if(isSpace(c) || isBrackets(c) != -1) {
 			//cout << temp << " | ";
-			if(c== '\n') {
-				//cout << c;
-				cout << file << " at line " << line << ": ";
+			if(c== '\n') {		
+				cout << c;
 				line++;
+				
+				
 			}
+			
 			int d = isPreprocessorDir(temp);
 			if(d == -1) {
 				if(directive[0] == "begin") {
 					lines.push(&line);
 					files.push(&file);
 					file = directive[1];
-					line = 0;
+					line = 1;
 				}
 				if(directive[0] == "end") {
 					line = *(lines.pop());
 					file = *(files.pop());
+					line--;
 				}
 				directive = vector<string>();
 				dir = 0;
@@ -61,20 +64,26 @@ int main(int argc, char** argv) {
 				if(dir) {
 					directive.push_back(temp);
 				}
+				else if(temp != "") {
+					cout << file << " - " << line << ": " << temp << " ";
+				}
 				//fait les trucs utiles
 			}
 			temp = "";
-		}
-		else if(isBrackets(c) != -1) {
-			cout << endl <<"brackets" << c << endl;
-			if(c == '(') {
-				cout << ++level << endl;
+			
+			if(isBrackets(c) != -1) {
+				cout << file << " - " << line << ": " << c << " ";
+				if(c == '(') {
+					++level;
+				}
+				else {
+					--level;
+				}
+				Term t("" + c, "" + c);
 			}
-			else {
-				cout << --level << endl;
-			}
-			Term t("" + c, "" + c);
 		}
+		
+
 		else {
 			//cout << (int) c << "  " << c << endl;
 			temp = temp + c;
@@ -83,12 +92,11 @@ int main(int argc, char** argv) {
 	}
 
   is.close();           // close file
-  Term t("salut", "id");
+  /*Term t("salut", "id");
   cout << t.getValue() << endl;
-  int a = 7;
   Stack<Term>* st = new Stack<Term>();
   st->push(&t);
-  cout << st->pop()->getValue() << endl;
+  cout << st->pop()->getValue() << endl;*/
   return 0;
 
 }
