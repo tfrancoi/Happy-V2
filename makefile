@@ -1,17 +1,18 @@
 CC = g++
-
+BIN = bin/
+SRC = src/
 all : main
 
-main : bin/lexical.o bin/Term.o bin/preprocess.o 
+main : $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o 
 	$(CC) -o $@ $^
 	
-bin/lexical.o : src/lexical.cpp
+$(BIN)lexical.o : $(SRC)lexical.cpp
 	$(CC) -o $@ -c $^
 	
-bin/preprocess.o : src/preprocess.cpp
+$(BIN)preprocess.o : $(SRC)preprocess.cpp
 	$(CC) -o $@ -c $^
 
-bin/Term.o : src/Term.cpp
+$(BIN)Term.o : $(SRC)Term.cpp
 	$(CC) -o $@ -c $^
 	
 
@@ -19,4 +20,4 @@ bin/Term.o : src/Term.cpp
 
 	
 clean:
-	rm -rf *.o
+	rm -rf $(BIN)/*.o

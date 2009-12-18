@@ -5,6 +5,7 @@
 
 class Term {
 		public :
+			Term();
 			Term(std::string value, std::string type);
 			~Term();
 			std::string getType();

@@ -1,6 +1,12 @@
 #include "Term.h"
 using namespace std;
 
+Term::Term() {
+	this->value = "";
+	this->type = "empty";
+}
+	
+
 Term::Term(string value, string type) {
 	this->value = value;
 	this->type = type;
