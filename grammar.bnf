@@ -1,0 +1,9 @@
+<Comment> --> 'esp' [! 'esp' <String> 'esp' !] 'esp'
+<Directive> --> 'esp' [# 'esp' <Dir_Name> 'esp' <Dir_Args_list>  'esp' '#]' 'esp'
+<Dir_Args_list> --> <String> | <String> 'esp' <Dir_Args_list>  
+
+
+<Programme> --> <Instr>
+<Instr>		--> <Block> | <If> | <While> | <Call> | <Assignement>
+<Block>		--> '(' <List> ')'
+<List>		--> <Instr> | <Instr> <List>
