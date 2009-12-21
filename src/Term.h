@@ -2,12 +2,21 @@
 #define TERM_H
 
 #include <string>
+#include <vector>
+
 
 class Term {
+	public :
+		virtual int isTerminal();	
+};
+
+
+class TTerm : public Term {
 		public :
-			Term();
-			Term(std::string value, std::string type);
-			~Term();
+			TTerm();
+			TTerm(std::string value, std::string type);
+			int isTerminal();
+			~TTerm();
 			std::string getType();
 			std::string getValue();
 			
@@ -17,18 +26,18 @@ class Term {
 		
 };
 
-/*
-class TList : public Term {
+
+class LTerm : public Term {
 	public :
-		TList();
-		~TList();
+		LTerm();
+		~LTerm();
 		void add(Term t);
 		int size();
 		Term operator[](int i);
 	private :
-		vector<Term> list;
+		std::vector<Term> list;
  
 };
-*/
+
 
 #endif

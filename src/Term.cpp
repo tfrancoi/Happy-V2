@@ -1,24 +1,32 @@
 #include "Term.h"
 using namespace std;
 
-Term::Term() {
+int Term::isTerminal() {
+	return 0;
+}
+
+TTerm::TTerm() {
 	this->value = "";
 	this->type = "empty";
 }
 	
 
-Term::Term(string value, string type) {
+TTerm::TTerm(string value, string type) {
 	this->value = value;
 	this->type = type;
 }
 			
-Term::~Term() {}
+TTerm::~TTerm() {}
 
-string Term::getType() {
+int TTerm::isTerminal() {
+	return 1;
+}
+
+string TTerm::getType() {
 	return this->type;
 }
 			
-string Term::getValue() {
+string TTerm::getValue() {
 	return this->value;
 }
 			

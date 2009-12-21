@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 		if(c == '"') {
 			str = 1 - str;
 			if(!str) { //on vient de finir un string on crée le term
-				Term t("string", temp);
+				TTerm t("string", temp);
 			}
 		} 
 		else if(str) {
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 				else {
 					--level;
 				}
-				Term t("" + c, "" + c);
+				TTerm t("" + c, "" + c);
 			}
 		}
 		
