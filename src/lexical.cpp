@@ -26,19 +26,27 @@ int main(int argc, char** argv) {
 
 	int dir = 0; //indique si on est dans une directive
 	int line = 1; //on démarre à la première ligne
+	int str = 0;
 	string file = argv[1];
 	Stack<int> lines = Stack<int>();
 	Stack<string> files = Stack<string>(); //on est dans le fichier d'origine
 	vector<string> directive;
 	while ((c = is.get()) != -1)  {
 
-		if(isSpace(c) || isBrackets(c) != -1) {
+		if(c == '"') {
+			str = 1 - str;
+			if(!str) { //on vient de finir un string on crée le term
+				Term t("string", temp);
+			}
+		} 
+		else if(str) {
+			temp = temp + c;
+		}
+		else if(isSpace(c) || isBrackets(c) != -1) {
 			//cout << temp << " | ";
 			if(c== '\n') {		
 				cout << c;
-				line++;
-				
-				
+				line++;				
 			}
 			
 			int d = isPreprocessorDir(temp);
@@ -92,11 +100,7 @@ int main(int argc, char** argv) {
 	}
 
   is.close();           // close file
-  /*Term t("salut", "id");
-  cout << t.getValue() << endl;
-  Stack<Term>* st = new Stack<Term>();
-  st->push(&t);
-  cout << st->pop()->getValue() << endl;*/
+  
   return 0;
 
 }

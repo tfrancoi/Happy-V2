@@ -3,7 +3,21 @@
 <Dir_Args_list> --> <String> | <String> 'esp' <Dir_Args_list>  
 
 
-<Programme> --> <Instr>
+<Programme> 	--> <Instr>
 <Instr>		--> <Block> | <If> | <While> | <Call> | <Assignement>
 <Block>		--> '(' <List> ')'
 <List>		--> <Instr> | <Instr> <List>
+
+
+
+
+
+
+
+<String>					--> '"' <Suite_caractère> '"'
+<Suite_caractère> --> <Caractère> | <Caractère> <Suite_caractère>
+<Caractère>				--> 'a-z' | 'A-Z' | ...
+
+
+<Reserved_char>  	--> '(' | ')' | '"'
+<Reserved_word> 	--> '[!' | '!]' | '[#' | '#]'

@@ -17,4 +17,18 @@ class Term {
 		
 };
 
+/*
+class TList : public Term {
+	public :
+		TList();
+		~TList();
+		void add(Term t);
+		int size();
+		Term operator[](int i);
+	private :
+		vector<Term> list;
+ 
+};
+*/
+
 #endif
