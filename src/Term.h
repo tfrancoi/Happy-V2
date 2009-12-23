@@ -8,14 +8,16 @@
 class Term {
 	public :
 		virtual int isTerminal();	
+		virtual void print();
 };
 
 
 class TTerm : public Term {
 		public :
+			virtual int isTerminal();	
+			virtual void print();
 			TTerm();
 			TTerm(std::string value, std::string type);
-			int isTerminal();
 			~TTerm();
 			std::string getType();
 			std::string getValue();
@@ -29,13 +31,15 @@ class TTerm : public Term {
 
 class LTerm : public Term {
 	public :
+		virtual int isTerminal();	
+		virtual void print();
 		LTerm();
 		~LTerm();
-		void add(Term t);
+		void add(Term *t);
 		int size();
-		Term operator[](int i);
+		Term* operator[](unsigned int i);
 	private :
-		std::vector<Term> list;
+		std::vector<Term*> list;
  
 };
 

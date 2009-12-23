@@ -31,6 +31,10 @@ int main(int argc, char** argv) {
 	Stack<int> lines = Stack<int>();
 	Stack<string> files = Stack<string>(); //on est dans le fichier d'origine
 	vector<string> directive;
+	
+	Stack<LTerm> term_stack = Stack<LTerm>();
+	
+	LTerm *cur = new LTerm();
 	while ((c = is.get()) != -1)  {
 
 		if(c == '"') {
@@ -82,12 +86,21 @@ int main(int argc, char** argv) {
 			if(isBrackets(c) != -1) {
 				cout << file << " - " << line << ": " << c << " ";
 				if(c == '(') {
+					LTerm *t = new LTerm();
+					cur->add(t);
+					term_stack.push(cur);
+					cur = t;
+					cur->add(new TTerm("" + c, "" + c));
+					
 					++level;
 				}
 				else {
+					cur->add(new TTerm("" + c, "" + c));
+					cur = term_stack.pop();
 					--level;
 				}
-				TTerm t("" + c, "" + c);
+				
+				
 			}
 		}
 		
