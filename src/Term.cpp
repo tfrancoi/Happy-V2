@@ -1,11 +1,14 @@
 #include "Term.h"
+#include <iostream>
 using namespace std;
 
 int Term::isTerminal() {
 	return 0;
 }
 
-void Term::print() {}
+void Term::print() {
+		cout << "erreur" << endl;	
+}
 
 TTerm::TTerm() {
 	this->value = "";
@@ -20,7 +23,9 @@ TTerm::TTerm(string value, string type) {
 			
 TTerm::~TTerm() {}
 
-void TTerm::print() {}
+void TTerm::print() {
+		cout << "value : " << this->value << "; " << endl;
+}
 
 int TTerm::isTerminal() {
 	return 1;
@@ -56,7 +61,11 @@ int LTerm::size() {
 }
 
 void LTerm::print() {
-	
+	cout << "( " ;	
+	for(int i = 0; i < list.size(); i++) {
+		list[i]->print();
+	}
+	cout << " )";
 }
 
 

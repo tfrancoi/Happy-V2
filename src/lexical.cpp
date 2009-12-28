@@ -111,6 +111,7 @@ int main(int argc, char** argv) {
 		}    // get character from file
 
 	}
+	cur->print();
 
   is.close();           // close file
   
