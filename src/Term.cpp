@@ -2,11 +2,17 @@
 #include <iostream>
 using namespace std;
 
+void indent(int level) {
+	for(int i = 0; i < level; i++) {
+		cout << ".  ";
+	}
+}
+
 int Term::isTerminal() {
 	return 0;
 }
 
-void Term::print() {
+void Term::print(int level) {
 		cout << "erreur" << endl;	
 }
 
@@ -23,8 +29,9 @@ TTerm::TTerm(string value, string type) {
 			
 TTerm::~TTerm() {}
 
-void TTerm::print() {
-		cout << "value : " << this->value << "; " << endl;
+void TTerm::print(int level) {
+	  indent(level);
+		cout << "value : " << this->value << endl ;
 }
 
 int TTerm::isTerminal() {
@@ -60,12 +67,14 @@ int LTerm::size() {
 	
 }
 
-void LTerm::print() {
-	cout << "( " ;	
+void LTerm::print(int level) {
+	indent(level);
+	cout << "[" << endl;	
 	for(int i = 0; i < list.size(); i++) {
-		list[i]->print();
+		list[i]->print(level+1);
 	}
-	cout << " )";
+	indent(level);
+	cout << "]" << endl;
 }
 
 

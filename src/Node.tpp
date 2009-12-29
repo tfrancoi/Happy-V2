@@ -10,13 +10,13 @@
 
 template <class T>
 Node<T>::Node(T* element) {
-	this->element = *element;
+	this->element = element;
 	this->next = NULL;
 }
 
 template <class T>
 Node<T>::Node(T* element, Node* next) {
-	this->element = *element;
+	this->element = element;
 	this->next = next;
 }
 
@@ -29,12 +29,12 @@ void Node<T>::setNext(Node* next) {
 
 template <class T>
 T* Node<T>::getElement() {
-	return &element;
+	return element;
 }
 
 template <class T>
 void Node<T>::setElement(T* element) {
-	this->element = *element;
+	this->element = element;
 }
 
 template <class T>

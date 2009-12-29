@@ -1,6 +1,4 @@
+[# include test2.ha #]
+(fun (main argv) (write 42))
+	
 
-( 
-	
-	(fun (main argv) (write 42))
-	
-)

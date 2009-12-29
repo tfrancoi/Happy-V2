@@ -28,19 +28,19 @@ int main(int argc, char** argv) {
 	int line = 1; //on démarre à la première ligne
 	int str = 0;
 	string file = argv[1];
-	Stack<int> lines = Stack<int>();
-	Stack<string> files = Stack<string>(); //on est dans le fichier d'origine
+	vector<int> lines = vector<int>();
+	vector<string> files = vector<string>(); //on est dans le fichier d'origine
 	vector<string> directive;
 	
-	Stack<LTerm> term_stack = Stack<LTerm>();
-	
+	Stack<LTerm> term_stack = Stack<LTerm>();	
 	LTerm *cur = new LTerm();
 	while ((c = is.get()) != -1)  {
 
 		if(c == '"') {
 			str = 1 - str;
 			if(!str) { //on vient de finir un string on crée le term
-				TTerm t("string", temp);
+				cur->add(new TTerm(temp, "string"));
+				temp = "";
 			}
 		} 
 		else if(str) {
@@ -49,21 +49,23 @@ int main(int argc, char** argv) {
 		else if(isSpace(c) || isBrackets(c) != -1) {
 			//cout << temp << " | ";
 			if(c== '\n') {		
-				cout << c;
+				//cout << c;
 				line++;				
 			}
 			
 			int d = isPreprocessorDir(temp);
 			if(d == -1) {
 				if(directive[0] == "begin") {
-					lines.push(&line);
-					files.push(&file);
+					lines.push_back(line);
+					files.push_back(file);
 					file = directive[1];
 					line = 1;
 				}
 				if(directive[0] == "end") {
-					line = *(lines.pop());
-					file = *(files.pop());
+					line = lines.back();
+					lines.pop_back();
+					file = files.back();
+					files.pop_back();
 					line--;
 				}
 				directive = vector<string>();
@@ -77,25 +79,28 @@ int main(int argc, char** argv) {
 					directive.push_back(temp);
 				}
 				else if(temp != "") {
-					cout << file << " - " << line << ": " << temp << " ";
+					cur->add(new TTerm(temp, "autre"));
+					//cout << file << " - " << line << ": " << temp << " ";
 				}
 				//fait les trucs utiles
 			}
 			temp = "";
 			
 			if(isBrackets(c) != -1) {
-				cout << file << " - " << line << ": " << c << " ";
+				//cout << file << " - " << line << ": " << c << " ";
 				if(c == '(') {
 					LTerm *t = new LTerm();
+					
 					cur->add(t);
 					term_stack.push(cur);
 					cur = t;
-					cur->add(new TTerm("" + c, "" + c));
+					//cur->add(new TTerm(string(1, c), string(1, c)));
+					//cur->print();
 					
 					++level;
 				}
 				else {
-					cur->add(new TTerm("" + c, "" + c));
+					//cur->add(new TTerm(string(1, c), string(1, c)));
 					cur = term_stack.pop();
 					--level;
 				}
@@ -111,7 +116,7 @@ int main(int argc, char** argv) {
 		}    // get character from file
 
 	}
-	cur->print();
+	cur->print(0);
 
   is.close();           // close file
   

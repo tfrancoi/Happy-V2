@@ -18,7 +18,7 @@ public:
 	void setElement(T* element);
 	~Node();
 private :
-	T element;
+	T* element;
 	Node<T>* next;
 };
 

@@ -8,14 +8,14 @@
 class Term {
 	public :
 		virtual int isTerminal();	
-		virtual void print();
+		virtual void print(int level);
 };
 
 
 class TTerm : public Term {
 		public :
 			virtual int isTerminal();	
-			virtual void print();
+			virtual void print(int level);
 			TTerm();
 			TTerm(std::string value, std::string type);
 			~TTerm();
@@ -32,7 +32,7 @@ class TTerm : public Term {
 class LTerm : public Term {
 	public :
 		virtual int isTerminal();	
-		virtual void print();
+		virtual void print(int level);
 		LTerm();
 		~LTerm();
 		void add(Term *t);
