@@ -3,11 +3,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <typeinfo>
 
 #include "lexical.h"
 #include "Stack.h"
 #include "Term.h"
 #include "preprocess.h"
+
 
 
 using namespace std;
@@ -79,7 +81,9 @@ int main(int argc, char** argv) {
 					directive.push_back(temp);
 				}
 				else if(temp != "") {
-					cur->add(new TTerm(temp, "autre"));
+					string *type = new string();
+					analyseTerm(temp, type);
+					cur->add(new TTerm(temp, *type));
 					//cout << file << " - " << line << ": " << temp << " ";
 				}
 				//fait les trucs utiles
@@ -117,11 +121,13 @@ int main(int argc, char** argv) {
 
 	}
 	cur->print(0);
-
+	cout << (typeid(*cur) == typeid(LTerm)) << endl; 
+	
+	cur->print(0);
   is.close();           // close file
   
   return 0;
-
+	
 }
 
 bool isSpace(const char c) {
@@ -136,4 +142,86 @@ char isBrackets(const char c) {
 		return c;
 	}
 	return (char) -1;
+}
+
+char digit[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+string reserved_word[] = {"fun", "if", "while", "set"};
+
+bool contain(char c , char* tab, int size) {
+	for(int i = 0; i < size; i++) {
+		if(c == tab[i]) {
+			return true;
+		}
+	}	
+	return false;
+}
+
+bool contain(string c , string tab[], int size) {
+	for(int i = 0; i < size; i++) {
+		if(c == tab[i]) {
+			return true;
+		}
+	}	
+	return false;
+}
+
+int analyseTerm(const string value, string* type) {
+	//check if it's a number
+	if(contain(value[0], digit, 10)) {
+		int floating = 0;
+		int number = 1; 
+		for(int i = 1; i < value.size(); i++) {
+			if(value[i] == ',') { 
+				floating++;
+			}
+			else {
+				if(!contain(value[i], digit, 10)) {
+					number=0;
+				}
+			}
+				
+			
+		}
+		if(number && floating == 1) {
+			type->append("float");
+			cout << "float " << value << endl;
+			return 0;
+		}
+		if(number && floating == 0) {
+			type->append("int");
+			cout << "int " << value << endl;
+			return 0;
+		}
+		cout << "id  " << value << endl;
+	}	
+	if(contain(value, reserved_word, 4)) {
+		type->append(value);
+		return 0;
+	}
+	type->append("id");
+	return 0;
+}
+
+Term* simplify(Term *t) {
+	if(typeid(TTerm) == typeid(*t)) {
+		return t;
+	}
+	
+	LTerm *cur = dynamic_cast<LTerm*> (t);
+	Term* c = cur->flatten();
+	
+	if(typeid(TTerm) == typeid(*c)) {
+		return c;
+	}
+	
+	LTerm *cur1 = dynamic_cast<LTerm*> (c);
+	reduce(cur1);
+	return cur1;
+}
+
+
+void reduce(LTerm *tree) {
+	for(int i = 0; i < tree->size(); i++) {
+			tree->set(i, simplify((*tree)[i]));
+	}
 }

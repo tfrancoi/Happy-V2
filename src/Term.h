@@ -38,6 +38,8 @@ class LTerm : public Term {
 		void add(Term *t);
 		int size();
 		Term* operator[](unsigned int i);
+		void set(unsigned int i, Term* t);
+		Term* flatten();
 	private :
 		std::vector<Term*> list;
  

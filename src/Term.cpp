@@ -1,5 +1,6 @@
 #include "Term.h"
 #include <iostream>
+#include <typeinfo>
 using namespace std;
 
 void indent(int level) {
@@ -31,7 +32,7 @@ TTerm::~TTerm() {}
 
 void TTerm::print(int level) {
 	  indent(level);
-		cout << "value : " << this->value << endl ;
+		cout << "type : " << this->type << "; value : " << this->value << endl ;
 }
 
 int TTerm::isTerminal() {
@@ -83,5 +84,26 @@ Term* LTerm::operator[] (unsigned int i) {
 		return new TTerm("error", "out of bound");
 	else 
 		return list[i];
+}
+
+
+Term* LTerm::flatten() {
+	if(list.size() > 1) {
+		return this;
+	}
+	
+	//si on a affaire un atom
+	if(typeid(TTerm) == typeid(*list[0])) {
+		return list[0];
+	}
+	
+	LTerm *cur = dynamic_cast<LTerm*> (list[0]);
+	return cur->flatten();
+	
+}
+
+void LTerm::set(unsigned int i, Term* t) {
+	list[i] = t;
+	
 }
 
