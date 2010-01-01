@@ -121,9 +121,9 @@ int main(int argc, char** argv) {
 
 	}
 	cur->print(0);
-	cout << (typeid(*cur) == typeid(LTerm)) << endl; 
 	
-	cur->print(0);
+	
+	reduce(cur);
   is.close();           // close file
   
   return 0;
