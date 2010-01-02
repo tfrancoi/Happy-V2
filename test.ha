@@ -1,5 +1,8 @@
 [! include test2.ha !]
 (
-(fun (main argv) (write 42,768979))
+	("salut \" \\ les " )
+	(fun (main argv) ((write 42,768979)))
+	(\-: "salut")
 )
+
 

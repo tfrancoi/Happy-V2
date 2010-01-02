@@ -20,19 +20,24 @@ void Term::print(int level) {
 TTerm::TTerm() {
 	this->value = "";
 	this->type = "empty";
+	this->file = "unknown";
+	this->line = 0;
 }
 	
 
-TTerm::TTerm(string value, string type) {
+TTerm::TTerm(string value, string type, string file, int line) {
 	this->value = value;
 	this->type = type;
+	this->file = file;
+	this->line = line;
 }
 			
 TTerm::~TTerm() {}
 
 void TTerm::print(int level) {
 	  indent(level);
-		cout << "type : " << this->type << "; value : " << this->value << endl ;
+		cout << "type : " << this->type << "; value : " << this->value << 
+				" in file " << file << " at line " << line << endl ;
 }
 
 int TTerm::isTerminal() {
@@ -59,6 +64,10 @@ void LTerm::add(Term *t) {
 	list.push_back(t);
 }
 
+void LTerm::del_last() {
+	list.pop_back();
+}
+
 int LTerm::isTerminal() {
 	return 0;
 }
@@ -81,7 +90,7 @@ void LTerm::print(int level) {
 
 Term* LTerm::operator[] (unsigned int i) {
 	if(i >= list.size()) 
-		return new TTerm("error", "out of bound");
+		return new TTerm("error", "out of bound", "unknow", 0);
 	else 
 		return list[i];
 }

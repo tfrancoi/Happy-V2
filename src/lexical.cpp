@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 	int dir = 0; //indique si on est dans une directive
 	int line = 1; //on démarre à la première ligne
 	int str = 0;
+	int echapement = 0; //caractère d'échapement dans les strings
 	string file = argv[1];
 	vector<int> lines = vector<int>();
 	vector<string> files = vector<string>(); //on est dans le fichier d'origine
@@ -38,20 +39,23 @@ int main(int argc, char** argv) {
 	LTerm *cur = new LTerm();
 	while ((c = is.get()) != -1)  {
 
-		if(c == '"') {
+		if(c == '"' && !echapement) {
 			str = 1 - str;
 			if(!str) { //on vient de finir un string on crée le term
-				cur->add(new TTerm(temp, "string"));
+				cur->add(new TTerm(temp, "string", file, line));
 				temp = "";
 			}
 		} 
 		else if(str) {
-			temp = temp + c;
+			if(c == '\\' && !echapement)
+				echapement = 1;
+			else {
+				temp = temp + c;
+				echapement = 0;
+			}
 		}
 		else if(isSpace(c) || isBrackets(c) != -1) {
-			//cout << temp << " | ";
 			if(c== '\n') {		
-				//cout << c;
 				line++;				
 			}
 			
@@ -83,29 +87,29 @@ int main(int argc, char** argv) {
 				else if(temp != "") {
 					string *type = new string();
 					analyseTerm(temp, type);
-					cur->add(new TTerm(temp, *type));
-					//cout << file << " - " << line << ": " << temp << " ";
+					cur->add(new TTerm(temp, *type, file, line));
 				}
-				//fait les trucs utiles
 			}
 			temp = "";
 			
 			if(isBrackets(c) != -1) {
-				//cout << file << " - " << line << ": " << c << " ";
 				if(c == '(') {
 					LTerm *t = new LTerm();
 					
 					cur->add(t);
 					term_stack.push(cur);
 					cur = t;
-					//cur->add(new TTerm(string(1, c), string(1, c)));
-					//cur->print();
-					
+						
 					++level;
 				}
 				else {
-					//cur->add(new TTerm(string(1, c), string(1, c)));
+					int size = cur->size(); 
 					cur = term_stack.pop();
+					if(size  < 1) {
+						cout << "Warning : Empty list of atom in " << file << " at line " << line  << endl;
+						cur->del_last();
+					}
+					
 					--level;
 				}
 				
@@ -115,15 +119,15 @@ int main(int argc, char** argv) {
 		
 
 		else {
-			//cout << (int) c << "  " << c << endl;
 			temp = temp + c;
 		}    // get character from file
 
 	}
-	cur->print(0);
+	
 	
 	
 	reduce(cur);
+	cur->print(0);
   is.close();           // close file
   
   return 0;
@@ -167,7 +171,7 @@ bool contain(string c , string tab[], int size) {
 
 int analyseTerm(const string value, string* type) {
 	//check if it's a number
-	if(contain(value[0], digit, 10)) {
+	if(contain(value[0], digit, 10) || value[0] == '-') {
 		int floating = 0;
 		int number = 1; 
 		for(int i = 1; i < value.size(); i++) {
@@ -184,15 +188,12 @@ int analyseTerm(const string value, string* type) {
 		}
 		if(number && floating == 1) {
 			type->append("float");
-			cout << "float " << value << endl;
 			return 0;
 		}
 		if(number && floating == 0) {
 			type->append("int");
-			cout << "int " << value << endl;
 			return 0;
 		}
-		cout << "id  " << value << endl;
 	}	
 	if(contain(value, reserved_word, 4)) {
 		type->append(value);
@@ -223,5 +224,10 @@ Term* simplify(Term *t) {
 void reduce(LTerm *tree) {
 	for(int i = 0; i < tree->size(); i++) {
 			tree->set(i, simplify((*tree)[i]));
+	}
+	Term *f = tree->flatten();
+	if(typeid(*f) == typeid(LTerm)) {
+		LTerm *t = dynamic_cast<LTerm*>(f);
+		*tree = *t;
 	}
 }

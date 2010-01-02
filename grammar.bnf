@@ -9,14 +9,18 @@
 <List>		--> <Instr> | <Instr> <List>
 
 
+<Expr>	--> <Call> | <id> | <value>
+<call>  --> '(' <id> <arg_list> ')'
+<id>		--> <Suite_caractère> / <PNumber>
 
 
-
-
+<value> --> <String> | <Number>
+<Number> --> <PNumber> | - <PNumber>
+<PNumber>  --> <Nat> | <Real>
 
 <String>					--> '"' <Suite_caractère> '"'
 <Suite_caractère> --> <Caractère> | <Caractère> <Suite_caractère>
-<Caractère>				--> 'a-z' | 'A-Z' | ...
+<Caractère>				--> 'a-z' | 'A-Z' | '0-9' | 'et tout le reste'...
 
 
 <Reserved_char>  	--> '(' | ')' | '"'
