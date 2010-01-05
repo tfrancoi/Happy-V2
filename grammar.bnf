@@ -1,20 +1,11 @@
+<!-- Syntaxe pour le préprocesseur-->
 <Comment> --> 'esp' [! 'esp' <String> 'esp' !] 'esp'
 <Directive> --> 'esp' [# 'esp' <Dir_Name> 'esp' <Dir_Args_list>  'esp' '#]' 'esp'
 <Dir_Args_list> --> <String> | <String> 'esp' <Dir_Args_list>  
 
-
-<Programme> 	--> <Instr>
-<Instr>		--> <Block> | <If> | <While> | <Call> | <Assignement>
-<Block>		--> '(' <List> ')'
-<List>		--> <Instr> | <Instr> <List>
-
-
-<Expr>	--> <Call> | <id> | <value>
-<call>  --> '(' <id> <arg_list> ')'
+<!-- Syntaxe pour l'analyseur lexical -->
 <id>		--> <Suite_caractère> / <PNumber>
 
-
-<value> --> <String> | <Number>
 <Number> --> <PNumber> | - <PNumber>
 <PNumber>  --> <Nat> | <Real>
 
@@ -25,3 +16,27 @@
 
 <Reserved_char>  	--> '(' | ')' | '"'
 <Reserved_word> 	--> '[!' | '!]' | '[#' | '#]'
+
+<!-- syntaxe pour le parser -->
+<Programme> 	--> <Fun_list> | <Block_fun>
+<Block_fun> --> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
+<Fun_list>  --> <Fun> | <Fun> <Fun_list>
+<!-- les fonctions prennent un premier id qui n'est asscoier à aucune valeur
+<Fun> --> '(' fun id '(' 
+
+
+
+<Instr>		--> <Block> | <If> | <While> | <Call> | <Assignement>
+<Block>		--> '(' <List> ')'
+<List>		--> <Instr> | <Instr> <List>
+
+
+<Expr>	--> <Call> | <id> | <value>
+<call>  --> '(' <id> <arg_list> ')'
+<value> --> <String> | <Number>
+
+
+
+
+
+
