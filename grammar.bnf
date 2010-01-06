@@ -1,13 +1,16 @@
 <!-- Syntaxe pour le préprocesseur-->
-<Comment> --> 'esp' [! 'esp' <String> 'esp' !] 'esp'
-<Directive> --> 'esp' [# 'esp' <Dir_Name> 'esp' <Dir_Args_list>  'esp' '#]' 'esp'
-<Dir_Args_list> --> <String> | <String> 'esp' <Dir_Args_list>  
+<Comment> 				--> 'esp' [! 'esp' <Suite_caractère> 'esp' !] 'esp'
+<Directive> 			--> 'esp' [# 'esp' <Dir_Name> 'esp' <Dir_Args_list>  'esp' '#]' 'esp'
+<Dir_Args_list> 	--> <String> | <String> 'esp' <Dir_Args_list>  
 
 <!-- Syntaxe pour l'analyseur lexical -->
-<id>		--> <Suite_caractère> / <PNumber>
+<Id>							--> <Suite_caractère> / <Number>
 
-<Number> --> <PNumber> | - <PNumber>
-<PNumber>  --> <Nat> | <Real>
+<Number> 					--> <PNumber> | - <PNumber>
+<PNumber>  				--> <Nat> | <Real>
+<Nat> 						--> '0-9' | '0-9' <Nat>
+<Real> 						--> <Nat> ',' <Nat>
+
 
 <String>					--> '"' <Suite_caractère> '"'
 <Suite_caractère> --> <Caractère> | <Caractère> <Suite_caractère>
@@ -15,25 +18,30 @@
 
 
 <Reserved_char>  	--> '(' | ')' | '"'
-<Reserved_word> 	--> '[!' | '!]' | '[#' | '#]'
+<Reserved_word> 	--> '[!' | '!]' | '[#' | '#]' | 'if' | 'set' | 'while' | 'fun'
 
 <!-- syntaxe pour le parser -->
-<Programme> 	--> <Fun_list> | <Block_fun>
-<Block_fun> --> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
-<Fun_list>  --> <Fun> | <Fun> <Fun_list>
-<!-- les fonctions prennent un premier id qui n'est asscoier à aucune valeur
-<Fun> --> '(' fun id '(' 
+<Programme> 			--> <Fun_list> | <Block_fun>
 
+<Block_fun> 			--> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
+<Fun_list>  			--> <Fun> | <Fun> <Fun_list>
 
+<Fun> 						--> '(' 'fun' <Id> '(' <Id_list> ')' <Instr> ')' | <Class>
+<Id_list> 				--> <Id> | <Id> <Id_list>
 
-<Instr>		--> <Block> | <If> | <While> | <Call> | <Assignement>
-<Block>		--> '(' <List> ')'
-<List>		--> <Instr> | <Instr> <List>
+<Instr>						--> <Block> | <If> | <While> | <Call> | <Assignement>
+<Block>						--> '(' <List> ')'
+<List>						--> <Instr> | <Instr> <List>
+<Assignement> 		--> '(' 'set' <Id> <Expr> ')'
+<If> 							--> '(' 'if' <Expr> <Instr> <Instr> ')'
+<While> 					--> '(' 'while' <Expr> <Instr> ')'
 
+<Expr>						--> <Call> | <id> | <value> | <Assignement>
+<Call>  					--> '(' <id> <Expr_list> ')'
+<Expr_list>				--> <Expr> | <Expr> <Expr_list>
+<value> 					--> <String> | <Number>
 
-<Expr>	--> <Call> | <id> | <value>
-<call>  --> '(' <id> <arg_list> ')'
-<value> --> <String> | <Number>
+<!-- extension pour l'objet -->
 
 
 
