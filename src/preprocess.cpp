@@ -20,16 +20,16 @@
 #include "const_preprocess.h"
 
 using namespace std;
+
 vector<string> includes;
 
 int isPreprocessorDir(string s) {
 	if(s == OPEN_DIR_PREPOCESS )
 		return 1;
-	if(s == CLOSE_DIR_PREPROCESS) {
-		return -1;
-	}
-	
 
+	if(s == CLOSE_DIR_PREPROCESS)
+		return -1;
+		
 	return 0;
 }
 
@@ -85,19 +85,19 @@ int analyseFile(const char* in, ofstream* os) {
 	is.open (in);
 	while ((c = is.get()) != -1)  {
 		if(comment_level < 0) {
-			cout << END_COMMENT_ERROR << " at line " << line << endl;
+			cout << END_COMMENT_ERROR << " at line " << line << " in file : " << in << endl;
 			return -1;
 		}
 		if(dir_level < 0 || dir_level > 1) {
-			cout << "Erreur : Directive close before open or try to put a directive in a directive" << " at line " << line << endl;
+			cout << "Erreur : Directive close before open or try to put a directive in a directive" 
+					 << " at line " << line << " in file : " << in << endl;
 			return -1;
 		}
 		if(isSpace(c) || isBrackets(c) != -1) {
 			if(c == '\n') { line++; }
-			//cout << "brackets or space" << " level : "  << comment_level << endl;
+			
 			if(!comment_level && !dir_level && !isComments(temp) && !isPreprocessorDir(temp) ) {
 				*(os) << temp;
-
 			}
 			*(os) << c;
 			comment_level += isComments(temp);
@@ -107,17 +107,16 @@ int analyseFile(const char* in, ofstream* os) {
 				directive.push_back(temp);
 			}
 			else if(!dir_level && old_level) {
+				//appel de traitement de la directive
 				if(directive_analyser(directive, os, line, in)) {
 					return -1;
 				}
-				//appel de traitement de la directive
-
+				
 				directive = vector<string>();
 			}
 			temp = "";
 		}
 		else {
-			//cout << (int) c << "  " << c << endl;
 			temp = temp + c;
 		}    // get character from file
 	}

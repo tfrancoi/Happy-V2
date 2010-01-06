@@ -3,9 +3,12 @@ BIN = bin/
 SRC = src/
 all : main
 
-main : $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o 
+main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o 
 	$(CC) -o $@ $^
 	
+$(BIN)main.o : $(SRC)main.cpp
+	$(CC) -o $@ -c $^
+
 $(BIN)lexical.o : $(SRC)lexical.cpp
 	$(CC) -o $@ -c $^
 	

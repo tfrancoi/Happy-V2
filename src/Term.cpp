@@ -55,6 +55,7 @@ string TTerm::getValue() {
 		
 LTerm::LTerm() {
 	list = vector<Term*>();
+	block = 2;
 }
 
 
@@ -62,10 +63,12 @@ LTerm::~LTerm() {}
 
 void LTerm::add(Term *t) {
 	list.push_back(t);
+	block = 2;
 }
 
 void LTerm::del_last() {
 	list.pop_back();
+	block = 2;
 }
 
 int LTerm::isTerminal() {
@@ -113,6 +116,7 @@ Term* LTerm::flatten() {
 
 void LTerm::set(unsigned int i, Term* t) {
 	list[i] = t;
+	block = 2;
 	
 }
 

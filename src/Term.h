@@ -40,11 +40,13 @@ class LTerm : public Term {
 		void add(Term *t);
 		void del_last();
 		int size();
+		int isblock();
 		Term* operator[](unsigned int i);
 		void set(unsigned int i, Term* t);
 		Term* flatten();
 	private :
 		std::vector<Term*> list;
+		int block;
  
 };
 

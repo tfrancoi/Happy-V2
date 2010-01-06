@@ -14,9 +14,8 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
-
-	preprocess((const char*) argv[1], (const char*) argv[2]);
+int lexical_analyser(const char* main_file, const char* preprocess_file) {
+	
 
 	int level = 0;
 	char c;
@@ -24,19 +23,21 @@ int main(int argc, char** argv) {
 
 
 	ifstream is;
-	is.open (argv[2]);
+	is.open (preprocess_file);
 
 	int dir = 0; //indique si on est dans une directive
 	int line = 1; //on démarre à la première ligne
 	int str = 0;
 	int echapement = 0; //caractère d'échapement dans les strings
-	string file = argv[1];
+	string file = main_file;
 	vector<int> lines = vector<int>();
 	vector<string> files = vector<string>(); //on est dans le fichier d'origine
 	vector<string> directive;
 	
 	Stack<LTerm> term_stack = Stack<LTerm>();	
 	LTerm *cur = new LTerm();
+	
+	cout << "lexical parser " << endl;
 	while ((c = is.get()) != -1)  {
 
 		if(c == '"' && !echapement) {
@@ -55,9 +56,7 @@ int main(int argc, char** argv) {
 			}
 		}
 		else if(isSpace(c) || isBrackets(c) != -1) {
-			if(c== '\n') {		
-				line++;				
-			}
+			
 			
 			int d = isPreprocessorDir(temp);
 			if(d == -1) {
@@ -65,7 +64,7 @@ int main(int argc, char** argv) {
 					lines.push_back(line);
 					files.push_back(file);
 					file = directive[1];
-					line = 1;
+					line = 0;
 				}
 				if(directive[0] == "end") {
 					line = lines.back();
@@ -87,7 +86,10 @@ int main(int argc, char** argv) {
 				else if(temp != "") {
 					string *type = new string();
 					analyseTerm(temp, type);
-					cur->add(new TTerm(temp, *type, file, line));
+					//cout << "line == " << line << endl;
+					int l = line;
+					//if(c == '\n') { l--;}
+					cur->add(new TTerm(temp, *type, file, l));
 				}
 			}
 			temp = "";
@@ -103,6 +105,11 @@ int main(int argc, char** argv) {
 					++level;
 				}
 				else {
+					--level;
+					if(level < 0) {
+						cout << "Too much end brackets, cannot reach a level higher than root level at line " << line << " in file " << file << endl;
+						return 2;
+					}
 					int size = cur->size(); 
 					cur = term_stack.pop();
 					if(size  < 1) {
@@ -110,11 +117,13 @@ int main(int argc, char** argv) {
 						cur->del_last();
 					}
 					
-					--level;
+					
 				}
 				
 				
 			}
+			
+			if(c== '\n') { line++; }
 		}
 		
 
@@ -124,6 +133,10 @@ int main(int argc, char** argv) {
 
 	}
 	
+	if(level != 0) {
+		cout << "Error too much brackets or not enough, programm tree corrupt" << endl;
+		return 1;
+	}
 	
 	
 	reduce(cur);
