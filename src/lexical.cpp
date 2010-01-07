@@ -162,7 +162,8 @@ char isBrackets(const char c) {
 }
 
 char digit[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-string reserved_word[] = {"fun", "if", "while", "set"};
+string reserved_word[] = {"fun", "if", "while", "set", "skip", "of"};
+const int nb_reserved_word = 6;
 
 bool contain(char c , char* tab, int size) {
 	for(int i = 0; i < size; i++) {
@@ -208,7 +209,7 @@ int analyseTerm(const string value, string* type) {
 			return 0;
 		}
 	}	
-	if(contain(value, reserved_word, 4)) {
+	if(contain(value, reserved_word, nb_reserved_word)) {
 		type->append(value);
 		return 0;
 	}

@@ -1,9 +1,10 @@
 [! include test2.ha !]
-(klkl)
+
 (
-	("salut \" \\ les " )
-	(fun (main argv) ( (write 42) (write 43) ) )
-	(\-: "salut")
+	
+	(fun main (of argv) ( (write 42) (write 43)
+		(if (= a b) (skip) (skip) )
+		 ) )
 	
 )
 

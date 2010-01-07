@@ -26,20 +26,24 @@
 <Block_fun> 			--> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
 <Fun_list>  			--> <Fun> | <Fun> <Fun_list>
 
-<Fun> 						--> '(' 'fun' <Id> '(' <Id_list> ')' <Instr> ')' | <Class>
-<Id_list> 				--> <Id> | <Id> <Id_list>
+<Fun> 						--> '(' 'fun' <Id_unb> <Block_arg> <Instr> ')' | <Class>
+<Block_arg>				--> '(' 'of' <Id_list> ')'
+<Id_list> 				--> <Id_unb> | <Id_unb> <Id_list>
+<Id_unb>					-->	<Id>
 
-<Instr>						--> <Block> | <If> | <While> | <Call> | <Assignement>
-<Block>						--> '(' <List> ')'
-<List>						--> <Instr> | <Instr> <List>
-<Assignement> 		--> '(' 'set' <Id> <Expr> ')'
+<Instr>						--> <Block> | <If> | <While> | <Call> | <Assignement> | <Skip>
+<Block>						--> '(' <Instr_list> ')'
+<Instr_list>			--> <Instr> | <Instr> <Instr_list>
+<Assignement> 		--> '(' 'set' <Id_unb> <Expr> ')'
 <If> 							--> '(' 'if' <Expr> <Instr> <Instr> ')'
 <While> 					--> '(' 'while' <Expr> <Instr> ')'
+<Skip>						--> '(' 'skip' ')'
 
-<Expr>						--> <Call> | <id> | <value> | <Assignement>
-<Call>  					--> '(' <id> <Expr_list> ')'
+<Expr>						--> <Call> | <Id> | <Value> | <Assignement>
+<Call>  					--> '(' <Id_fun> <Expr_list> ')'
 <Expr_list>				--> <Expr> | <Expr> <Expr_list>
-<value> 					--> <String> | <Number>
+<value> 					--> <string> | <Number>
+<Number>					--> <int> | <float>
 
 <!-- extension pour l'objet -->
 

@@ -106,7 +106,7 @@ Term* LTerm::flatten() {
 	
 	//si on a affaire un atom
 	if(typeid(TTerm) == typeid(*list[0])) {
-		return list[0];
+		return this;
 	}
 	
 	LTerm *cur = dynamic_cast<LTerm*> (list[0]);
