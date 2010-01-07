@@ -1,61 +1,52 @@
-Ensemble de type non Terminaux : {Call, If, While, Assignement, Programme, Block_fun, Fun, Block_arg, }
-Terminaux : {fun, int, float, string, if, set, while, skip, Expr}
-
-[0] contexte hors instruction
-[1] contexte dans les instruction
-contexte = [1] ssi noeud parent appartien {If, While, Call, Assignement}
-contexte = [0] sinon
+Ensemble de type liste:
+{Call, If, While, Assignement, Programme, Block_fun, Fun, Block_arg, Skip,  }
+Terminaux : {fun, int, float, string, if, set, while, skip, of, Expr, Id}
 
 
 1) Détermine le type le plus spécifique d'un noeud en regardant le type le plus spécifique du premier fils
-[?] 	fun 	=> Fun
-[?]		skip	=> Skip
-[?] 	of		=> Block_arg
-[?] 	if  	=> If
-[?] 	set		=> Assignement
-[?] 	while => While
-[?] 	Id		=> Call
----------------------
-[?] 	Instr	=> Instr
+fun 	=> Fun
+skip	=> Skip
+of		=> Block_arg
+if  	=> If
+set		=> Assignement
+while => While
+Id		=> Call
 
+spécifique => spécifique
 
-n* : de l'élément 1 à n
-
+n 0 ou plus  
+N 1 ou plus
 2) Connaissant le type (spécifique ou non) du parent, on trouve l'ensemble des types généraux possibles pour les enfant
-[?] 	Programme 	? n * {Block_fun, Fun	}	//Element racine
-[?] 	Block_fun 	? n * {Block_fun, Fun } //un block fun est définit comme étant un term dont les enfants sont des fun ou des block fun
-[?]   Fun					? 1 * {fun} +  1 * {Id_unb} + 1 * {Block_arg} + 1 * {Instr}
-[?]		Skip 				? 1 * {skip}
-[?] 	Block_arg		? 1 * of + 1 * {Id_unb} + n *{Id_unb}
-[?]		Instr				? 1 * {Id_fun, if, while, set, Instr, skip} + n * {Expr, Instr} 
-[?] 	Expr				?	1 * {Id, set} + 1 * {Id_unb, Expr} + n * {Expr}   //seulement quand on a un call
-[?]		Assignement	? 1 * {set} + 1 * {Id_unb} + 1 * {Expr}
-[?] 	Call				? 1 * {Id_fun} + n * {Expr}
-[?] 	If 					? 1 * {if} + 1 * {Expr} + 2 * {Instr}
-[?] 	While				? 1 * {while} + 1 * {Expr} + 1 *{Instr}
+Programme 	? N * {Block_fun, Fun}	
+Block_fun 	? N * {Block_fun, Fun} 
+Fun					? 1 * {fun} +  1 * {Id_unb} + 1 * {Block_arg} + 1 * {Instr}
+Skip 				? 1 * {skip}
+Block_arg		? 1 * of + 1 * {Id_unb} + n * {Id_unb}
+Instr				? 1 * {Id_fun, if, while, set, Instr, skip} + n * {Expr, Instr} 
+Expr				?	1 * {Id, set} + 1 * {Id_unb, Expr} + n * {Expr}   //seulement quand on a un call
+Assignement	? 1 * {set} + 1 * {Id_unb} + 1 * {Expr}
+Call				? 1 * {Id_fun} + N * {Expr}
+If 					? 1 * {if} + 1 * {Expr} + 2 * {Instr}
+While				? 1 * {while} + 1 * {Expr} + 1 *{Instr}
 
 
 
 3) Les réécritures : Réécrit les types les plus spécifique en type générale
-[0|1] Block				--> {Instr}
-[1]		Call 				--> {Instr, Expr}
-[1]		Assignement	--> {Instr, Expr}
-[0|1]	If					--> {Instr}
-[0|1]	While				--> {Instr}
-[?]		Skip				--> {Instr}
-[0] 	Id					--> {Id_unb, Id_fun, Id}
-[0|1] String 			--> Expr
-[0|1]	Float 			--> Expr
-[0|1]	Int					--> Expr
-[0|1]	fun					--> fun
-[?] 	if  				--> if
-[?] 	set					--> set
-[?] 	while 			--> while
-[?]		skip				--> skip
+Call 				--> {Instr, Expr}
+Assignement	--> {Instr, Expr}
+If					--> {Instr}
+While				--> {Instr}
+Skip				--> {Instr}
+Id					--> {Id_unb, Id_fun, Id}
+String 			--> {Expr}
+Float 			--> {Expr}
+Int					--> {Expr}
+
+
 
 4) constraintes des voisins
 1) les contraintes sur les voisins, si le premier est ca alors le voisin est
-fun 		? 1 * Id 		& 1 * Arg_list 	& 1 * Instr
+Instr ? n * Instr
 
 
 
@@ -90,40 +81,3 @@ si l'intersection des type possible et des contraintes > 1 ==> ambuiguité, erre
 
 
 
-1) les contraintes sur les voisins, si le premier est ca alors le voisin est
-fun 		? 1 * Id 		& 1 * Arg_list 	& 1 * Instr
-if 			?	1 * Expr 	& 1 * Instr 		& 1 * Instr
-set			? 1 * Id 		&	1 * Expr
-while 	?	1 * Expr	& 1 * Instr
-Id_fun	? n * Expr //dans le contexte des instruction
-Instr		? n * Instr
-
-//dans le contexte des déclarations de fonction
-Id_unb	? n * Id_unb	 
-
-
-
-1.1) les contraintes sur l'élément en fonction du premier enfant fun contexte
-fun ? Fun
-
-
-
-
-[0|1] Block				--> {Instr}
-[0] 	Call				--> {Instr}
-[1]		Call 				--> {Instr, Expr}
-[0]		Assignement	--> {Instr}
-[1]		Assignement	--> {Instr, Expr}
-[0|1]	If					--> {Instr}
-[0|1]	While				--> {Instr}
-[?]		Skip				--> {Instr}
-[0] 	Id					--> {Id_unb, Id_fun}
-[1]		Id					--> {Id_unb, Id}
-[0|1] String 			--> Expr
-[0|1]	Float 			--> Expr
-[0|1]	Int					--> Expr
-[0|1]	fun					--> fun
-[?] 	if  				--> if
-[?] 	set					--> set
-[?] 	while 			--> while
-[?]		skip				--> skip
