@@ -1,79 +1,84 @@
 Ensemble de type liste:
-{Call, If, While, Assignement, Programme, Block_fun, Fun, Block_arg, Skip,  }
+{Call, If, While, Assignement, Programme, Block_fun, Fun, Block_arg, Skip, Block_instr, Block_fun }
 Terminaux : {fun, int, float, string, if, set, while, skip, of, Expr, Id}
+Le type spécifique est un atom, noté x
+Le(s) type généraux sont des ensemble, noté {x,y,..}
+
+1] Assure qu'on connait le type spécifique du parent et qu'il n'existe plus qu'un type général
+
+Conditions d'entré, on connait le type spécifique du premier fils
+1.1) Détermine le type le plus spécifique d'un noeud en regardant le type le plus spécifique du premier fils
+map <string,string>
+
+fun 		=> Fun
+skip		=> Skip
+of			=> Block_arg
+if  		=> If
+set			=> Assignement
+while 	=> While
+return 	=> Return
+Id			=> Call
+
+Conditions d'entré, on ne connait pas le type spécifique du premier fils
+1.2) Le type générale devient le spécifique.
+Type générale contient d'un noeud est alors sont type spécifique devient
+map<string,string>
+{Block_fun} 	-> Block_fun
+{Block_instr} -> Block_instr
+{Block_arg}		-> Block_arg
+
+Après 1.1 et 1.2 : connait le type spécifique de l'élément courant
+Si type spécifique non connu => Erreur de syntaxe
+
+1.3) pour déterminer le type générale 
+type générale = ({des types spécifique réécrit} union {spécifique}) inter type générale
+
+Après 1.3 : 1 seule type générale => si 0 ou plus de 1: Erreur de syntaxe
 
 
-1) Détermine le type le plus spécifique d'un noeud en regardant le type le plus spécifique du premier fils
-fun 	=> Fun
-skip	=> Skip
-of		=> Block_arg
-if  	=> If
-set		=> Assignement
-while => While
-Id		=> Call
-
-spécifique => spécifique
+2) Connaissant le type (spécifique ou non) du parent, on trouve l'ensemble des types généraux possibles pour les enfant
 
 n 0 ou plus  
 N 1 ou plus
-2) Connaissant le type (spécifique ou non) du parent, on trouve l'ensemble des types généraux possibles pour les enfant
-Programme 	? N * {Block_fun, Fun}	
-Block_fun 	? N * {Block_fun, Fun} 
-Fun					? 1 * {fun} +  1 * {Id_unb} + 1 * {Block_arg} + 1 * {Instr}
-Skip 				? 1 * {skip}
-Block_arg		? 1 * of + 1 * {Id_unb} + n * {Id_unb}
-Instr				? 1 * {Id_fun, if, while, set, Instr, skip} + n * {Expr, Instr} 
-Expr				?	1 * {Id, set} + 1 * {Id_unb, Expr} + n * {Expr}   //seulement quand on a un call
-Assignement	? 1 * {set} + 1 * {Id_unb} + 1 * {Expr}
-Call				? 1 * {Id_fun} + N * {Expr}
-If 					? 1 * {if} + 1 * {Expr} + 2 * {Instr}
-While				? 1 * {while} + 1 * {Expr} + 1 *{Instr}
+
+Conditions d'entré, on connait le type spécifique de l'élément courant, assuré par 1) 
+map<string, pair<vector<int>, vector<string>>
+Programme 	? N * {Block_fun, Fun}	  																						[1-n]
+Block_fun 	? N * {Block_fun, Fun}    																						[1-n]
+Fun					? 1 * {fun} +  1 * {Id} + 1 * {Block_arg} + 1 * {Instr, Block_instr}  [4-4]
+Skip 				? 1 * {skip} 																													[1-1]
+Block_arg		? 1 * {of} + N * {Id}																									[2-n]	
+Block_instr	? N * {Block_instr, Instr}    																				[1-n]
+Assignement	? 1 * {set} + 1 * {Id_unb} + 1 * {Expr}																[3-3]
+Call				? 1 * {Id_fun} + n * {Expr}																						[1-n]
+If 					? 1 * {if} + 1 * {Expr} + 2 * {Block_instr, Instr}										[4-4]	
+While				? 1 * {while} + 1 * {Expr} + 1 *{Block_instr, Instr}									[3-3]
+Return			? 1 * {return} + 1 * {Expr}																						[2-2]
+
+Si la longueur de l'élément courant ne match pas avec le range => erreur de syntaxe
+
+Après 2) tout les enfants ont un ou plus type générale assigné  
 
 
+3] Sur chaque enfant
+conditions d'entré, on connait le type spécifique de l'enfant
+
+type générale = ({des types spécifique réécrit} union {spécifique}) inter type générale
 
 3) Les réécritures : Réécrit les types les plus spécifique en type générale
+map<string, set<string>>
 Call 				--> {Instr, Expr}
 Assignement	--> {Instr, Expr}
 If					--> {Instr}
 While				--> {Instr}
 Skip				--> {Instr}
-Id					--> {Id_unb, Id_fun, Id}
+Return			--> {Instr}
 String 			--> {Expr}
 Float 			--> {Expr}
 Int					--> {Expr}
+Id					--> {Id, Expr}
 
-
-
-4) constraintes des voisins
-1) les contraintes sur les voisins, si le premier est ca alors le voisin est
-Instr ? n * Instr
-
-
-
-
-<Programme> 			--> <Fun_list> | <Block_fun>
-
-<Block_fun> 			--> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
-<Fun_list>  			--> <Fun> | <Fun> <Fun_list>
-
-<Fun> 						--> '(' 'fun' <Id_unb> <Block_arg> <Instr> ')' | <Class>
-<Block_arg>				--> '(' 'of' <Id_list> ')'
-<Id_list> 				--> <Id_unb> | <Id_unb> <Id_list>
-<Id_unb>					-->	<Id>
-
-<Instr>						--> <Block> | <If> | <While> | <Call> | <Assignement> | <Skip>
-<Block>						--> '(' <Instr_list> ')'
-<Instr_list>			--> <Instr> | <Instr> <Instr_list>
-<Assignement> 		--> '(' 'set' <Id_unb> <Expr> ')'
-<If> 							--> '(' 'if' <Expr> <Instr> <Instr> ')'
-<While> 					--> '(' 'while' <Expr> <Instr> ')'
-<Skip>						--> '(' 'skip' ')'
-
-<Expr>						--> <Call> | <Id> | <Value> | <Assignement>
-<Call>  					--> '(' <Id_fun> <Expr_list> ')'
-<Expr_list>				--> <Expr> | <Expr> <Expr_list>
-<value> 					--> <string> | <Number>
-<Number>					--> <int> | <float>
+Après 3 : si on connait le type spécifique de l'enfant, alors il a un et un seul type générale assigné
 
 
 si l'intersection des type possible et des contraintes est vide ==> erreur de syntaxe

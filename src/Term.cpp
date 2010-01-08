@@ -83,7 +83,7 @@ int LTerm::size() {
 void LTerm::print(int level) {
 	indent(level);
 	cout << "[" << endl;	
-	for(int i = 0; i < list.size(); i++) {
+	for(unsigned int i = 0; i < list.size(); i++) {
 		list[i]->print(level+1);
 	}
 	indent(level);

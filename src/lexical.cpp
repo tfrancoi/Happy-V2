@@ -188,7 +188,7 @@ int analyseTerm(const string value, string* type) {
 	if(contain(value[0], digit, 10) || value[0] == '-') {
 		int floating = 0;
 		int number = 1; 
-		for(int i = 1; i < value.size(); i++) {
+		for(unsigned int i = 1; i < value.size(); i++) {
 			if(value[i] == ',') { 
 				floating++;
 			}

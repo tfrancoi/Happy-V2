@@ -34,7 +34,7 @@ int isPreprocessorDir(string s) {
 }
 
 int include(ofstream* os, const char* in, int line, const char* file) {
-	for(int i = 0; i < includes.size(); i++) {
+	for(unsigned int i = 0; i < includes.size(); i++) {
 		if(includes[i] == in) {
 			cout << "warning double include at line " << line << " in file " << file << endl;
 			return 0;
@@ -80,7 +80,7 @@ int analyseFile(const char* in, ofstream* os) {
 	int comment_level = 0;
 	int old_level = 0;
 	int dir_level = 0;
-	bool preprocess = false;
+	
 	ifstream is;
 	is.open (in);
 	while ((c = is.get()) != -1)  {

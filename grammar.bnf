@@ -21,32 +21,57 @@
 <Reserved_word> 	--> '[!' | '!]' | '[#' | '#]' | 'if' | 'set' | 'while' | 'fun'
 
 <!-- syntaxe pour le parser -->
+
 <Programme> 			--> <Fun_list> | <Block_fun>
 
 <Block_fun> 			--> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
 <Fun_list>  			--> <Fun> | <Fun> <Fun_list>
 
-<Fun> 						--> '(' 'fun' <Id_unb> <Block_arg> <Instr> ')' | <Class>
+<Fun> 						--> '(' 'fun' <Id> <Block_arg> <Instr> ')' | '(' 'fun' <Id> <Block_arg> <Block_instr> ')' | <Class>
 <Block_arg>				--> '(' 'of' <Id_list> ')'
-<Id_list> 				--> <Id_unb> | <Id_unb> <Id_list>
+<Id_list> 				--> <Id> | <Id> <Id_list>
 <Id_unb>					-->	<Id>
 
-<Instr>						--> <Block> | <If> | <While> | <Call> | <Assignement> | <Skip>
-<Block>						--> '(' <Instr_list> ')'
+<Instr>						--> <If> | <While> | <Call> | <Assignement> | <Skip> | <Return>
+<Block_instr>			--> '(' <Instr_list> ')' | '(' <Block_instr> ')' | <Block_instr> <Block_instr>
 <Instr_list>			--> <Instr> | <Instr> <Instr_list>
-<Assignement> 		--> '(' 'set' <Id_unb> <Expr> ')'
+<Assignement> 		--> '(' 'set' <Id> <Expr> ')'
 <If> 							--> '(' 'if' <Expr> <Instr> <Instr> ')'
 <While> 					--> '(' 'while' <Expr> <Instr> ')'
 <Skip>						--> '(' 'skip' ')'
+<Return>					--> '(' 'return' <Expr> ')'
 
 <Expr>						--> <Call> | <Id> | <Value> | <Assignement>
-<Call>  					--> '(' <Id_fun> <Expr_list> ')'
+<Call>  					--> '(' <Id> <Expr_list> ')'
 <Expr_list>				--> <Expr> | <Expr> <Expr_list>
 <value> 					--> <string> | <Number>
 <Number>					--> <int> | <float>
-
 <!-- extension pour l'objet -->
 <Class> 					--> 
+
+
+
+(class Id
+	(attr 
+		(Access Id)
+		(Access Id)
+	)
+	(
+		(method Access Id (of Id) 
+			(
+				(Instr)
+				(Instr)
+			) 	
+		)
+		(method Access Id (of Id) 
+			(
+				(Instr)
+				(Instr)
+			) 	
+		)
+	)
+)
+
 
 
 
