@@ -1,6 +1,7 @@
 #include "Term.h"
 #include <iostream>
 #include <typeinfo>
+#include "grammar.h"
 using namespace std;
 
 void indent(int level) {
@@ -19,15 +20,16 @@ void Term::print(int level) {
 
 TTerm::TTerm() {
 	this->value = "";
-	this->type = "empty";
+	this->type = 0;
 	this->file = "unknown";
 	this->line = 0;
+	
 }
 	
 
 TTerm::TTerm(string value, string type, string file, int line) {
 	this->value = value;
-	this->type = type;
+	this->type = get_set_code(type);
 	this->file = file;
 	this->line = line;
 }
@@ -44,7 +46,7 @@ int TTerm::isTerminal() {
 	return 1;
 }
 
-string TTerm::getType() {
+int TTerm::getType() {
 	return this->type;
 }
 			
@@ -120,3 +122,7 @@ void LTerm::set(unsigned int i, Term* t) {
 	
 }
 
+
+void LTerm::set_type(int i) {
+	this->type = i;
+}

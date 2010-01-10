@@ -25,7 +25,7 @@ Type générale contient d'un noeud est alors sont type spécifique devient
 map<string,string>
 {Block_fun} 	-> Block_fun
 {Block_instr} -> Block_instr
-{Block_arg}		-> Block_arg
+
 
 Après 1.1 et 1.2 : connait le type spécifique de l'élément courant
 Si type spécifique non connu => Erreur de syntaxe
@@ -49,7 +49,7 @@ Fun					? 1 * {fun} +  1 * {Id} + 1 * {Block_arg} + 1 * {Instr, Block_instr}  [4
 Skip 				? 1 * {skip} 																													[1-1]
 Block_arg		? 1 * {of} + N * {Id}																									[2-n]	
 Block_instr	? N * {Block_instr, Instr}    																				[1-n]
-Assignement	? 1 * {set} + 1 * {Id_unb} + 1 * {Expr}																[3-3]
+Assignement	? 1 * {set} + 1 * {Id} + 1 * {Expr}																[3-3]
 Call				? 1 * {Id_fun} + n * {Expr}																						[1-n]
 If 					? 1 * {if} + 1 * {Expr} + 2 * {Block_instr, Instr}										[4-4]	
 While				? 1 * {while} + 1 * {Expr} + 1 *{Block_instr, Instr}									[3-3]
@@ -73,9 +73,9 @@ If					--> {Instr}
 While				--> {Instr}
 Skip				--> {Instr}
 Return			--> {Instr}
-String 			--> {Expr}
-Float 			--> {Expr}
-Int					--> {Expr}
+string 			--> {Expr}
+float 			--> {Expr}
+int					--> {Expr}
 Id					--> {Id, Expr}
 
 Après 3 : si on connait le type spécifique de l'enfant, alors il a un et un seul type générale assigné

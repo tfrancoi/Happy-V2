@@ -213,7 +213,7 @@ int analyseTerm(const string value, string* type) {
 		type->append(value);
 		return 0;
 	}
-	type->append("id");
+	type->append("Id");
 	return 0;
 }
 

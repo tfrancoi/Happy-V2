@@ -2,14 +2,15 @@
 **  sets.cpp : class definitions for set operations using bit representations. 
 **
 **  Stephen R. Schmitt
+**  Nettoyage et mis en c++ pure : Thibault Francois
 */
 
                                // MS Visual C++ file
 #include "sets.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
 
+#include <string>
+#include <iostream>
+using namespace std;
 /*----------------------------------------------------------------------------*
 **  "sets()" default constructor, initializes elements of the set to zero.  
 **
@@ -99,9 +100,9 @@ void sets::clear()
 **
 **  returns: nothing
 */
-void sets::define( char *input )                    // string of numbers
+void sets::define( string input )                    // string of numbers
 {
-    int length = strlen( input );                   // of input buffer
+    int length = input.size();                   // of input buffer
     int pos = 0;                                    // current character
     clear();                                        // initialize to empty
 
@@ -177,7 +178,7 @@ int sets::cardinality()
 */
 void sets::print()
 {
-    printf( "{ " );
+    cout << "{ " ;
 
     for( int j = 0; j < MAX_WORDS; j++ )            // do all words
     {
@@ -186,13 +187,13 @@ void sets::print()
 	for( int i = 1; i <= WORD_SIZE; i++ )
 	{
 	    if( set[j] & mask )                     // check bit
-		printf( "%d ", ( WORD_SIZE * j + i ) );
+				cout << ( WORD_SIZE * j + i ) << " ";
 
 	    mask <<= 1;                             // next higher bit
 	}
     }
     
-    printf( "}" );
+    cout << "}" << endl;
 }
 
 /*----------------------------------------------------------------------------*
@@ -285,7 +286,3 @@ sets sets::operator ^ ( const sets &rhs )
                        
     return rv;
 }
-
-
-
-

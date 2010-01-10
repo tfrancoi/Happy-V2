@@ -7,9 +7,9 @@
 #ifndef SETS_H
 #define SETS_H
 
-#define MAX_WORDS  2
+#define MAX_WORDS  4
 #define WORD_SIZE  ( 8 * sizeof( unsigned long ) )
-
+#include <string>
 class sets
 {
 public:
@@ -18,7 +18,7 @@ public:
     void binary();
     int  cardinality();
     void clear();
-    void define( char * );
+    void define( std::string );
     void insert( int );
     int  item( int );
     void print();

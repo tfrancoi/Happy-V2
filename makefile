@@ -5,7 +5,7 @@ SRC = src/
 SET = set/
 all : main
 
-main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o
+main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o
 	$(CCW) -o $@ $^
 	
 $(BIN)main.o : $(SRC)main.cpp
@@ -19,10 +19,12 @@ $(BIN)preprocess.o : $(SRC)preprocess.cpp
 
 $(BIN)Term.o : $(SRC)Term.cpp
 	$(CCW) -o $@ -c $^
+
+$(BIN)grammar.o : $(SRC)grammar.cpp
+	$(CCW) -o $@ -c $^
 	
 $(BIN)sets.o : $(SRC)$(SET)sets.cpp
 	$(CC) -o $@ -c $^
-
 	
 clean:
 	rm -rf $(BIN)/*.o
