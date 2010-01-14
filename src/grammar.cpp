@@ -1,6 +1,10 @@
+#include <iostream>
+#include <vector>
 #include "grammar.h"
 #include "set/sets.h"
-#include <iostream>
+
+
+
 using namespace std;
 
 
@@ -19,6 +23,7 @@ map<string, int> type_map;
 map<int, int> regle1;
 map<int, int> regle1_2;
 map<int, sets> rewriteRule;
+map<int, vector<Paire> > rule2;
 
 
 sets create_sets(string tab[], int size) {
@@ -50,6 +55,42 @@ void initRule1() {
 	regle1_2[get_set_code("Block_instr")] = get_set_code("Block_instr");
 }
 
+/**
+ * 0  pour n
+ * -1 pour N
+ */
+void initRule2() {
+	string tab1[] = {"Fun", "Block_fun"};
+	string tab2[] = {"fun"};
+	string tab3[] = {"Id"};
+	string tab4[] = {"Block_arg"};
+	string tab5[] = {"Instr", "Block_instr"};
+	string tab6[] = {"skip"};
+	string tab7[] = {"of"};
+	
+	vector<Paire> v1;
+	v1.push_back(Paire(-1, create_sets(tab1, 2)));
+	rule2[get_set_code("Programme")] = v1;
+	rule2[get_set_code("Block_fun")] = v1;
+	
+	vector<Paire> v2;
+	v2.push_back(Paire(1, create_sets(tab2, 1)));
+	v2.push_back(Paire(1, create_sets(tab3, 1)));
+	v2.push_back(Paire(1, create_sets(tab4, 1)));
+	v2.push_back(Paire(1, create_sets(tab5, 1)));
+	rule2[get_set_code("Fun")] = v2;
+	
+	
+	vector<Paire> v3;
+	v3.push_back(Paire(1, create_sets(tab6,1)));
+	rule2[get_set_code("Skip")] = v3;
+	
+	vector<Paire> v4;
+	v4.push_back(Paire(1, create_sets(tab7,1)));
+	v4.push_back(Paire(0, create_sets(tab3,1)));
+	rule2[get_set_code("Block_arg")] = v4;
+}
+
 void initRewriteRule() {
 	string tab1[] = {"Instr", "Expr"};
 	string tab2[] = {"Instr"};
@@ -74,7 +115,12 @@ void initRewriteRule() {
 void init() {
 		initMap();
 		initRule1();
+		initRule2();
 		initRewriteRule();
+		
+		
+		string tab[] = {"Instr"};
+		Paire p = Paire(1, create_sets(tab, 1));
 	
 }
 
@@ -84,4 +130,11 @@ int get_set_code(string t) {
 		cout << "ERROR : type " << t << " unknown" << endl;
 	}
 	return result;	
+}
+
+
+Paire::Paire(int nb, sets s) {
+	this->s = s;
+	this->nb = nb;
+	
 }

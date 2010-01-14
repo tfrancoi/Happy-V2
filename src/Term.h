@@ -10,6 +10,8 @@ class Term {
 	public :
 		virtual int isTerminal();	
 		virtual void print(int level);
+		virtual int getType();
+		virtual sets getGeneral(); 
 };
 
 
@@ -46,8 +48,8 @@ class LTerm : public Term {
 		Term* operator[](unsigned int );
 		void set(unsigned int , Term* );
 		Term* flatten();
-		
 		void set_type(int );
+	
 	private :
 		std::vector<Term*> list;
 		int block;
