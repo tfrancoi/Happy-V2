@@ -14,11 +14,12 @@ string type[] = {
 	"If", "While", "Call", "Assignement", "Return", "Skip",
 	"set", "if", "while", "return", "skip", "Expr",
 	"string", "int", "float"
-	
-	};
+};
+
 int type_length = 25;
 
 map<string, int> type_map;
+
 
 map<int, int> regle1;
 map<int, int> regle1_2;
@@ -67,6 +68,11 @@ void initRule2() {
 	string tab5[] = {"Instr", "Block_instr"};
 	string tab6[] = {"skip"};
 	string tab7[] = {"of"};
+	string tab8[] = {"set"};
+	string tab9[] = {"Expr"};
+	string tab10[] = {"if"};
+	string tab11[] = {"while"};
+	string tab12[] = {"return"};
 	
 	vector<Paire> v1;
 	v1.push_back(Paire(-1, create_sets(tab1, 2)));
@@ -77,7 +83,7 @@ void initRule2() {
 	v2.push_back(Paire(1, create_sets(tab2, 1)));
 	v2.push_back(Paire(1, create_sets(tab3, 1)));
 	v2.push_back(Paire(1, create_sets(tab4, 1)));
-	v2.push_back(Paire(1, create_sets(tab5, 1)));
+	v2.push_back(Paire(1, create_sets(tab5, 2)));
 	rule2[get_set_code("Fun")] = v2;
 	
 	
@@ -89,6 +95,43 @@ void initRule2() {
 	v4.push_back(Paire(1, create_sets(tab7,1)));
 	v4.push_back(Paire(0, create_sets(tab3,1)));
 	rule2[get_set_code("Block_arg")] = v4;
+	
+	vector<Paire> v5;
+	v5.push_back(Paire(-1, create_sets(tab5, 2)));
+	rule2[get_set_code("Block_instr")] = v5;
+	
+	vector<Paire> v6;
+	v6.push_back(Paire(1, create_sets(tab8, 1)));
+	v6.push_back(Paire(1, create_sets(tab3, 1)));
+	v6.push_back(Paire(1, create_sets(tab9, 1)));
+	rule2[get_set_code("Assignement")] = v6;
+	
+	vector<Paire> v7;
+	v7.push_back(Paire(1, create_sets(tab3, 1)));
+	v7.push_back(Paire(0, create_sets(tab9, 1)));
+	rule2[get_set_code("Call")] = v7;
+	
+	vector<Paire> v8;
+	v8.push_back(Paire(1, create_sets(tab10, 1)));
+	v8.push_back(Paire(1, create_sets(tab9, 1)));
+	v8.push_back(Paire(2, create_sets(tab5, 2)));
+	rule2[get_set_code("If")] = v8;
+	
+	
+	vector<Paire> v9;
+	v9.push_back(Paire(1, create_sets(tab11, 1)));
+	v9.push_back(Paire(1, create_sets(tab9, 1)));
+	v9.push_back(Paire(1, create_sets(tab5, 2)));
+	rule2[get_set_code("While")] = v9;
+	
+	
+	vector<Paire> v10;
+	v10.push_back(Paire(1, create_sets(tab12, 1)));
+	v10.push_back(Paire(1, create_sets(tab9, 1)));
+	rule2[get_set_code("Return")] = v10;
+	
+	
+	
 }
 
 void initRewriteRule() {
@@ -116,12 +159,7 @@ void init() {
 		initMap();
 		initRule1();
 		initRule2();
-		initRewriteRule();
-		
-		
-		string tab[] = {"Instr"};
-		Paire p = Paire(1, create_sets(tab, 1));
-	
+		initRewriteRule();	
 }
 
 int get_set_code(string t) {

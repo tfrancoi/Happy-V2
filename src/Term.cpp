@@ -2,6 +2,7 @@
 #include <iostream>
 #include <typeinfo>
 #include "grammar.h"
+#include "set/sets.h"
 
 using namespace std;
 
@@ -16,6 +17,26 @@ int Term::isTerminal() {
 void Term::print(int level) {
 		cout << "erreur" << endl;	
 }
+
+
+int Term::getType() {
+	return this->type;
+}
+
+sets Term::getGeneral() {
+	return this->general;
+}
+
+
+void Term::setType(int type) {
+	this->type = type;
+}
+
+void Term::setGeneral(sets gene) {
+	this->general = gene;
+}
+
+
 TTerm::TTerm() {
 	this->value = "";
 	this->type = 0;
@@ -37,12 +58,11 @@ void TTerm::print(int level) {
 int TTerm::isTerminal() {
 	return 1;
 }
-int TTerm::getType() {
-	return this->type;
-}
+
 string TTerm::getValue() {
 	return this->value;
 }
+
 LTerm::LTerm() {
 	list = vector<Term*>();
 	block = 2;
@@ -94,6 +114,8 @@ void LTerm::set(unsigned int i, Term* t) {
 	list[i] = t;
 	block = 2;
 }
+
 void LTerm::set_type(int i) {
 	this->type = i;
 }
+

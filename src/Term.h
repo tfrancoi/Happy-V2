@@ -10,8 +10,13 @@ class Term {
 	public :
 		virtual int isTerminal();	
 		virtual void print(int level);
-		virtual int getType();
-		virtual sets getGeneral(); 
+		int getType();
+		sets getGeneral();
+		void setType(int type);
+		void setGeneral(sets gene);
+	protected :
+		int type; //spécifique
+		sets general;
 };
 
 
@@ -22,8 +27,8 @@ class TTerm : public Term {
 			TTerm();
 			TTerm(std::string value, std::string type, std::string file, int line);
 			~TTerm();
-			int getType();
 			std::string getValue();
+			
 			
 		private :
 				std::string value;
@@ -49,6 +54,8 @@ class LTerm : public Term {
 		void set(unsigned int , Term* );
 		Term* flatten();
 		void set_type(int );
+		
+		void applyRule1();
 	
 	private :
 		std::vector<Term*> list;
