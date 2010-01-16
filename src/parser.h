@@ -5,6 +5,6 @@
 
 
 
-void parse(LTerm* tree);
+void analyse_tree(LTerm* tree);
 
 #endif 

@@ -1,8 +1,10 @@
 #include <string>
-#include "Term.h"
+#include "parser.h"
 
-void parse(LTerm *tree) {
-	char tab[] = "Programme";
+using namespace std;
+
+void analyse_tree(LTerm *tree) {
+	string a = "salut";
 	
 	
 }

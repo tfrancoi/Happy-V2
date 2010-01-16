@@ -10,6 +10,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdio>
 using namespace std;
 /*----------------------------------------------------------------------------*
 **  "sets()" default constructor, initializes elements of the set to zero.  
