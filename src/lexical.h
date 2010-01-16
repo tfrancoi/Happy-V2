@@ -6,7 +6,7 @@
 bool isSpace(const char);
 char isBrackets(const char c) ;
 
-int lexical_analyser(const char* main_file, const char* preprocess_file);
+int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm* );
 /**
  * return 0 if there is no error then type contain the good type of the term
  * 				1 if there is an error then type contain the error

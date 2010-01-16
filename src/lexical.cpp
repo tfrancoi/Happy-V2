@@ -14,7 +14,7 @@
 
 using namespace std;
 
-int lexical_analyser(const char* main_file, const char* preprocess_file) {
+int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *cur) {
 	
 
 	int level = 0;
@@ -35,7 +35,7 @@ int lexical_analyser(const char* main_file, const char* preprocess_file) {
 	vector<string> directive;
 	
 	Stack<LTerm> term_stack = Stack<LTerm>();	
-	LTerm *cur = new LTerm();
+	
 	
 	cout << "lexical parser " << endl;
 	while ((c = is.get()) != -1)  {
@@ -218,14 +218,14 @@ int analyseTerm(const string value, string* type) {
 }
 
 Term* simplify(Term *t) {
-	if(typeid(TTerm) == typeid(*t)) {
+	if(t->isTerminal()) {
 		return t;
 	}
 	
 	LTerm *cur = dynamic_cast<LTerm*> (t);
 	Term* c = cur->flatten();
 	
-	if(typeid(TTerm) == typeid(*c)) {
+	if(c->isTerminal()) {
 		return c;
 	}
 	
@@ -240,7 +240,7 @@ void reduce(LTerm *tree) {
 			tree->set(i, simplify((*tree)[i]));
 	}
 	Term *f = tree->flatten();
-	if(typeid(*f) == typeid(LTerm)) {
+	if(!f->isTerminal()) {
 		LTerm *t = dynamic_cast<LTerm*>(f);
 		*tree = *t;
 	}

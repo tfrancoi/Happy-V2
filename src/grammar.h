@@ -10,7 +10,7 @@ void init();
 
 
 int get_set_code(std::string t);
-
+sets create_sets(std::string tab[], int size);
 
 
 class Paire {

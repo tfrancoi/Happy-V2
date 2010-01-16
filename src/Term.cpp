@@ -103,7 +103,7 @@ Term* LTerm::flatten() {
 	}
 	
 	//si on a affaire un atom
-	if(typeid(TTerm) == typeid(*list[0])) {
+	if(list[0]->isTerminal()) {
 		return this;
 	}
 	

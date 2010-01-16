@@ -4,7 +4,6 @@
 
 
 
-
-void analyse_tree(LTerm* tree);
+int analyse_tree(LTerm* tree);
 
 #endif 
