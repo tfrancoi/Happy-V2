@@ -32,8 +32,6 @@ class TTerm : public Term {
 			
 		private :
 				std::string value;
-				int type; //spécifique
-				sets general;
 				std::string file;
 				int line;
 		
@@ -59,7 +57,6 @@ class LTerm : public Term {
 	
 	private :
 		std::vector<Term*> list;
-		int block;
 		int type;
 		sets general;
  

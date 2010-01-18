@@ -140,7 +140,7 @@ int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *
 	
 	
 	reduce(cur);
-	cur->print(0);
+	//cur->print(0);
   is.close();           // close file
   
   return 0;

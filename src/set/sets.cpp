@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <cstdio>
+#include <sstream>
 using namespace std;
 /*----------------------------------------------------------------------------*
 **  "sets()" default constructor, initializes elements of the set to zero.  
@@ -197,6 +198,28 @@ void sets::print()
     cout << "}" << endl;
 }
 
+string sets::to_s()
+{
+		ostringstream out;
+		out << "{ " ;
+
+    for( int j = 0; j < MAX_WORDS; j++ )            // do all words
+    {
+        unsigned long mask = 1;                     // start at low bit
+        
+	for( int i = 1; i <= WORD_SIZE; i++ )
+	{
+	    if( set[j] & mask )                     // check bit
+				out << ( WORD_SIZE * j + i ) << " ";
+
+	    mask <<= 1;                             // next higher bit
+	}
+    }
+    
+    out << "}";
+    return out.str();
+}
+
 /*----------------------------------------------------------------------------*
 **  "operator = " assigns the right hand side to this set.
 **
@@ -286,4 +309,15 @@ sets sets::operator ^ ( const sets &rhs )
 	rv.set[i] = set[i] ^ rhs.set[i];            // bitwise XOR
                        
     return rv;
+}
+
+bool sets::operator < ( const sets &rhs ) {
+	long sum1 = 0;
+	long sum2 = 0;
+	for( int i = 0; i < MAX_WORDS; i++ )  {          // copy into new set
+		sum1 += set[i];
+		sum2 += rhs.set[i];
+	}
+	return sum1 < sum2;
+	
 }

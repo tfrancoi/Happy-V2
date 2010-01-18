@@ -63,18 +63,20 @@ string TTerm::getValue() {
 	return this->value;
 }
 
+
+
 LTerm::LTerm() {
 	list = vector<Term*>();
-	block = 2;
+	setType(0);
 }
 void LTerm::add(Term *t) {
 	list.push_back(t);
-	block = 2;
 }
+
 void LTerm::del_last() {
 	list.pop_back();
-	block = 2;
 }
+
 int LTerm::isTerminal() {
 	return 0;
 }
@@ -84,7 +86,7 @@ int LTerm::size() {
 }
 void LTerm::print(int level) {
 	indent(level);
-	cout << "[" << endl;	
+	cout << "[ type = "  << getType() << ", general = " << getGeneral().to_s() << endl;	
 	for(unsigned int i = 0; i < list.size(); i++) {
 		list[i]->print(level+1);
 	}
@@ -112,10 +114,7 @@ Term* LTerm::flatten() {
 }
 void LTerm::set(unsigned int i, Term* t) {
 	list[i] = t;
-	block = 2;
 }
 
-void LTerm::set_type(int i) {
-	this->type = i;
-}
+
 

@@ -16,7 +16,9 @@ string type[] = {
 	"string", "int", "float"
 };
 
-int type_length = 25;
+const int type_length = 25;
+const int nb_element_block = 2;
+int element1_2[nb_element_block];
 
 map<string, int> type_map;
 
@@ -51,6 +53,9 @@ void initRule1() {
 	regle1[get_set_code("while")] = get_set_code("While");
 	regle1[get_set_code("Id")] = get_set_code("Call");
 	regle1[get_set_code("of")] = get_set_code("Block_arg");
+	
+	element1_2[0] = get_set_code("Block_fun");
+	element1_2[1] =get_set_code("Block_instr");
 	
 	regle1_2[get_set_code("Block_fun")] = get_set_code("Block_fun");
 	regle1_2[get_set_code("Block_instr")] = get_set_code("Block_instr");
@@ -175,4 +180,23 @@ Paire::Paire(int nb, sets s) {
 	this->s = s;
 	this->nb = nb;
 	
+}
+
+
+
+map<int, int> getRule1() {
+	return regle1;
+} 
+map<int, int> getRule1_2() {
+	return regle1_2;
+}
+map<int, vector<Paire> > getRule2() {
+	return rule2;
+}
+map<int, sets> getRule3() {
+	return rewriteRule;
+}
+
+int applyRule1_2(sets s) {
+	return 0;
 }

@@ -30,6 +30,9 @@ public:
     sets operator * ( const sets & );
     sets operator - ( const sets & );
     sets operator ^ ( const sets & );
+    bool operator < ( const sets & );
+    
+    std::string to_s();
 
 private:
     unsigned long set[MAX_WORDS];                   // the set
