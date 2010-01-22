@@ -1,11 +1,33 @@
+#ifndef PROG_H
+#define PROG_H
+
 #include <string>
+#include <map>
+#include "../Term.h"
+
+class Function {
+	
+	
+};
 
 class Prog {
-	
-	
-	
-}
+	public :
+		Prog(LTerm *tree);
+	private :
+		std::map<std::string, Function*> fun_list;
+};
 
+class Val {
+	
+};
+
+class Store {
+	
+};
+
+class Env {
+	
+};
 
 class Expression {
 	public :
@@ -16,17 +38,15 @@ class Expression {
 		 * @return un objet val qui représente la valeur renvoyée
 		 */ 
 		virtual Val eval(Store* s, Env* e);
-}
+};
 
-class function {
-	
-	
-}
+
 
 
 class id : public Expression {
 	private :
-		string name;
+		std::string name;
 		int ref;
 	
-}
+};
+#endif

@@ -34,7 +34,7 @@ sets create_sets(string tab[], int size) {
 	for(int i = 0; i < size; i++) {
 		s.insert(get_set_code(tab[i]));
 	}
-	s.print();
+	//s.print();
 	return s;
 }
 
@@ -170,7 +170,8 @@ void init() {
 int get_set_code(string t) {
 	int result = type_map[t];
 	if(!result) {
-		cout << "ERROR : type " << t << " unknown" << endl;
+		if(t != "ERROR") 
+			cout << "ERROR : type " << t << " unknown" << endl;
 	}
 	return result;	
 }
@@ -200,7 +201,6 @@ map<int, sets> getRule3() {
 int applyRule1_2(sets s) {
 	for(int i = 0; i < nb_element_block; i++) {
 		if(s.item(element1_2[i])) {
-			cout << " test " << element1_2[i] << endl;
 			return element1_2[i];  
 		}
 	}	
