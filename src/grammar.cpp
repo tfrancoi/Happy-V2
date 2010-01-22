@@ -198,5 +198,11 @@ map<int, sets> getRule3() {
 }
 
 int applyRule1_2(sets s) {
+	for(int i = 0; i < nb_element_block; i++) {
+		if(s.item(element1_2[i])) {
+			cout << " test " << element1_2[i] << endl;
+			return element1_2[i];  
+		}
+	}	
 	return 0;
 }

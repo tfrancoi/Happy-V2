@@ -28,6 +28,8 @@ class TTerm : public Term {
 			TTerm(std::string value, std::string type, std::string file, int line);
 			~TTerm();
 			std::string getValue();
+			std::string getFile();
+			int getLine();
 			
 			
 		private :

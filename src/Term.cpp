@@ -52,7 +52,7 @@ TTerm::TTerm(string value, string type, string file, int line) {
 }
 void TTerm::print(int level) {
 	  indent(level);
-		cout << "type : " << this->type << "; value : " << this->value << 
+		cout << "general : " << getGeneral().to_s() << "; type : " << this->type << "; value : " << this->value << 
 				" in file " << file << " at line " << line << endl ;
 }
 int TTerm::isTerminal() {
@@ -114,6 +114,15 @@ Term* LTerm::flatten() {
 }
 void LTerm::set(unsigned int i, Term* t) {
 	list[i] = t;
+}
+
+
+string TTerm::getFile() {
+	return file;
+}
+
+int TTerm::getLine() {
+	return line;
 }
 
 

@@ -26,6 +26,7 @@ class Paire {
 std::map<int, int> getRule1(); 
 std::map<int, int> getRule1_2();
 std::map<int, std::vector<Paire> > getRule2();
-std::map<int, sets> getRule3();;
+std::map<int, sets> getRule3();
+int applyRule1_2(sets s);
 
 #endif
