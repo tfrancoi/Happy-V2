@@ -10,18 +10,19 @@
  * TODO : fix when main is call in an other directory, 
  * this directory became the working directory
  */
+
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <vector>
 
+#include <vector>
+#include <string>
 #include "lexical.h"
 #include "preprocess.h"
 #include "const_preprocess.h"
 
 using namespace std;
 
-vector<string> includes;
+vector<std::string> inc;
 
 int isPreprocessorDir(string s) {
 	if(s == OPEN_DIR_PREPOCESS )
@@ -34,8 +35,8 @@ int isPreprocessorDir(string s) {
 }
 
 int include(ofstream* os, const char* in, int line, const char* file) {
-	for(unsigned int i = 0; i < includes.size(); i++) {
-		if(includes[i] == in) {
+	for(unsigned int i = 0; i < inc.size(); i++) {
+		if(inc[i] == in) {
 			cout << "warning double include at line " << line << " in file " << file << endl;
 			return 0;
 		}
@@ -47,7 +48,7 @@ int include(ofstream* os, const char* in, int line, const char* file) {
 		cout << "include error cannot find " << in << endl;
 		return -1;
 	}
-	includes.push_back(in);
+	inc.push_back(in);
 	is.close();
 	*(os) << "[# begin " << in << " #]" << endl;
 	int result = analyseFile(in, os);
@@ -131,7 +132,7 @@ int analyseFile(const char* in, ofstream* os) {
 }
 
 int preprocess(const char* in, const char* out) {
-	includes.push_back(in);
+	inc.push_back(in);
 	ofstream os;
 	os.open(out);
 
