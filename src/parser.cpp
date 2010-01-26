@@ -17,10 +17,13 @@ int analyse_node(LTerm *tree) {
 		if((*tree)[0]->isTerminal()) {
 			int type = (*tree)[0]->getType();
 			tree->setType(getRule1()[type]);
-			//si c'est 0 erreur invalid token at child 1
+			if(tree->getType() == get_set_code("ERROR")) {
+				
+				cout << "Invalid start list token at line " << tree->getLine() << " in file " << tree->getFile() << endl;
+				return 3;
+			}
 		}
 		else { //pas terminal alors on applique la règle 2
-			cout << "on ne connait pas le type on va le trouver" << endl;
 			int type = applyRule1_2(tree->getGeneral());
 			if(type) {
 				tree->setType(type);
@@ -32,11 +35,11 @@ int analyse_node(LTerm *tree) {
 	
 	sets r = rewriteCheck(tree);
 	if(r.cardinality() == 0) {
-		cout << "Error unexpected element while rewrite " << endl;
+		cout << "Error unexpected element while rewrite at line " << tree->getLine() << " in file " << tree->getFile() << endl;
 		return 2;
 	}
 	if(r.cardinality() > 1)  {
-		cout << "Ambiguité gros soucis ici ";
+		cout << "Ambiguité gros soucis ici at line " << tree->getLine() << " in file " << tree->getFile() << endl;
 		return 99;
 	}
 	tree->setGeneral(r);
@@ -58,7 +61,7 @@ int analyse_node(LTerm *tree) {
 		}
 		
 		if((nb + child) > tree->size()) {
-			cout << "Erreur d'arity" << endl;
+			cout << "Arity error at line " << tree->getLine() << " in file " << tree->getFile() << endl;
 			return 1;
 		}
 		
@@ -67,6 +70,11 @@ int analyse_node(LTerm *tree) {
 			child++;
 		}
 		
+	}
+	
+	if(child < tree->size()) {
+		cout << "Arity error at line " << tree->getLine() << " in file " << tree->getFile() << endl;
+		return 1;
 	}
 	//on connait le type général du fils, on vérifie que ca colle bien avec le type spécifique
 	//tree->print(0);
@@ -91,7 +99,9 @@ int analyse_node(LTerm *tree) {
 	for(int i =0; i < tree->size(); i++) {
 		if(!(*tree)[i]->isTerminal()) {
 			LTerm* c = dynamic_cast<LTerm*>((*tree)[i]);
-			analyse_node(c);
+			int error  = analyse_node(c);
+			if(error) 
+				return error;
 		}
 	}
 	//tree->print(0);
@@ -100,13 +110,16 @@ int analyse_node(LTerm *tree) {
 }
 
 int analyse_tree(LTerm *tree) {
+	cout << "Parser ";
 	string tab[] = {"Programme"};
 	LTerm *prog = new LTerm();
 	prog->add(tree);
 	prog->setType(get_set_code("Programme"));
 	prog->setGeneral(create_sets(tab, 1));
-	prog->print(0);
-	analyse_node(prog);
+	int error = analyse_node(prog);
+	if(error) {
+		return error;
+	}
 	prog->print(0);
 	return 0;
 	

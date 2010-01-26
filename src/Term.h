@@ -10,6 +10,8 @@ class Term {
 	public :
 		virtual int isTerminal();	
 		virtual void print(int level);
+		virtual std::string getFile();
+		virtual	int getLine();
 		int getType();
 		sets getGeneral();
 		void setType(int type);
@@ -24,12 +26,13 @@ class TTerm : public Term {
 		public :
 			virtual int isTerminal();	
 			virtual void print(int level);
+			virtual std::string getFile();
+			virtual	int getLine();
 			TTerm();
 			TTerm(std::string value, std::string type, std::string file, int line);
 			~TTerm();
 			std::string getValue();
-			std::string getFile();
-			int getLine();
+			
 			
 			
 		private :
@@ -44,6 +47,8 @@ class LTerm : public Term {
 	public :
 		virtual int isTerminal();	
 		virtual void print(int );
+		virtual std::string getFile();
+		virtual	int getLine();
 		LTerm();
 		~LTerm();
 		void add(Term *);

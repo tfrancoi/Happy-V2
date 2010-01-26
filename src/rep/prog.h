@@ -1,6 +1,11 @@
+#ifndef PROG_H
+#define PROG_H
+
 #include <string>
 #include <map>
 #include <vector>
+#include "../Term.h"
+
 
 class Instr {
 	public:
@@ -26,8 +31,23 @@ class Prog {
 		int execute(std::string[] );
 		Function* getFunction(std::string );
 	private:
-		map<std:string, Function*> functions;
+		std::map<std:string, Function*> functions;
 	
+	
+};
+
+
+
+
+class Val {
+	
+};
+
+class Store {
+	
+};
+
+class Env {
 	
 };
 
@@ -41,14 +61,13 @@ class Expression {
 		 * @return un objet val qui représente la valeur renvoyée
 		 */ 
 		virtual Val eval(Store* s, Env* e);
-}
-
-
+};
 
 
 class id : public Expression {
 	private :
-		string name;
+		std::string name;
 		int ref;
 	
-}
+};
+#endif

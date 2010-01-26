@@ -11,6 +11,14 @@ void indent(int level) {
 		cout << ".  ";
 	}
 }
+
+int Term::getLine() {
+	return 0;
+}
+
+string Term::getFile() {
+	return "";
+}
 int Term::isTerminal() {
 	return 0;
 }
@@ -125,5 +133,13 @@ int TTerm::getLine() {
 	return line;
 }
 
+
+int LTerm::getLine() {
+	return list[0]->getLine();
+}
+
+string LTerm::getFile() {
+	return list[0]->getFile();
+}
 
 
