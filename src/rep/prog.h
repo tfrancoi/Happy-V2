@@ -1,10 +1,35 @@
 #include <string>
+#include <map>
+#include <vector>
 
-class Prog {
-	
-	
+class Instr {
+	public:
+		/**
+		 * @return error code, 0 if nothing wrong happened.
+		 */ 
+		virtual int execute(Env*, Store*);
 	
 }
+
+class Function {
+	
+	private :
+		vector<Instr> instr;
+		std::string name;
+		int arity;
+		
+}
+
+class Prog {
+	public:
+		Prog(Lterm* );
+		int execute(std::string[] );
+		Function* getFunction(std::string );
+	private:
+		map<std:string, Function*> functions;
+	
+	
+};
 
 
 class Expression {
@@ -18,10 +43,7 @@ class Expression {
 		virtual Val eval(Store* s, Env* e);
 }
 
-class function {
-	
-	
-}
+
 
 
 class id : public Expression {
