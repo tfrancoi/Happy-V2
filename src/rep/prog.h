@@ -7,34 +7,9 @@
 #include "../Term.h"
 
 
-class Instr {
-	public:
-		/**
-		 * @return error code, 0 if nothing wrong happened.
-		 */ 
-		virtual int execute(Env*, Store*);
-	
-}
 
-class Function {
-	
-	private :
-		vector<Instr> instr;
-		std::string name;
-		int arity;
-		
-}
 
-class Prog {
-	public:
-		Prog(Lterm* );
-		int execute(std::string[] );
-		Function* getFunction(std::string );
-	private:
-		std::map<std:string, Function*> functions;
-	
-	
-};
+
 
 
 
@@ -68,6 +43,37 @@ class id : public Expression {
 	private :
 		std::string name;
 		int ref;
+	
+};
+
+
+class Instr {
+	public:
+		/**
+		 * @return error code, 0 if nothing wrong happened.
+		 */ 
+		virtual int execute(Env*, Store*);
+	
+};
+
+
+class Function {
+	
+	private :
+		std::vector<Instr> instr;
+		std::string name;
+		int arity;
+		
+};
+
+class Prog {
+	public:
+		Prog(LTerm* );
+		int execute(std::string[] );
+		Function* getFunction(std::string );
+	private:
+		std::map<std::string, Function*> functions;
+	
 	
 };
 #endif
