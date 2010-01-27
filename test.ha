@@ -6,6 +6,10 @@
 		(if (= a b) (skip) (skip) )
 		 ) )
 	(fun es (of arg) (write "salut"))
+	(
+		(fun tes (of) (write "test"))
+		(fun tes2 (of) (write "test"))
+	)
 	
 )
 

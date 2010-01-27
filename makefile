@@ -25,7 +25,7 @@ $(BIN)parser.o : $(SRC)parser.cpp
 $(BIN)sets.o : $(SRC)$(SET)sets.cpp
 	$(CC) -o $@ -c $^
 	
-$(BIN)Prog.o : $(SRC)$(REP)prog.cpp
+$(BIN)Prog.o : $(SRC)$(REP)prog.cpp 
 	$(CC) -o $@ -c $^
 	
 clean:

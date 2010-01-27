@@ -109,18 +109,24 @@ int analyse_node(LTerm *tree) {
 	return 0;
 }
 
-int analyse_tree(LTerm *tree) {
-	cout << "Parser ";
+LTerm* prog_tree(LTerm* tree) {
 	string tab[] = {"Programme"};
 	LTerm *prog = new LTerm();
 	prog->add(tree);
 	prog->setType(get_set_code("Programme"));
 	prog->setGeneral(create_sets(tab, 1));
-	int error = analyse_node(prog);
+	return prog;
+}
+
+
+int analyse_tree(LTerm *tree) {
+	
+	int error = analyse_node(tree);
 	if(error) {
 		return error;
 	}
-	prog->print(0);
+	tree->print(0);
+	
 	return 0;
 	
 }

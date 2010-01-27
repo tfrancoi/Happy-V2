@@ -5,6 +5,8 @@
 #include "preprocess.h"
 #include "grammar.h"
 #include "parser.h"
+#include "rep/prog.h"
+
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -15,8 +17,13 @@ int main(int argc, char** argv) {
 	cout << "preprocess " << endl;
 	error = preprocess((const char*) argv[1], (const char*) argv[2]);
 	if(error) { return error; }
+	cout << "Lexical " << endl;
 	lexical_analyser((const char*) argv[1], (const char*) argv[2], tree);
 	if(error) { return error; }
-	analyse_tree(tree);
+	cout << "Parser " << endl;
+	tree = prog_tree(tree);
+	error = analyse_tree(tree);
+	if(error) { return error; }
+	Prog *main = new Prog(tree);
 	
 }

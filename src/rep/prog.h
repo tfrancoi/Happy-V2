@@ -49,6 +49,8 @@ class id : public Expression {
 
 class Instr {
 	public:
+		Instr(LTerm *);
+		virtual ~Instr();
 		/**
 		 * @return error code, 0 if nothing wrong happened.
 		 */ 
@@ -58,8 +60,12 @@ class Instr {
 
 
 class Function {
+	public :
+		Function(LTerm*);
 	
 	private :
+		
+		
 		std::vector<Instr> instr;
 		std::string name;
 		int arity;
@@ -71,7 +77,10 @@ class Prog {
 		Prog(LTerm* );
 		int execute(std::string[] );
 		Function* getFunction(std::string );
+		
 	private:
+		void analyse_block(LTerm*);
+		void analyse_fun(LTerm*);
 		std::map<std::string, Function*> functions;
 	
 	
