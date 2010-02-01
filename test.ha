@@ -2,14 +2,15 @@
 
 (
 	
-	(fun main (of argv) ( (write 42) (write 43)
-		(if (= a b) (skip) (skip) )
-		 ) )
-	(fun es (of arg) (write "salut"))
-	(
-		(fun tes (of) (write "test"))
-		(fun tes2 (of) (write "test"))
+	(fun main (of argv argc) 
+		( 
+			(write 42) 
+			(write 43)
+			(set a 7)
+			(set b 9)
+		) 
 	)
+	
 	
 )
 

@@ -19,14 +19,14 @@
 
 <Reserved_char>  	--> '(' | ')' | '"'
 <Reserved_word> 	--> '[!' | '!]' | '[#' | '#]' | 'if' | 
-'set' | 'while' | 'fun' | 'skip' | 'of' | 'return'
+'set' | 'while' | 'fun' | 'skip' | 'of' | 'return' | 'private' | 'public' | 'method'
 
 <!-- syntaxe pour le parser -->
 
 <Programme> 			--> <Fun> | <Block_fun>
 
-<Block_fun> 			--> '(' <Block_fun> ')' | <Block_fun> <Block_fun> | '(' <Fun_list> ')' 
-<Fun_list>  			--> <Fun> | <Fun> <Fun_list>
+<Block_fun> 			--> '(' <Fun_list> ')' | <Fun> 
+<Fun_list>  			--> <Block_fun> | <Block_fun> <Fun_list> | 
 
 <Fun> 						--> '(' 'fun' <Id> <Block_arg> <Instr> ')' | '(' 'fun' <Id> <Block_arg> <Block_instr> ')' | <Class>
 <Block_arg>				--> '(' 'of' <Id_list> ')'
@@ -61,31 +61,8 @@
  
 
 
-(# objet -> id)
-(# objet -> method) 
-
-(class Id
-	(
-		(private a b c)
-		(public b c d)
-	)
-	(
-		(method Access Id (of Id) 
-			(
-				(Instr)
-				(Instr)
-			) 	
-		)
-		(method Access Id (of Id) 
-			(
-				(Instr)
-				(Instr)
-			) 	
-		)
-	)
-)
-
-
+(objet::id)
+(objet.method
 
 
 

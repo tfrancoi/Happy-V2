@@ -1,11 +1,11 @@
 #include <iostream>
 
-
-#include "lexical.h"
 #include "preprocess.h"
+#include "lexical.h"
 #include "grammar.h"
 #include "parser.h"
 #include "rep/prog.h"
+#include "interpreter.h"
 
 using namespace std;
 
@@ -24,6 +24,11 @@ int main(int argc, char** argv) {
 	tree = prog_tree(tree);
 	error = analyse_tree(tree);
 	if(error) { return error; }
+	cout << "translation " << endl;
+	initType();
 	Prog *main = new Prog(tree);
+	cout << "execution " << endl;
+	execute(main, NULL);
+	
 	
 }
