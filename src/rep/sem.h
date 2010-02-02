@@ -8,7 +8,10 @@
 int getType(std::string);
 void initType();
 
-class Value {};
+class Value {
+	public : 
+		virtual string to_s();
+};
 
 class Val {
 	public :
@@ -16,6 +19,7 @@ class Val {
 		Val();
 		Val(int val);
 		int getType();
+		string to_s();
 	
 	private :
 		int type;
@@ -47,6 +51,7 @@ class Env {
 class Empty : public Value {};
 class Int : public Value {
 		public :
+			virtual string to_s();
 			int val;
 };
 

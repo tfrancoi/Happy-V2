@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <sstream>
 #include "interpreter.h"
 
 using namespace std;
@@ -44,8 +44,14 @@ int NFunction::execute(Env* e, Store* s, vector<Expression*> args) {
 
 
 Val write(Env* e, Store* s, vector<Expression*> args) {
+	for(int i = 0; i < args.size(); i++) {
+		Val v = args[i]->eval(s,e);
+		cout << v.to_s();
+		cout << " ";
+	}
+	cout << endl;
 	
-	cout << 42 << endl;
+	
 	return Val(1);
 }
 

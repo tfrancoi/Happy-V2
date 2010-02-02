@@ -54,3 +54,19 @@ Val::Val(int val) {
 	i.val = val;
 	this->val = i;
 }
+
+string Val::to_s() {
+	return value.to_s();
+}
+
+String Value::to_s() {
+	
+	return "(-)";
+}
+
+String Int::to_s() {
+	ostringstream out;
+	out << this->val;
+	return out.str();
+	
+}
