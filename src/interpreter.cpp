@@ -46,4 +46,5 @@ int NFunction::execute(Env* e, Store* s, vector<Expression*> args) {
 
 void initNative() {
 	native["write"] = new NFunction(&write);
+	native["+"] = new NFunction(&::plus);
 }

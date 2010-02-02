@@ -17,7 +17,11 @@ class Expression {
 };
 
 
-class id : public Expression {
+class Id : public Expression {
+	public:
+		Id(std::string s, int var_ref);
+		virtual Val eval(Store* s, Env* e);
+		
 	private :
 		std::string name;
 		int ref;

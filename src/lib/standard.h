@@ -6,6 +6,7 @@
 
 
 Val write(Env* e, Store* s, std::vector<Expression*> args);
+Val plus(Env* e, Store* s, std::vector<Expression*> args);
 
 
 #endif

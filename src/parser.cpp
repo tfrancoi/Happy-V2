@@ -18,7 +18,7 @@ int analyse_node(LTerm *tree) {
 			int type = (*tree)[0]->getType();
 			tree->setType(getRule1()[type]);
 			if(tree->getType() == get_set_code("ERROR")) {
-				
+				cout << type << " ,?? " << endl;
 				cout << "Invalid start list token at line " << tree->getLine() << " in file " << tree->getFile() << endl;
 				return 3;
 			}

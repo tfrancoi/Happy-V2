@@ -49,6 +49,11 @@ Val::Val() {
 	this->val = new Empty();
 }
 
+int Val::getType() {
+	
+	return this->type;
+}
+
 Val::Val(int val) {
 	this->type = ::getType("integer");
 	Int* i =  new Int();

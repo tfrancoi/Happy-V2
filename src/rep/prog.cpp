@@ -5,7 +5,7 @@
 
 using namespace std;
 
-
+map<std::string, int>* vars_ref;
 
 Prog::Prog(LTerm *tree) {
 	analyse_block(tree);
@@ -33,6 +33,7 @@ void Prog::analyse_block(LTerm *tree) {
 }
 
 Function::Function(LTerm *tree) {
+	vars_ref = &(this->vars);
 	TTerm* t = dynamic_cast<TTerm*>( (*tree)[1]);
 	this->name = t->getValue();
 	LTerm* arg = dynamic_cast<LTerm*>( (*tree)[2]);
@@ -86,11 +87,13 @@ int Function::analyse_instr(LTerm* instr, int number) {
 	}
 	if(instr->getType() == get_set_code("Assignement")) { 
 		Assignement* ass = new Assignement(instr);
-		this->instr.push_back(ass);
+		
 		if(vars[ass->getVarName()] == 0) {
 			vars[ass->getVarName()] = j;
 			j++;
 		}
+		ass->setVarRef(vars[ass->getVarName()]);
+		this->instr.push_back(ass);
 		//cout << "set " << ass->getVarName() << endl;
 	}
 	return j;
@@ -103,5 +106,10 @@ int Function::execute(Env* e, Store* s) {
 		}		
 }
 
+
+int get_var_ref(string s) {
+	return (*vars_ref)[s];
+	
+}
 
 

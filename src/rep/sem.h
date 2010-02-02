@@ -11,6 +11,7 @@ void initType();
 class Value {
 	public : 
 		virtual std::string to_s();
+		
 };
 
 class Val {

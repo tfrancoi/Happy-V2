@@ -188,6 +188,10 @@ bool contain(string c , string tab[], int size) {
 }
 
 int analyseTerm(const string value, string* type) {
+	if(value.size() == 1 && value[0] == '-') {
+		type->append("Id");
+		return 0;
+	}
 	//check if it's a number
 	if(contain(value[0], digit, 10) || value[0] == '-') {
 		int floating = 0;

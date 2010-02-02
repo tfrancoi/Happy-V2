@@ -44,6 +44,6 @@ class Prog {
 	
 };
 
-
+int get_var_ref(std::string);
 
 #endif
