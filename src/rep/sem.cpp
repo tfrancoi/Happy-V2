@@ -1,14 +1,15 @@
 #include <string>
 #include <iostream>
+#include <sstream>
 #include "sem.h"
 using namespace std;
 
 
 string types[] = {
-	"empty", "integer"
+	"empty", "integer", "string"
 };
 
-const int types_length = 2;
+const int types_length = 3;
 map<string, int> types_map;
 
 
@@ -45,28 +46,39 @@ Val Env::get(int index) {
 
 Val::Val() {
 	this->type = ::getType("empty"); //empty
-	this->val = Empty();
+	this->val = new Empty();
 }
 
 Val::Val(int val) {
 	this->type = ::getType("integer");
-	Int i = Int();
-	i.val = val;
+	Int* i =  new Int();
+	i->val = val;
 	this->val = i;
 }
 
+Val::Val(string s) {
+	this->type = ::getType("string");
+	Str* str = new Str();
+	str->val = s;
+	this->val = str;
+} 
+
 string Val::to_s() {
-	return value.to_s();
+	return val->to_s();
 }
 
-String Value::to_s() {
+string Value::to_s() {
 	
 	return "(-)";
 }
 
-String Int::to_s() {
+string Int::to_s() {
 	ostringstream out;
 	out << this->val;
 	return out.str();
 	
+}
+
+string Str::to_s() {
+	return val;
 }

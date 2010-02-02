@@ -28,7 +28,8 @@ int main(int argc, char** argv) {
 	initType();
 	Prog *main = new Prog(tree);
 	cout << "execution " << endl;
-	execute(main, NULL);
+	cout << "--------------------------" << endl << endl;
+	return execute(main, NULL);
 	
 	
 }

@@ -8,7 +8,7 @@ using namespace std;
 Call::Call(LTerm* tree) {
 		TTerm* t = dynamic_cast<TTerm*>((*tree)[0]);
 		name = t->getValue();
-		cout << name << endl;
+		//cout << name << endl;
 		for(int i = 1; i < tree->size(); i++) {
 			argument.push_back(create_expression((*tree)[i]));
 		}
@@ -49,9 +49,12 @@ string Assignement::getVarName() {
 
 Expression* create_expression(Term* t) {
 	if(t->getType() == get_set_code("int")) {
-		cout << "int " << endl;
 		TTerm* tt = dynamic_cast<TTerm*>(t);
 		return new Integer(tt->getValue());
+	}
+	if(t->getType() == get_set_code("string")) {
+		TTerm* tt = dynamic_cast<TTerm*>(t);
+		return new String(tt->getValue());
 	}
 	return new Expression();
 }

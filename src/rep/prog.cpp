@@ -20,7 +20,6 @@ void Prog::analyse_fun(LTerm *tree) {
 	functions[f->getName()] = f;	
 }
 
-
 void Prog::analyse_block(LTerm *tree) {
 	for(int i = 0; i < tree->size(); i++) {
 		LTerm* fun = dynamic_cast<LTerm*>((*tree)[i]);
@@ -40,7 +39,7 @@ Function::Function(LTerm *tree) {
 	analyse_arg(arg);
 	LTerm* instr = dynamic_cast<LTerm*>( (*tree)[3]);
 	int j = analyse_instr(instr, this->arity);
-	cout << "total de var " << j << endl;
+	//cout << "total de var " << j << endl;
 	this->nb_var = j;
 }
 
@@ -48,6 +47,7 @@ string Function::getName() {
 	return this->name;
 	
 }
+
 int Function::getNbVar() {
 	return this->nb_var;
 }
@@ -55,6 +55,7 @@ int Function::getNbVar() {
 int Function::getArity() {
 	return this->arity;
 }
+
 void Function::analyse_arg(LTerm* arg) {
 		this->arity = arg->size() - 1;
 		int j = 0;
@@ -62,10 +63,9 @@ void Function::analyse_arg(LTerm* arg) {
 			TTerm *t = dynamic_cast<TTerm*>((*arg)[i]);
 			vars[t->getValue()] = j;
 			j++;
-		}
-		
-		
+		}		
 }
+
 int Function::analyse_block(LTerm* block, int number) {
 	int j = number;
 	for(int i = 0; i < block->size(); i++) {
@@ -83,7 +83,6 @@ int Function::analyse_instr(LTerm* instr, int number) {
 	}
 	if(instr->getType() == get_set_code("Call")) { 
 		this->instr.push_back(new Call(instr));
-		cout << "call " << endl;
 	}
 	if(instr->getType() == get_set_code("Assignement")) { 
 		Assignement* ass = new Assignement(instr);
@@ -92,19 +91,16 @@ int Function::analyse_instr(LTerm* instr, int number) {
 			vars[ass->getVarName()] = j;
 			j++;
 		}
-		cout << "set " << ass->getVarName() << endl;
+		//cout << "set " << ass->getVarName() << endl;
 	}
 	return j;
 }
 
 
-int Function::execute(Env* e, Store* s) {
-		
+int Function::execute(Env* e, Store* s) {		
 		for(int i = 0; i < instr.size(); i++) {
-			cout << "i " << i << endl;
 			instr[i]->execute(e,s);
-		}
-		
+		}		
 }
 
 

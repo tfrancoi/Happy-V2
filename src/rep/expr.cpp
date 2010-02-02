@@ -16,6 +16,17 @@ Integer::Integer(string s) {
 Val Integer::eval(Store* s, Env* e) {
 	return Val(val);
 }
+
+
+String::String(string s) {
+	val = s;
+}
+
+
+Val String::eval(Store* s, Env* e) {
+	return Val(val);
+}
+
 Expression::Expression() {}
 Expression::~Expression() {}
 Val Expression::eval(Store* s, Env* e) { return Val(); }

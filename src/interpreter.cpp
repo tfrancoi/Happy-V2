@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include "interpreter.h"
+#include "lib/standard.h"
 
 using namespace std;
 
@@ -42,18 +43,6 @@ int NFunction::execute(Env* e, Store* s, vector<Expression*> args) {
 	return 0;
 }
 
-
-Val write(Env* e, Store* s, vector<Expression*> args) {
-	for(int i = 0; i < args.size(); i++) {
-		Val v = args[i]->eval(s,e);
-		cout << v.to_s();
-		cout << " ";
-	}
-	cout << endl;
-	
-	
-	return Val(1);
-}
 
 void initNative() {
 	native["write"] = new NFunction(&write);

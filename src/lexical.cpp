@@ -50,6 +50,10 @@ int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *
 		else if(str) {
 			if(c == '\\' && !echapement)
 				echapement = 1;
+			else if(c== 'n' && echapement) {
+				temp = temp + "\n";
+				echapement = 0;
+			}
 			else {
 				temp = temp + c;
 				echapement = 0;

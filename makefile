@@ -4,9 +4,10 @@ BIN = bin/
 SRC = src/
 SET = set/
 REP = rep/
+LIB = lib/
 all : main
 
-main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o
+main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o $(BIN)standard.o
 	$(CCW) -o $@ $^
 $(BIN)main.o : $(SRC)main.cpp
 	$(CCW) -o $@ -c $^
@@ -27,13 +28,15 @@ $(BIN)sets.o : $(SRC)$(SET)sets.cpp
 	$(CC) -o $@ -c $^
 	
 $(BIN)Prog.o : $(SRC)$(REP)prog.cpp 
-	$(CC) -o $@ -c $^
+	$(CCW) -o $@ -c $^
 $(BIN)expr.o : $(SRC)$(REP)expr.cpp 
-	$(CC) -o $@ -c $^
+	$(CCW) -o $@ -c $^
 $(BIN)sem.o : $(SRC)$(REP)sem.cpp 
-	$(CC) -o $@ -c $^
+	$(CCW) -o $@ -c $^
 $(BIN)instr.o : $(SRC)$(REP)instr.cpp 
-	$(CC) -o $@ -c $^
+	$(CCW) -o $@ -c $^
 	
+$(BIN)standard.o : $(SRC)$(LIB)standard.cpp
+	$(CCW) -o $@ -c $^
 clean:
 	rm -rf $(BIN)/*.o

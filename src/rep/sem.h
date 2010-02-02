@@ -10,7 +10,7 @@ void initType();
 
 class Value {
 	public : 
-		virtual string to_s();
+		virtual std::string to_s();
 };
 
 class Val {
@@ -18,12 +18,13 @@ class Val {
 		Val(int type, Value v);
 		Val();
 		Val(int val);
+		Val(std::string);
 		int getType();
-		string to_s();
+		std::string to_s();
 	
 	private :
 		int type;
-		Value val;
+		Value* val;
 	
 };
 
@@ -51,8 +52,14 @@ class Env {
 class Empty : public Value {};
 class Int : public Value {
 		public :
-			virtual string to_s();
+			virtual std::string to_s();
 			int val;
+};
+
+class Str : public Value {
+		public :
+			virtual std::string to_s();
+			std::string val;
 };
 
 
