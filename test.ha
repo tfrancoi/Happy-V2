@@ -1,16 +1,27 @@
 (	
 	(fun main (of argv argc) 
 		( 
-			(+ 3 "salut")
-			(set a "salut")
+			(set a (+ "salut l" "es amis"))
+			(write (writes a " hin ! "))
+			(write (+ 4 (+ 2 3)))
 			(write a)
-			(write 42) 
-			(write 43)
 			(write 100 70 10 45 67)
-			(write "hello world")
 			(write "hello \nworld")
 		) 
 	)	
+	(fun writes (of arg arg2) 
+		(
+			(write (= "salut" "salut"))
+			(write (+ arg arg2))
+			(if (= "salut" "salut") (write "yes") (write "no"))
+		
+			(return (+ arg2 arg))			
+		)
+	)
 )
+
+
+
+
 
 

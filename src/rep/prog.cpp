@@ -94,16 +94,30 @@ int Function::analyse_instr(LTerm* instr, int number) {
 		}
 		ass->setVarRef(vars[ass->getVarName()]);
 		this->instr.push_back(ass);
-		//cout << "set " << ass->getVarName() << endl;
+	}
+	if(instr->getType() == get_set_code("Return")) {
+		this->instr.push_back(new Return(instr));
+	}
+	if(instr->getType() == get_set_code("If")) {
+		If* cond = new If(instr, j);
+		j = cond->getJ();
+		this->instr.push_back(cond);
+		cout << "test ---------------------" << endl;
 	}
 	return j;
 }
 
 
 int Function::execute(Env* e, Store* s) {		
-		for(int i = 0; i < instr.size(); i++) {
-			instr[i]->execute(e,s);
-		}		
+	for(unsigned int i = 0; i < instr.size(); i++) {
+		int result = instr[i]->execute(e,s);
+		if(result == 99) {
+			return 0;
+		}
+		else if(result) {
+			return result;
+		}
+	}		
 }
 
 
@@ -112,4 +126,7 @@ int get_var_ref(string s) {
 	
 }
 
+void set_var_ref(int j, string name) {
+	(*vars_ref)[name] = j;
+}
 

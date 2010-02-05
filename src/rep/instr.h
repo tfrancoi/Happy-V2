@@ -46,4 +46,25 @@ class Assignement : public Instr {
 			int var_ref;
 };
 
+class Return : public Instr {
+	public :
+		Return(LTerm*);
+		virtual int execute(Env*, Store*);
+	private :
+		Expression* expr;	
+};
+
+
+class If : public Instr {
+	public :
+		If(LTerm*, int);
+		int getJ();
+		virtual int execute(Env*, Store*);
+	private :
+		int j;
+		Expression* expr;
+		std::vector<Instr*> yes;
+		std::vector<Instr*> no;
+};
+
 #endif

@@ -5,23 +5,32 @@
 #include <map>
 #include <vector>
 #include "../Term.h"
+
+
+#define EMPTY 0
+#define INTEGER 1
+#define STRING 2
+
 int getType(std::string);
 void initType();
 
 class Value {
 	public : 
-		virtual std::string to_s();
+		virtual std::string to_s() = 0;
+		virtual int to_i() = 0;
 		
 };
 
 class Val {
 	public :
-		Val(int type, Value v);
+		Val(int type, Value* v);
 		Val();
 		Val(int val);
 		Val(std::string);
 		int getType();
 		std::string to_s();
+		int to_i();
+		
 	
 	private :
 		int type;
@@ -44,23 +53,30 @@ class Env {
 		~Env();
 		Val get(int);
 		int set(int, Val);
+		int getSize();
 	private:
 		Val* tab;
 		int size; 
 		
 };
 
-class Empty : public Value {};
+class Empty : public Value {
+	public :
+		virtual std::string to_s();
+		virtual int to_i();
+};
 class Int : public Value {
-		public :
-			virtual std::string to_s();
-			int val;
+	public :
+		virtual std::string to_s();
+		virtual int to_i();
+		int val;
 };
 
 class Str : public Value {
-		public :
-			virtual std::string to_s();
-			std::string val;
+	public :
+		virtual std::string to_s();
+		virtual int to_i();
+		std::string val;
 };
 
 

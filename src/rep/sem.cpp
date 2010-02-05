@@ -5,25 +5,6 @@
 using namespace std;
 
 
-string types[] = {
-	"empty", "integer", "string"
-};
-
-const int types_length = 3;
-map<string, int> types_map;
-
-
-int getType(string s) {
-	return types_map[s];
-}
-
-
-void initType() {	
-	for(int i = 0; i < types_length; i++) {
-		types_map[types[i]] = i;
-	}
-}
-
 Env::Env(int nb_var) {
 	tab = new Val[nb_var + 1];
 	size = nb_var + 1;
@@ -43,10 +24,19 @@ Val Env::get(int index) {
 	return tab[index];
 }
 
+int Env::getSize() {
+	return this->size;
+}
+
 
 Val::Val() {
-	this->type = ::getType("empty"); //empty
+	this->type = EMPTY;//empty
 	this->val = new Empty();
+}
+
+Val::Val(int type, Value* v) {
+	this->type = type;//empty
+	this->val = v;
 }
 
 int Val::getType() {
@@ -55,14 +45,14 @@ int Val::getType() {
 }
 
 Val::Val(int val) {
-	this->type = ::getType("integer");
+	this->type = INTEGER;
 	Int* i =  new Int();
 	i->val = val;
 	this->val = i;
 }
 
 Val::Val(string s) {
-	this->type = ::getType("string");
+	this->type = STRING;
 	Str* str = new Str();
 	str->val = s;
 	this->val = str;
@@ -72,9 +62,17 @@ string Val::to_s() {
 	return val->to_s();
 }
 
-string Value::to_s() {
-	
+int Val::to_i() {
+	return val->to_i();
+}
+
+
+string Empty::to_s() {	
 	return "(-)";
+}
+
+int Empty::to_i() {
+	return 0;
 }
 
 string Int::to_s() {
@@ -84,6 +82,14 @@ string Int::to_s() {
 	
 }
 
+int Int::to_i() {
+	return this->val;
+}
+
 string Str::to_s() {
 	return val;
+}
+
+int Str::to_i() {
+	return 1;
 }

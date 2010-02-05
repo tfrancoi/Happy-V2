@@ -25,7 +25,6 @@ int main(int argc, char** argv) {
 	error = analyse_tree(tree);
 	if(error) { return error; }
 	cout << "translation " << endl;
-	initType();
 	Prog *main = new Prog(tree);
 	cout << "execution " << endl;
 	cout << "--------------------------" << endl << endl;

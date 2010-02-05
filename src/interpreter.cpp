@@ -43,8 +43,13 @@ int NFunction::execute(Env* e, Store* s, vector<Expression*> args) {
 	return 0;
 }
 
+Val NFunction::eval(Store* s, Env* e, vector<Expression*> args) {
+	return this->f(e,s,args);
+}
+
 
 void initNative() {
 	native["write"] = new NFunction(&write);
 	native["+"] = new NFunction(&::plus);
+	native["="] = new NFunction(&::egal);
 }
