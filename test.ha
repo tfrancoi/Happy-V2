@@ -1,21 +1,23 @@
+[# include std.ha #]
+
 (	
 	(fun main (of argv argc) 
 		( 
-			(set a (+ "salut l" "es amis"))
-			(write (writes a " hin ! "))
-			(write (+ 4 (+ 2 3)))
-			(write a)
-			(write 100 70 10 45 67)
-			(write "hello \nworld")
+			(write (- 10 3))
+			(write (<= 5 4) (< 4 4))
+			(write (>= 5 4) (> 4 4))
+			(write (* 3 400000))
+			(write (fibbo 24))
 		) 
-	)	
-	(fun writes (of arg arg2) 
-		(
-			(write (= "salut" "salut"))
-			(write (+ arg arg2))
-			(if (= "salut" "salut") (write "yes") (write "no"))
-		
-			(return (+ arg2 arg))			
+	)		
+	
+	(fun fibbo (of a) 
+		(if (= a 0) 
+			(return 0)
+			(if (= a 1)
+				(return 1)
+				(return (+ (fibbo (- a 1)) (fibbo (- a 2))))
+			)
 		)
 	)
 )

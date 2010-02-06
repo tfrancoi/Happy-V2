@@ -110,17 +110,81 @@ int Return::execute(Env* e, Store* s) {
 If::If(LTerm *tree, int j) {
 	this->j = j;
 	this->expr = create_expression((*tree)[1]);
+	LTerm *t = dynamic_cast<LTerm*>((*tree)[2]);
+	this->j = analyse_instr(t, j, yes);
+	LTerm *tt = dynamic_cast<LTerm*>((*tree)[3]);
+	this->j = analyse_instr(tt, this->j, no);
 }
 
 int If::getJ() {
 	return j;
 }
 
+int If::analyse_block(LTerm* block, int number, std::vector<Instr*>& v) {
+	int j = number;
+	for(int i = 0; i < block->size(); i++) {
+		LTerm* instr = dynamic_cast<LTerm*>( (*block)[i]);
+		j = analyse_instr(instr, j, v);
+	}
+	
+	return j;
+}
+		
+int If::analyse_instr(LTerm* instr, int number, std::vector<Instr*>& v) {
+	int j = number;
+	if(instr->getType() == get_set_code("Block_instr")) {
+		j = analyse_block(instr, j,v);
+	}
+	if(instr->getType() == get_set_code("Call")) { 
+		//cout << "appel de fonction " << endl;
+		v.push_back(new Call(instr));
+	}
+	if(instr->getType() == get_set_code("Assignement")) { 
+		Assignement* ass = new Assignement(instr);
+		
+		if(get_var_ref(ass->getVarName()) == 0) {
+			set_var_ref(j, ass->getVarName());
+			j++;
+		}
+		ass->setVarRef(get_var_ref(ass->getVarName()));
+		v.push_back(ass);
+	}
+	if(instr->getType() == get_set_code("Return")) {
+		v.push_back(new Return(instr));
+	}
+	if(instr->getType() == get_set_code("If")) {
+		If* cond = new If(instr, j);
+		j = cond->getJ();
+		v.push_back(cond);
+		//cout << "test ---------------------" << endl;
+	}
+	return j;
+}
 
-int If::execute(Env*, Store*) {
+
+
+int If::execute(Env* e, Store* s) {
+	if(expr->eval(s,e).to_b()) {
+		executeList(e,s,yes);
+	}
+	else {
+		executeList(e,s,no);
+	}
 	return 0;
 }
 
+
+int If::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
+	for(unsigned int i = 0; i < instr.size(); i++) {
+		int result = instr[i]->execute(e,s);
+		if(result == 99) {
+			return 99;
+		}
+		else if(result) {
+			return result;
+		}
+	}		
+}
 
 Instr::Instr() {}
 Instr::~Instr() {}

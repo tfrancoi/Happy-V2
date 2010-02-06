@@ -100,9 +100,10 @@ int Function::analyse_instr(LTerm* instr, int number) {
 	}
 	if(instr->getType() == get_set_code("If")) {
 		If* cond = new If(instr, j);
+		//cout << "j : " << j << endl;
 		j = cond->getJ();
 		this->instr.push_back(cond);
-		cout << "test ---------------------" << endl;
+		//cout << "j after : " << j << endl;
 	}
 	return j;
 }

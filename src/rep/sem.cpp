@@ -66,12 +66,20 @@ int Val::to_i() {
 	return val->to_i();
 }
 
+int Val::to_b() {
+	return val->to_b();
+}
+
 
 string Empty::to_s() {	
 	return "(-)";
 }
 
 int Empty::to_i() {
+	return 0;
+}
+
+int Empty::to_b() {
 	return 0;
 }
 
@@ -86,10 +94,21 @@ int Int::to_i() {
 	return this->val;
 }
 
+int Int::to_b() {
+	return this->val;	
+}
+
 string Str::to_s() {
 	return val;
 }
 
 int Str::to_i() {
 	return 1;
+}
+
+int Str::to_b() {
+	if(val == "") 
+		return 0;
+	else
+		return 1;
 }

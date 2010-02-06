@@ -52,6 +52,26 @@ Val plus(Env* e, Store* s, vector<Expression*> args) {
 	return result;
 }
 
+
+Val moins(Env* e, Store* s, vector<Expression*> args) {
+	if(args.size() != 2) {
+		cout << "cannot use operator - for less or more then 2 arguments" << endl;
+		exit(1);
+	}
+	Val v1 = args[0]->eval(s,e);
+	Val v2 = args[1]->eval(s,e);
+	int type1 = v1.getType();
+	int type2 = v2.getType();
+	if(type1 == type2) {
+		if(type1 ==INTEGER) {
+			int i = v1.to_i() - v2.to_i();
+			return Val(i);
+		}
+	}
+	
+	return Val(0);
+}
+
 Val egal(Env* e, Store* s, vector<Expression*> args) {
 	if(args.size() != 2) {
 		cout << "cannot use operator = for less then 2 arguments" << endl;
@@ -68,6 +88,25 @@ Val egal(Env* e, Store* s, vector<Expression*> args) {
 		}
 		if(type1 == STRING) {
 			int i = v1.to_s() == v2.to_s();
+			return Val(i);
+		}
+	}
+	return Val(0);	
+}
+
+
+Val less(Env* e, Store* s, vector<Expression*> args) {
+	if(args.size() != 2) {
+		cout << "cannot use operator < for less or more then 2 arguments" << endl;
+		exit(1);
+	}
+	Val v1 = args[0]->eval(s,e);
+	Val v2 = args[1]->eval(s,e);
+	int type1 = v1.getType();
+	int type2 = v2.getType();
+	if(type1 == type2) {
+		if(type1 ==INTEGER) {
+			int i = v1.to_i() < v2.to_i();
 			return Val(i);
 		}
 	}

@@ -18,6 +18,7 @@ class Value {
 	public : 
 		virtual std::string to_s() = 0;
 		virtual int to_i() = 0;
+		virtual int to_b() = 0;
 		
 };
 
@@ -30,6 +31,7 @@ class Val {
 		int getType();
 		std::string to_s();
 		int to_i();
+		int to_b();
 		
 	
 	private :
@@ -64,11 +66,13 @@ class Empty : public Value {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
+		virtual int to_b();
 };
 class Int : public Value {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
+		virtual int to_b();
 		int val;
 };
 
@@ -76,6 +80,7 @@ class Str : public Value {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
+		virtual int to_b();
 		std::string val;
 };
 

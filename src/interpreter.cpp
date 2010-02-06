@@ -51,5 +51,7 @@ Val NFunction::eval(Store* s, Env* e, vector<Expression*> args) {
 void initNative() {
 	native["write"] = new NFunction(&write);
 	native["+"] = new NFunction(&::plus);
+	native["-"] = new NFunction(&::moins);
 	native["="] = new NFunction(&::egal);
+	native["<"] = new NFunction(&::less);
 }

@@ -125,7 +125,7 @@ int analyse_tree(LTerm *tree) {
 	if(error) {
 		return error;
 	}
-	tree->print(0);
+	//tree->print(0);
 	
 	return 0;
 	
