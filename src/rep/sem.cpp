@@ -10,6 +10,10 @@ Env::Env(int nb_var) {
 	size = nb_var + 1;
 }
 
+Env::~Env() {
+	delete tab;	
+}
+
 int Env::set(int index, Val value) {
 	if(index < 0 || index >= this->size) 
 		return 1;

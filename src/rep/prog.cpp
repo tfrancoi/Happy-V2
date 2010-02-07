@@ -7,8 +7,9 @@ using namespace std;
 
 map<std::string, int>* vars_ref;
 
+
 Prog::Prog(LTerm *tree) {
-	analyse_block(tree);
+	this->analyse_block(tree);
 }
 
 Function* Prog::getFunction(string name) {
@@ -24,10 +25,10 @@ void Prog::analyse_block(LTerm *tree) {
 	for(int i = 0; i < tree->size(); i++) {
 		LTerm* fun = dynamic_cast<LTerm*>((*tree)[i]);
 		if(fun->getType() == get_set_code("Block_fun")) {
-			analyse_block(fun);
+			this->analyse_block(fun);
 		}
 		if(fun->getType() == get_set_code("Fun")) {			
-			analyse_fun(fun);			
+			this->analyse_fun(fun);			
 		}
 	}
 }
@@ -39,14 +40,12 @@ Function::Function(LTerm *tree) {
 	LTerm* arg = dynamic_cast<LTerm*>( (*tree)[2]);
 	analyse_arg(arg);
 	LTerm* instr = dynamic_cast<LTerm*>( (*tree)[3]);
-	int j = analyse_instr(instr, this->arity);
-	//cout << "total de var " << j << endl;
+	int j = ::analyse_instr(instr, this->arity, this->instr);
 	this->nb_var = j;
 }
 
 string Function::getName() {
-	return this->name;
-	
+	return this->name;	
 }
 
 int Function::getNbVar() {
@@ -67,46 +66,8 @@ void Function::analyse_arg(LTerm* arg) {
 		}		
 }
 
-int Function::analyse_block(LTerm* block, int number) {
-	int j = number;
-	for(int i = 0; i < block->size(); i++) {
-		LTerm* instr = dynamic_cast<LTerm*>( (*block)[i]);
-		j = analyse_instr(instr, j);
-	}
-	
-	return j;
-}
 		
-int Function::analyse_instr(LTerm* instr, int number) {
-	int j = number;
-	if(instr->getType() == get_set_code("Block_instr")) {
-		j = analyse_block(instr, j);
-	}
-	if(instr->getType() == get_set_code("Call")) { 
-		this->instr.push_back(new Call(instr));
-	}
-	if(instr->getType() == get_set_code("Assignement")) { 
-		Assignement* ass = new Assignement(instr);
-		
-		if(vars[ass->getVarName()] == 0) {
-			vars[ass->getVarName()] = j;
-			j++;
-		}
-		ass->setVarRef(vars[ass->getVarName()]);
-		this->instr.push_back(ass);
-	}
-	if(instr->getType() == get_set_code("Return")) {
-		this->instr.push_back(new Return(instr));
-	}
-	if(instr->getType() == get_set_code("If")) {
-		If* cond = new If(instr, j);
-		//cout << "j : " << j << endl;
-		j = cond->getJ();
-		this->instr.push_back(cond);
-		//cout << "j after : " << j << endl;
-	}
-	return j;
-}
+
 
 
 int Function::execute(Env* e, Store* s) {		
@@ -129,5 +90,50 @@ int get_var_ref(string s) {
 
 void set_var_ref(int j, string name) {
 	(*vars_ref)[name] = j;
+}
+
+
+int analyse_block(LTerm* block, int number, vector<Instr*>& v) {
+	int j = number;
+	for(int i = 0; i < block->size(); i++) {
+		LTerm* instr = dynamic_cast<LTerm*>( (*block)[i]);
+		j = analyse_instr(instr, j, v);
+	}
+	
+	return j;
+}
+		
+int analyse_instr(LTerm* instr, int number, vector<Instr*>& v) {
+	int j = number;
+	if(instr->getType() == get_set_code("Block_instr")) {
+		j = analyse_block(instr, j,v);
+	}
+	if(instr->getType() == get_set_code("Call")) { 
+		v.push_back(new Call(instr, j));
+	}
+	if(instr->getType() == get_set_code("Assignement")) { 
+		Assignement* ass = new Assignement(instr, j);
+		
+		if(get_var_ref(ass->getVarName()) == 0) {
+			set_var_ref(j, ass->getVarName());
+			j++;
+		}
+		ass->setVarRef(get_var_ref(ass->getVarName()));
+		v.push_back(ass);
+	}
+	if(instr->getType() == get_set_code("Return")) {
+		v.push_back(new Return(instr, j));
+	}
+	if(instr->getType() == get_set_code("If")) {
+		If* cond = new If(instr, j);
+		j = cond->getJ();
+		v.push_back(cond);
+	}
+	if(instr->getType() == get_set_code("While")) {
+		While* boucle = new While(instr, j);
+		j = boucle->getJ();
+		v.push_back(boucle);
+	}
+	return j;
 }
 

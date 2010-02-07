@@ -21,8 +21,6 @@ class Function {
 		int getArity();
 	private :		
 		void analyse_arg(LTerm*);
-		int analyse_block(LTerm*, int);
-		int analyse_instr(LTerm*, int);
 		std::vector<Instr*> instr;
 		std::string name;
 		std::map<std::string, int> vars;
@@ -46,5 +44,10 @@ class Prog {
 
 int get_var_ref(std::string);
 void set_var_ref(int j, std::string name);
+
+
+int analyse_block(LTerm*, int, std::vector<Instr*>&);
+int analyse_instr(LTerm*, int, std::vector<Instr*>&);
+		
 
 #endif

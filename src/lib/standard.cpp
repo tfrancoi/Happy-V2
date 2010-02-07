@@ -112,3 +112,19 @@ Val less(Env* e, Store* s, vector<Expression*> args) {
 	}
 	return Val(0);	
 }
+
+Val type(Env* e, Store* s, vector<Expression*> args) {
+	if(args.size() != 1) {
+		cout << "cannot use operator typeof for more then 1 arguments" << endl;
+		exit(1);
+	}
+	Val v1 = args[0]->eval(s,e);
+	int type1 = v1.getType();
+	if(type1 ==INTEGER) {
+			return Val("int");
+	}
+	if(type1 ==STRING) {
+			return Val("string");
+	}
+	return Val("empty");
+}

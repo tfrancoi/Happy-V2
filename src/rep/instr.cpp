@@ -9,11 +9,11 @@ using namespace std;
 
 
 
-Call::Call(LTerm* tree) {
+Call::Call(LTerm* tree, int& j) {
 		TTerm* t = dynamic_cast<TTerm*>((*tree)[0]);
 		name = t->getValue();
 		for(int i = 1; i < tree->size(); i++) {
-			argument.push_back(create_expression((*tree)[i]));
+			argument.push_back(create_expression((*tree)[i], j));
 		}
 }
 
@@ -46,7 +46,9 @@ Val Call::eval(Store* s, Env* e) {
 		}
 		f->execute(ne, s);
 		//TODO implémenter le return et retourner la dernière valeur de l'env
-		return ne->get(f->getNbVar());
+		Val v = ne->get(f->getNbVar()); 
+		delete ne;
+		return v;
 		
 	}
 	return Val();
@@ -54,20 +56,33 @@ Val Call::eval(Store* s, Env* e) {
 
 
 
-Assignement::Assignement(LTerm* list) {
+Assignement::Assignement(LTerm* list, int& j) {
 	TTerm* id = dynamic_cast<TTerm*>( (*list)[1]);
 	this->name = id->getValue();
-	this->expr = create_expression((*list)[2]);	
+	this->expr = create_expression((*list)[2], j);	
 }
 
 int Assignement::execute(Env* e, Store* s) {
-	Val v = this->expr->eval(s,e);
-	if(e->set(var_ref, v)) {
-		cout << "variable hors des bornes de l'env boulet de programmeur " << endl;
+	Val v = eval(s,e);
+	
+	if(v.to_s() == "(-)") {
 		return 1;
 	}
 	return 0;
 }
+
+
+
+
+Val Assignement::eval(Store* s, Env* e) {
+	Val v = this->expr->eval(s,e);
+	if(e->set(var_ref, v)) {
+		cout << "variable hors des bornes de l'env boulet de programmeur " << endl;
+		return Val();
+	}
+	return v;
+}
+
 string Assignement::getVarName() {
 	return this->name;
 }
@@ -77,7 +92,7 @@ void Assignement::setVarRef(int ref) {
 }
 
 
-Expression* create_expression(Term* t) {
+Expression* create_expression(Term* t, int& j) {
 	if(t->getType() == get_set_code("int")) {
 		TTerm* tt = dynamic_cast<TTerm*>(t);
 		return new Integer(tt->getValue());
@@ -92,14 +107,25 @@ Expression* create_expression(Term* t) {
 	}
 	if(t->getType() == get_set_code("Call")) {
 		LTerm* lt = dynamic_cast<LTerm*>(t);
-		return new Call(lt);
+		return new Call(lt, j);
+	}
+	if(t->getType() == get_set_code("Assignement")) {
+		LTerm* lt = dynamic_cast<LTerm*>(t);
+		Assignement* ass = new Assignement(lt, j);
+		
+		if(get_var_ref(ass->getVarName()) == 0) {
+			set_var_ref(j, ass->getVarName());
+			j++;
+		}
+		ass->setVarRef(get_var_ref(ass->getVarName()));
+		return ass;
 	}
 	return new Expression();
 }
 
 
-Return::Return(LTerm* list) {
-	this->expr = create_expression((*list)[1]);	
+Return::Return(LTerm* list, int& j) {
+	this->expr = create_expression((*list)[1], j);	
 }
 
 int Return::execute(Env* e, Store* s) {
@@ -109,57 +135,17 @@ int Return::execute(Env* e, Store* s) {
 
 If::If(LTerm *tree, int j) {
 	this->j = j;
-	this->expr = create_expression((*tree)[1]);
+	this->expr = create_expression((*tree)[1], j);
 	LTerm *t = dynamic_cast<LTerm*>((*tree)[2]);
-	this->j = analyse_instr(t, j, yes);
+	this->j = ::analyse_instr(t, j, yes);
 	LTerm *tt = dynamic_cast<LTerm*>((*tree)[3]);
-	this->j = analyse_instr(tt, this->j, no);
+	this->j = ::analyse_instr(tt, this->j, no);
 }
 
 int If::getJ() {
 	return j;
 }
 
-int If::analyse_block(LTerm* block, int number, std::vector<Instr*>& v) {
-	int j = number;
-	for(int i = 0; i < block->size(); i++) {
-		LTerm* instr = dynamic_cast<LTerm*>( (*block)[i]);
-		j = analyse_instr(instr, j, v);
-	}
-	
-	return j;
-}
-		
-int If::analyse_instr(LTerm* instr, int number, std::vector<Instr*>& v) {
-	int j = number;
-	if(instr->getType() == get_set_code("Block_instr")) {
-		j = analyse_block(instr, j,v);
-	}
-	if(instr->getType() == get_set_code("Call")) { 
-		//cout << "appel de fonction " << endl;
-		v.push_back(new Call(instr));
-	}
-	if(instr->getType() == get_set_code("Assignement")) { 
-		Assignement* ass = new Assignement(instr);
-		
-		if(get_var_ref(ass->getVarName()) == 0) {
-			set_var_ref(j, ass->getVarName());
-			j++;
-		}
-		ass->setVarRef(get_var_ref(ass->getVarName()));
-		v.push_back(ass);
-	}
-	if(instr->getType() == get_set_code("Return")) {
-		v.push_back(new Return(instr));
-	}
-	if(instr->getType() == get_set_code("If")) {
-		If* cond = new If(instr, j);
-		j = cond->getJ();
-		v.push_back(cond);
-		//cout << "test ---------------------" << endl;
-	}
-	return j;
-}
 
 
 
@@ -183,8 +169,49 @@ int If::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
 		else if(result) {
 			return result;
 		}
-	}		
+	}	
+	return 0;	
 }
+
+
+While::While(LTerm *tree, int j) {
+	this->j = j;
+	this->expr = create_expression((*tree)[1], j);
+	LTerm *t = dynamic_cast<LTerm*>((*tree)[2]);
+	this->j = ::analyse_instr(t, j, yes);
+}
+
+int While::getJ() {
+	return j;
+}
+
+int While::execute(Env* e, Store* s) { 
+	while(expr->eval(s,e).to_b()) {
+		int result = executeList(e,s,yes); 
+		if(result == 99) {
+			return 99;
+		}
+		else if(result) {
+			return result;
+		}
+	}
+	return 0;
+}
+
+
+int While::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
+	for(unsigned int i = 0; i < instr.size(); i++) {
+		int result = instr[i]->execute(e,s);
+		if(result == 99) {
+			return 99;
+		}
+		else if(result) {
+			return result;
+		}
+	}	
+	return 0;	
+}
+
 
 Instr::Instr() {}
 Instr::~Instr() {}

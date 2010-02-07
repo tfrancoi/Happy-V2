@@ -54,4 +54,5 @@ void initNative() {
 	native["-"] = new NFunction(&::moins);
 	native["="] = new NFunction(&::egal);
 	native["<"] = new NFunction(&::less);
+	native["typeof"] = new NFunction(&::type);
 }

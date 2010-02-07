@@ -3,11 +3,20 @@
 (	
 	(fun main (of argv argc) 
 		( 
+			
+			(set a 0)
+			(while (< (set a (+ a 1)) 10) (
+				(write a)				
+			))
+			(write (set b "18 - - - - - - - "))
+			(write (set b 23))
 			(write (- 10 3))
+			(write (typeof 4))
+			(set a (+ 5 6))
 			(write (<= 5 4) (< 4 4))
 			(write (>= 5 4) (> 4 4))
-			(write (* 3 400000))
-			(write (fibbo 24))
+			(write (* 7 a))
+			[! (write (fibbo 24)) !]
 		) 
 	)		
 	
