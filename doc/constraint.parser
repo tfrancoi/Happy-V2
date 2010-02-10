@@ -1,0 +1,88 @@
+Ensemble de type liste:
+{Call, If, While, Assignement, Programme, Block_fun, Fun, Block_arg, Skip, Block_instr, Block_fun }
+Terminaux : {fun, int, float, string, if, set, while, skip, of, Expr, Id}
+Le type spécifique est un atom, noté x
+Le(s) type généraux sont des ensemble, noté {x,y,..}
+
+1] Assure qu'on connait le type spécifique du parent et qu'il n'existe plus qu'un type général
+
+Conditions d'entré, on connait le type spécifique du premier fils
+1.1) Détermine le type le plus spécifique d'un noeud en regardant le type le plus spécifique du premier fils
+map <string,string>
+
+fun 		=> Fun
+skip		=> Skip
+of			=> Block_arg
+if  		=> If
+set			=> Assignement
+while 	=> While
+return 	=> Return
+Id			=> Call
+
+Conditions d'entré, on ne connait pas le type spécifique du premier fils
+1.2) Le type générale devient le spécifique.
+Type générale contient d'un noeud est alors sont type spécifique devient
+map<string,string>
+{Block_fun} 	-> Block_fun
+{Block_instr} -> Block_instr
+
+
+Après 1.1 et 1.2 : connait le type spécifique de l'élément courant
+Si type spécifique non connu => Erreur de syntaxe
+
+1.3) pour déterminer le type générale 
+type générale = ({des types spécifique réécrit} union {spécifique}) inter type générale
+
+Après 1.3 : 1 seule type générale => si 0 ou plus de 1: Erreur de syntaxe
+
+
+2) Connaissant le type (spécifique ou non) du parent, on trouve l'ensemble des types généraux possibles pour les enfant
+
+n 0 ou plus  
+N 1 ou plus
+
+Conditions d'entré, on connait le type spécifique de l'élément courant, assuré par 1) 
+map<string, pair<vector<int>, vector<string>>
+Programme 	? N * {Block_fun, Fun}	  																						[1-n]
+Block_fun 	? N * {Block_fun, Fun}    																						[1-n]
+Fun					? 1 * {fun} +  1 * {Id} + 1 * {Block_arg} + 1 * {Instr, Block_instr}  [4-4]
+Skip 				? 1 * {skip} 																													[1-1]
+Block_arg		? 1 * {of} + n * {Id}																									[2-n]	
+Block_instr	? N * {Block_instr, Instr}    																				[1-n]
+Assignement	? 1 * {set} + 1 * {Id} + 1 * {Expr}																		[3-3]
+Call				? 1 * {Id} + n * {Expr}																								[1-n]
+If 					? 1 * {if} + 1 * {Expr} + 2 * {Block_instr, Instr}										[4-4]	
+While				? 1 * {while} + 1 * {Expr} + 1 *{Block_instr, Instr}									[3-3]
+Return			? 1 * {return} + 1 * {Expr}																						[2-2]
+
+Si la longueur de l'élément courant ne match pas avec le range => erreur de syntaxe
+
+Après 2) tout les enfants ont un ou plus type générale assigné  
+
+
+3] Sur chaque enfant
+conditions d'entré, on connait le type spécifique de l'enfant
+
+type générale = ({des types spécifique réécrit} union {spécifique}) inter type générale
+
+3) Les réécritures : Réécrit les types les plus spécifique en type générale
+map<string, set<string>>
+Call 				--> {Instr, Expr}
+Assignement	--> {Instr, Expr}
+If					--> {Instr}
+While				--> {Instr}
+Skip				--> {Instr}
+Return			--> {Instr}
+string 			--> {Expr}
+float 			--> {Expr}
+int					--> {Expr}
+Id					--> {Id, Expr}
+
+Après 3 : si on connait le type spécifique de l'enfant, alors il a un et un seul type générale assigné
+
+
+si l'intersection des type possible et des contraintes est vide ==> erreur de syntaxe
+si l'intersection des type possible et des contraintes > 1 ==> ambuiguité, erreur de la grammaire, manque de contrainte ou syntaxe
+
+
+

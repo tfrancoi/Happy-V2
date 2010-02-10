@@ -1,0 +1,69 @@
+<!-- Syntaxe pour le préprocesseur-->
+<Comment> 				--> 'esp' [! 'esp' <Suite_caractère> 'esp' !] 'esp'
+<Directive> 			--> 'esp' [# 'esp' <Dir_Name> 'esp' <Dir_Args_list>  'esp' '#]' 'esp'
+<Dir_Args_list> 	--> <String> | <String> 'esp' <Dir_Args_list>  
+
+<!-- Syntaxe pour l'analyseur lexical -->
+<Id>							--> <Suite_caractère> / <Number>
+<Access>					--> 'public' | 'private'
+<Number> 					--> <PNumber> | - <PNumber>
+<PNumber>  				--> <Nat> | <Real>
+<Nat> 						--> '0-9' | '0-9' <Nat>
+<Real> 						--> <Nat> ',' <Nat>
+
+
+<String>					--> '"' <Suite_caractère> '"'
+<Suite_caractère> --> <Caractère> | <Caractère> <Suite_caractère>
+<Caractère>				--> 'a-z' | 'A-Z' | '0-9' | 'et tout le reste'...
+
+
+<Reserved_char>  	--> '(' | ')' | '"'
+<Reserved_word> 	--> '[!' | '!]' | '[#' | '#]' | 'if' | 
+'set' | 'while' | 'fun' | 'skip' | 'of' | 'return' | 'private' | 'public' | 'method'
+
+<!-- syntaxe pour le parser -->
+
+<Programme> 			--> <Fun> | <Block_fun>
+
+<Block_fun> 			--> '(' <Fun_list> ')' | <Fun> 
+<Fun_list>  			--> <Block_fun> | <Block_fun> <Fun_list> | 
+
+<Fun> 						--> '(' 'fun' <Id> <Block_arg> <Instr> ')' | '(' 'fun' <Id> <Block_arg> <Block_instr> ')' | <Class>
+<Block_arg>				--> '(' 'of' <Id_list> ')'
+<Id_list> 				--> <Id> | <Id> <Id_list>
+<Id_unb>					-->	<Id>
+
+<Instr>						--> <If> | <While> | <Call> | <Assignement> | <Skip> | <Return>
+<Block_instr>			--> '(' <Instr_list> ')' | '(' <Block_instr> ')' | <Block_instr> <Block_instr>
+<Instr_list>			--> <Instr> | <Instr> <Instr_list>
+<Assignement> 		--> '(' 'set' <Id> <Expr> ')'
+<If> 							--> '(' 'if' <Expr> <Instr> <Instr> ')'
+<While> 					--> '(' 'while' <Expr> <Instr> ')'
+<Skip>						--> '(' 'skip' ')'
+<Return>					--> '(' 'return' <Expr> ')'
+
+<Expr>						--> <Call> | <Id> | <Value> | <Assignement>
+<Call>  					--> '(' <Id> <Expr_list> ')'
+<Expr_list>				--> <Expr> | <Expr> <Expr_list>
+<value> 					--> <string> | <Number>
+<Number>					--> <int> | <float>
+<!-- extension pour l'objet -->
+<Class> 					--> '(' 'class' <Id> <Attr> <Block_method> ')' | 
+											'(' 'class' <Id> <Block_Attr> <Block_method> ')' |
+											'(' 'class' <Id> <Attr> <Method> ')' |
+											'(' 'class' <Id> <Block_attr> <Method> ')'
+<Block_attr> 			--> '(' <Block_attr> ')' | <Block_attr> <Block_attr> | '(' <Attr_list> ')'
+<Attr_list>				--> <Attr> | <Attr> <Attr_list>
+<Attr>						--> '(' <Access> <Id_list> ')'
+<Block_method>		--> '(' <Block_method> ')' | <Block_method> <Block_method> | '(' <Method_list> ')'
+<Method_list>    	--> <Method> | <Method> <Method_list>
+<Method>					--> '(' 'method' <Access> <Id> <Block_arg> <Instr> ')' | '(' 'method' <Access> <Id> <Block_arg> <Block_Instr> ')'
+ 
+
+
+(objet.@ 5)
+(objet.id
+
+
+
+
