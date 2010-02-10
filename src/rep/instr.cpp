@@ -9,11 +9,11 @@ using namespace std;
 
 
 
-Call::Call(LTerm* tree, int& j) {
+Call::Call(LTerm* tree) {
 		TTerm* t = dynamic_cast<TTerm*>((*tree)[0]);
 		name = t->getValue();
 		for(int i = 1; i < tree->size(); i++) {
-			argument.push_back(create_expression((*tree)[i], j));
+			argument.push_back(create_expression((*tree)[i]));
 		}
 }
 
@@ -56,10 +56,10 @@ Val Call::eval(Store* s, Env* e) {
 
 
 
-Assignement::Assignement(LTerm* list, int& j) {
+Assignement::Assignement(LTerm* list) {
 	TTerm* id = dynamic_cast<TTerm*>( (*list)[1]);
 	this->name = id->getValue();
-	this->expr = create_expression((*list)[2], j);	
+	this->expr = create_expression((*list)[2]);	
 }
 
 int Assignement::execute(Env* e, Store* s) {
@@ -92,7 +92,7 @@ void Assignement::setVarRef(int ref) {
 }
 
 
-Expression* create_expression(Term* t, int& j) {
+Expression* create_expression(Term* t) {
 	if(t->getType() == get_set_code("int")) {
 		TTerm* tt = dynamic_cast<TTerm*>(t);
 		return new Integer(tt->getValue());
@@ -107,16 +107,13 @@ Expression* create_expression(Term* t, int& j) {
 	}
 	if(t->getType() == get_set_code("Call")) {
 		LTerm* lt = dynamic_cast<LTerm*>(t);
-		return new Call(lt, j);
+		return new Call(lt);
 	}
 	if(t->getType() == get_set_code("Assignement")) {
 		LTerm* lt = dynamic_cast<LTerm*>(t);
-		Assignement* ass = new Assignement(lt, j);
+		Assignement* ass = new Assignement(lt);
 		
-		if(get_var_ref(ass->getVarName()) == 0) {
-			set_var_ref(j, ass->getVarName());
-			j++;
-		}
+		::add_var(ass->getVarName());
 		ass->setVarRef(get_var_ref(ass->getVarName()));
 		return ass;
 	}
@@ -124,8 +121,8 @@ Expression* create_expression(Term* t, int& j) {
 }
 
 
-Return::Return(LTerm* list, int& j) {
-	this->expr = create_expression((*list)[1], j);	
+Return::Return(LTerm* list) {
+	this->expr = create_expression((*list)[1]);	
 }
 
 int Return::execute(Env* e, Store* s) {
@@ -133,21 +130,13 @@ int Return::execute(Env* e, Store* s) {
 	return 99;
 }
 
-If::If(LTerm *tree, int j) {
-	this->j = j;
-	this->expr = create_expression((*tree)[1], j);
+If::If(LTerm *tree) {
+	this->expr = create_expression((*tree)[1]);
 	LTerm *t = dynamic_cast<LTerm*>((*tree)[2]);
-	this->j = ::analyse_instr(t, j, yes);
+	::analyse_instr(t, yes);
 	LTerm *tt = dynamic_cast<LTerm*>((*tree)[3]);
-	this->j = ::analyse_instr(tt, this->j, no);
+	::analyse_instr(tt, no);
 }
-
-int If::getJ() {
-	return j;
-}
-
-
-
 
 int If::execute(Env* e, Store* s) {
 	if(expr->eval(s,e).to_b()) {
@@ -174,16 +163,12 @@ int If::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
 }
 
 
-While::While(LTerm *tree, int j) {
-	this->j = j;
-	this->expr = create_expression((*tree)[1], j);
+While::While(LTerm *tree) {
+	this->expr = create_expression((*tree)[1]);
 	LTerm *t = dynamic_cast<LTerm*>((*tree)[2]);
-	this->j = ::analyse_instr(t, j, yes);
+	::analyse_instr(t, yes);
 }
 
-int While::getJ() {
-	return j;
-}
 
 int While::execute(Env* e, Store* s) { 
 	while(expr->eval(s,e).to_b()) {

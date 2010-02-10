@@ -48,6 +48,15 @@ class String : public Expression {
 };
 
 
+class Real : public Expression {
+	public:
+		String(std::string s);
+		virtual Val eval(Store* s, Env* e);
+	private :
+		double val;
+	
+};
+
 
 
 

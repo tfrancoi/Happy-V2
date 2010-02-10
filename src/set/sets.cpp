@@ -18,9 +18,8 @@ using namespace std;
 **
 **  returns: nothing
 */
-sets::sets()
-{
-    clear();                                        // initialize to empty
+sets::sets() {
+	clear();                                        // initialize to empty
 }
 
 /*----------------------------------------------------------------------------*
@@ -29,10 +28,9 @@ sets::sets()
 **
 **  returns: nothing
 */
-sets::sets( const sets &rhs )                       // the set to copy
-{
-    for( int i = 0; i < MAX_WORDS; i++ )            // copy into new set
-	set[i] = rhs.set[i];
+sets::sets(const sets &rhs) { // the set to copy
+	for( int i = 0; i < MAX_WORDS; i++ )            // copy into new set
+		set[i] = rhs.set[i];
 }
 
 /*----------------------------------------------------------------------------*
@@ -40,15 +38,13 @@ sets::sets( const sets &rhs )                       // the set to copy
 **
 **  returns: 1 if item present, 0 if not, -1 on range error
 */
-int sets::item( int bit )                           // index of the item
-{
-    if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
-	return -1;
+int sets::item( int bit ) {                           // index of the item
+	if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
+		return -1;
 
-    int i = bit / WORD_SIZE;
-    bit -= i * WORD_SIZE;
-    
-    return set[i] & 1 << ( bit - 1 );               // binary AND
+	int i = bit / WORD_SIZE;
+	bit -= i * WORD_SIZE;
+	return set[i] & 1 << ( bit - 1 );               // binary AND
 }
 
 /*----------------------------------------------------------------------------*
@@ -56,15 +52,14 @@ int sets::item( int bit )                           // index of the item
 **
 **  returns: nothing
 */
-void sets::insert( int bit )                        // index of the item
-{
-    if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
-	return;
+void sets::insert( int bit ) {                        // index of the item
+	if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
+		return;
 
-    int i = bit / WORD_SIZE;
-    bit -= i * WORD_SIZE;
+	int i = bit / WORD_SIZE;
+	bit -= i * WORD_SIZE;
 
-    set[i] |= 1 << ( bit - 1 );                     // binary OR
+	set[i] |= 1 << ( bit - 1 );                     // binary OR
 }
 
 /*----------------------------------------------------------------------------*
@@ -72,15 +67,13 @@ void sets::insert( int bit )                        // index of the item
 **
 **  returns: nothing
 */
-void sets::remove( int bit )                        // index of the item
-{
-    if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
-	return;
+void sets::remove( int bit ) {                      // index of the item
+	if( bit <= 0 || bit > MAX_WORDS * WORD_SIZE )   // in range?
+		return;
+	int i = bit / WORD_SIZE;
+	bit -= i * WORD_SIZE;
 
-    int i = bit / WORD_SIZE;
-    bit -= i * WORD_SIZE;
-
-    set[i] &= ~( 1 << ( bit - 1 ) );                // binary AND
+	set[i] &= ~( 1 << ( bit - 1 ) );                // binary AND
 }
 
 /*----------------------------------------------------------------------------*
@@ -88,10 +81,9 @@ void sets::remove( int bit )                        // index of the item
 **
 **  returns: nothing
 */
-void sets::clear()
-{
-    for( int i = 0; i < MAX_WORDS; i++ )            // all words in set
-        set[i] = 0;
+void sets::clear() {
+	for( int i = 0; i < MAX_WORDS; i++ )            // all words in set
+		set[i] = 0;
 }
 
 /*----------------------------------------------------------------------------*
@@ -102,29 +94,25 @@ void sets::clear()
 **
 **  returns: nothing
 */
-void sets::define( string input )                    // string of numbers
-{
-    int length = input.size();                   // of input buffer
-    int pos = 0;                                    // current character
-    clear();                                        // initialize to empty
+void sets::define( string input ) {                   // string of numbers
+	int length = input.size();                   // of input buffer
+	int pos = 0;                                    // current character
+	clear();                                        // initialize to empty
 
-    while( pos < length )                           // more input
-    {
-	int bit = 0;                                // init bit to set
+	while( pos < length ) {                      // more input
+		int bit = 0;                                // init bit to set
 
-	while( isdigit( input[pos] ) )
-	{
-	    bit *= 10;                              // compute bit to set
-	    bit += input[pos] - '0';
+		while( isdigit( input[pos] ) ) {
+			bit *= 10;                              // compute bit to set
+			bit += input[pos] - '0';
+			pos++;                                  // advance
+		}
 
-	    pos++;                                  // advance
-        }
-
-	if( bit )                                   // zero means no bit
+		if( bit )                                   // zero means no bit
 	    insert( bit );
 
-	pos++;                                      // advance
-    }
+		pos++;                                      // advance
+	}
 }
 
 /*----------------------------------------------------------------------------*
@@ -132,22 +120,17 @@ void sets::define( string input )                    // string of numbers
 **
 **  returns:  nothing
 */
-void sets::binary()
-{
-    for( int j = 0; j < MAX_WORDS; j++ )            // do all words
-    {
-        unsigned long mask = 1;                     // start at low bit
+void sets::binary() {
+	for( int j = 0; j < MAX_WORDS; j++ ) {         // do all words
+		unsigned long mask = 1;                     // start at low bit
 
-	for( int i = 0; i < WORD_SIZE; i++ )        // every bit in word
-        {
-            if( i % 4 == 0 )                        // add space
-		putchar( ' ' );
-            
-	    set[j] & mask ? putchar( '1' ) : putchar( '0' );
-	    
+		for( int i = 0; i < WORD_SIZE; i++ ) {       // every bit in word
+			if( i % 4 == 0 )                        // add space
+				putchar( ' ' );
+			set[j] & mask ? putchar( '1' ) : putchar( '0' );
 	    mask <<= 1;                             // next higher bit 
+		}
 	}
-    }
 }
 
 /*----------------------------------------------------------------------------*
@@ -155,22 +138,18 @@ void sets::binary()
 **
 **  returns:  total items
 */
-int sets::cardinality()
-{
-    int count = 0;                                  // init counter
+int sets::cardinality() {
+	int count = 0;                                  // init counter
 
-    for( int j = 0; j < MAX_WORDS; j++ )            // do all words
-    {
-        unsigned long mask = 1;                     // start at low bit
+	for( int j = 0; j < MAX_WORDS; j++ ) {          // do all words
+		unsigned long mask = 1;                     // start at low bit
         
-	for( int i = 0; i < WORD_SIZE; i++ )        // every bit in word
-	{
-	    count += set[j] & mask ? 1 : 0;
+		for( int i = 0; i < WORD_SIZE; i++ ) {       // every bit in word
+			count += set[j] & mask ? 1 : 0;
 	    mask <<= 1;                             // next higher bit
+		}
 	}
-    }
-
-    return count;
+	return count;
 }
 
 /*----------------------------------------------------------------------------*
@@ -178,46 +157,36 @@ int sets::cardinality()
 **
 **  returns:  nothing
 */
-void sets::print()
-{
-    cout << "{ " ;
+void sets::print() {
+	cout << "{ " ;
 
-    for( int j = 0; j < MAX_WORDS; j++ )            // do all words
-    {
-        unsigned long mask = 1;                     // start at low bit
-        
-	for( int i = 1; i <= WORD_SIZE; i++ )
-	{
-	    if( set[j] & mask )                     // check bit
+	for( int j = 0; j < MAX_WORDS; j++ ) {           // do all words
+		unsigned long mask = 1;                     // start at low bit
+    for( int i = 1; i <= WORD_SIZE; i++ ) {
+			if( set[j] & mask )                     // check bit
 				cout << ( WORD_SIZE * j + i ) << " ";
-
-	    mask <<= 1;                             // next higher bit
+			mask <<= 1;                             // next higher bit
+		}
 	}
-    }
-    
-    cout << "}" << endl;
+	cout << "}" << endl;
 }
 
-string sets::to_s()
-{
-		ostringstream out;
-		out << "{ " ;
+string sets::to_s() {
+	ostringstream out;
+	out << "{ " ;
 
-    for( int j = 0; j < MAX_WORDS; j++ )            // do all words
-    {
-        unsigned long mask = 1;                     // start at low bit
+	for( int j = 0; j < MAX_WORDS; j++ ) {           // do all words
+		unsigned long mask = 1;                     // start at low bit
         
-	for( int i = 1; i <= WORD_SIZE; i++ )
-	{
-	    if( set[j] & mask )                     // check bit
+		for( int i = 1; i <= WORD_SIZE; i++ ) {
+			if( set[j] & mask )                     // check bit
 				out << ( WORD_SIZE * j + i ) << " ";
-
-	    mask <<= 1;                             // next higher bit
+			mask <<= 1;                             // next higher bit
+		}
 	}
-    }
     
-    out << "}";
-    return out.str();
+	out << "}";
+	return out.str();
 }
 
 /*----------------------------------------------------------------------------*
@@ -225,15 +194,13 @@ string sets::to_s()
 **
 **  returns: nothing
 */
-const sets &sets::operator = ( const sets &rhs )
-{
-    if( &rhs != this )                              // avoid self assignment
-    {
-	for( int i = 0; i < MAX_WORDS; i++ )        // copy into this set
-	    set[i] = rhs.set[i];
-    }
+const sets &sets::operator = ( const sets &rhs ) {
+	if( &rhs != this ) {             // avoid self assignment
+		for( int i = 0; i < MAX_WORDS; i++ )        // copy into this set
+			set[i] = rhs.set[i];
+	}
 
-    return *this;                                   // enable x = y = z;
+	return *this;                                   // enable x = y = z;
 }
 
 /*----------------------------------------------------------------------------*
@@ -241,14 +208,13 @@ const sets &sets::operator = ( const sets &rhs )
 **
 **  returns: pointer to set
 */
-sets sets::operator ~ () const
-{
-    sets rv;
+sets sets::operator ~ () const {
+	sets rv;
 	
-    for( int i = 0; i < MAX_WORDS; i++ )
-	rv.set[i] = ~set[i];                        // bitwise complement
+	for( int i = 0; i < MAX_WORDS; i++ )
+		rv.set[i] = ~set[i];                        // bitwise complement
 
-    return rv;
+	return rv;
 }
 		      
 /*----------------------------------------------------------------------------*
@@ -256,14 +222,13 @@ sets sets::operator ~ () const
 **
 **  returns: pointer to set
 */
-sets sets::operator + ( const sets &rhs )
-{
-    sets rv;
+sets sets::operator + ( const sets &rhs ) {
+	sets rv;
 	
-    for( int i = 0; i < MAX_WORDS; i++ )
-	rv.set[i] = set[i] | rhs.set[i];            // bitwise OR
+	for( int i = 0; i < MAX_WORDS; i++ )
+		rv.set[i] = set[i] | rhs.set[i];            // bitwise OR
 
-    return rv;
+	return rv;
 }
 
 /*----------------------------------------------------------------------------*
@@ -271,14 +236,13 @@ sets sets::operator + ( const sets &rhs )
 **
 **  returns: pointer to set
 */
-sets sets::operator * ( const sets &rhs )
-{
-    sets rv;
+sets sets::operator * ( const sets &rhs ) {
+	sets rv;
     
-    for( int i = 0; i < MAX_WORDS; i++ )
-	rv.set[i] = set[i] & rhs.set[i];            // bitwise AND
+	for( int i = 0; i < MAX_WORDS; i++ )
+		rv.set[i] = set[i] & rhs.set[i];            // bitwise AND
                        
-    return rv;
+	return rv;
 }
 
 /*----------------------------------------------------------------------------*
@@ -286,14 +250,13 @@ sets sets::operator * ( const sets &rhs )
 **
 **  returns: pointer to set
 */
-sets sets::operator - ( const sets &rhs )
-{
-    sets rv;
+sets sets::operator - ( const sets &rhs ) {
+	sets rv;
     
-    for( int i = 0; i < MAX_WORDS; i++ )
-	rv.set[i] = set[i] & ( ~rhs.set[i] );       // bitwise a AND ~b
+	for( int i = 0; i < MAX_WORDS; i++ )
+		rv.set[i] = set[i] & ( ~rhs.set[i] );       // bitwise a AND ~b
                        
-    return rv;
+	return rv;
 }
 
 /*----------------------------------------------------------------------------*
@@ -301,23 +264,12 @@ sets sets::operator - ( const sets &rhs )
 **
 **  returns: pointer to set
 */
-sets sets::operator ^ ( const sets &rhs )
-{
-    sets rv;
+sets sets::operator ^ ( const sets &rhs ) {
+	sets rv;
     
-    for( int i = 0; i < MAX_WORDS; i++ )
-	rv.set[i] = set[i] ^ rhs.set[i];            // bitwise XOR
+	for( int i = 0; i < MAX_WORDS; i++ )
+		rv.set[i] = set[i] ^ rhs.set[i];            // bitwise XOR
                        
-    return rv;
+	return rv;
 }
 
-bool sets::operator < ( const sets &rhs ) {
-	long sum1 = 0;
-	long sum2 = 0;
-	for( int i = 0; i < MAX_WORDS; i++ )  {          // copy into new set
-		sum1 += set[i];
-		sum2 += rhs.set[i];
-	}
-	return sum1 < sum2;
-	
-}

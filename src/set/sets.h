@@ -9,10 +9,11 @@
 
 #define MAX_WORDS  4
 #define WORD_SIZE  ( 8 * sizeof( unsigned long ) )
+
 #include <string>
-class sets
-{
-public:
+
+class sets {
+	public:
     sets();
     sets( const sets & );
     void binary();
@@ -30,11 +31,10 @@ public:
     sets operator * ( const sets & );
     sets operator - ( const sets & );
     sets operator ^ ( const sets & );
-    bool operator < ( const sets & );
-    
+        
     std::string to_s();
 
-private:
+	private:
     unsigned long set[MAX_WORDS];                   // the set
 };
 

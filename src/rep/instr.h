@@ -7,7 +7,7 @@
 
 
 
-Expression* create_expression(Term* t, int&);
+Expression* create_expression(Term* t);
 
 class Instr {
 	public:
@@ -22,7 +22,7 @@ class Instr {
 
 class Call : public Instr, public Expression {
 	public:
-		Call(LTerm*, int&);
+		Call(LTerm*);
 		virtual int execute(Env*, Store*);
 		virtual Val eval(Store* s, Env* e);
 		
@@ -33,7 +33,7 @@ class Call : public Instr, public Expression {
 
 class Assignement : public Instr, public Expression {
 		public:
-			Assignement(LTerm*, int&);
+			Assignement(LTerm*);
 			virtual int execute(Env*, Store*);
 			virtual Val eval(Store* s, Env* e);
 			std::string getVarName();
@@ -46,7 +46,7 @@ class Assignement : public Instr, public Expression {
 
 class Return : public Instr {
 	public :
-		Return(LTerm*, int&);
+		Return(LTerm*);
 		virtual int execute(Env*, Store*);
 	private :
 		Expression* expr;	
@@ -55,14 +55,13 @@ class Return : public Instr {
 
 class If : public Instr {
 	public :
-		If(LTerm*, int);
-		int getJ();
+		If(LTerm*);
 		virtual int execute(Env*, Store*);
 
 	private :
 		int executeList(Env*, Store*, std::vector<Instr*>&);
 				
-		int j;
+		
 		Expression* expr;
 		std::vector<Instr*> yes;
 		std::vector<Instr*> no;
@@ -73,14 +72,11 @@ class If : public Instr {
 
 class While : public Instr {
 	public :
-		While(LTerm*, int);
-		int getJ();
+		While(LTerm*);
 		virtual int execute(Env*, Store*);
 
 	private :
 		int executeList(Env*, Store*, std::vector<Instr*>&);
-		
-		int j;
 		Expression* expr;
 		std::vector<Instr*> yes;
 };

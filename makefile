@@ -5,9 +5,9 @@ SRC = src/
 SET = set/
 REP = rep/
 LIB = lib/
-all : main
+all : happy
 
-main : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o $(BIN)standard.o
+happy : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o $(BIN)standard.o
 	$(CCW) -o $@ $^
 $(BIN)main.o : $(SRC)main.cpp
 	$(CCW) -o $@ -c $^

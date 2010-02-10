@@ -37,7 +37,6 @@ int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *
 	Stack<LTerm> term_stack = Stack<LTerm>();	
 	
 	
-	cout << "lexical parser " << endl;
 	while ((c = is.get()) != -1)  {
 
 		if(c == '"' && !echapement) {

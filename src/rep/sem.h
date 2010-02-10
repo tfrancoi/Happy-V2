@@ -19,6 +19,7 @@ class Value {
 		virtual std::string to_s() = 0;
 		virtual int to_i() = 0;
 		virtual int to_b() = 0;
+		virtual double to_f() = 0;
 		
 };
 
@@ -32,6 +33,7 @@ class Val {
 		std::string to_s();
 		int to_i();
 		int to_b();
+		double to_f();
 		
 	
 	private :
@@ -67,12 +69,15 @@ class Empty : public Value {
 		virtual std::string to_s();
 		virtual int to_i();
 		virtual int to_b();
+		virtual double to_f();
 };
+
 class Int : public Value {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
 		virtual int to_b();
+		virtual double to_f();
 		int val;
 };
 
@@ -81,8 +86,17 @@ class Str : public Value {
 		virtual std::string to_s();
 		virtual int to_i();
 		virtual int to_b();
+		virtual double to_f();
 		std::string val;
 };
 
+class Float : public Value {
+	public :
+		virtual std::string to_s();
+		virtual int to_i();
+		virtual int to_b();
+		virtual double to_f();
+		double val;	
+};
 
 #endif

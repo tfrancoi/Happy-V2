@@ -44,10 +44,10 @@ class Prog {
 
 int get_var_ref(std::string);
 void set_var_ref(int j, std::string name);
+void add_var(std::string s);
 
-
-int analyse_block(LTerm*, int, std::vector<Instr*>&);
-int analyse_instr(LTerm*, int, std::vector<Instr*>&);
+int analyse_block(LTerm*, std::vector<Instr*>&);
+int analyse_instr(LTerm*, std::vector<Instr*>&);
 		
 
 #endif

@@ -41,17 +41,18 @@ int include(ofstream* os, const char* in, int line, const char* file) {
 			return 0;
 		}
 	}
+	string inw = getWorkDir() + in;
 	ifstream is;
-	is.open(in);
+	is.open(inw.c_str());
 
 	if(is.fail()) {
-		cout << "include error cannot find " << in << endl;
+		cout << "include error : cannot find " << inw << endl;
 		return -1;
 	}
 	inc.push_back(in);
 	is.close();
 	*(os) << "[# begin " << in << " #]" << endl;
-	int result = analyseFile(in, os);
+	int result = analyseFile(inw.c_str(), os);
 	*(os) << "[# end " << in << " #]" << endl;
 
 
@@ -98,9 +99,11 @@ int analyseFile(const char* in, ofstream* os) {
 			if(c == '\n') { line++; }
 			
 			if(!comment_level && !dir_level && !isComments(temp) && !isPreprocessorDir(temp) ) {
-				*(os) << temp;
+				*(os) << temp;				
 			}
-			*(os) << c;
+			if(isBrackets(c) == -1 || !comment_level) 
+				*(os) << c;
+			
 			comment_level += isComments(temp);
 			old_level = dir_level;
 			dir_level += isPreprocessorDir(temp);
@@ -131,6 +134,11 @@ int analyseFile(const char* in, ofstream* os) {
 
 }
 
+/**
+ * preprocess the file in and put the result in the file with the name out
+ * @return 0 if everything went well
+ * 				 1 otherwise
+ */
 int preprocess(const char* in, const char* out) {
 	inc.push_back(in);
 	ofstream os;
@@ -138,18 +146,23 @@ int preprocess(const char* in, const char* out) {
 
 	int result = analyseFile(in, &os);
 	if(result != 0) {
-		return -1;
+		return 1;
 	}
 	return 0;
 
 }
 
+/**
+ * @return 
+ *  1 if s open an happy comment
+ * -1 if s close an happy comment
+ *  0 else 
+ */
 int isComments(string s) {
 	if(s == OPEN_COMMENT )
 		return 1;
-	if(s == CLOSE_COMMENT) {
+	if(s == CLOSE_COMMENT)
 		return -1;
-	}
 
 	return 0;
 }

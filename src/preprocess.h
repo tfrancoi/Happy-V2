@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 
+std::string getWorkDir();
 
 int preprocess(const char* , const char*);
 

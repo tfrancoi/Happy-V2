@@ -74,6 +74,10 @@ int Val::to_b() {
 	return val->to_b();
 }
 
+double Val::to_f() {
+	return val->to_f();
+}
+
 
 string Empty::to_s() {	
 	return "(-)";
@@ -85,6 +89,10 @@ int Empty::to_i() {
 
 int Empty::to_b() {
 	return 0;
+}
+
+double Empty::to_f() {
+	return 0.0;
 }
 
 string Int::to_s() {
@@ -102,6 +110,33 @@ int Int::to_b() {
 	return this->val;	
 }
 
+
+double Int::to_f() {
+	return this->val;
+}
+
+string Float::to_s() {
+	ostringstream out;
+	out << this->val;
+	return out.str();
+}
+
+int Float::to_i() {
+	return (int) val;
+}
+
+int Float::to_b() {
+	if(val) 
+		return 1;
+	else
+		return 0;
+}
+
+double Float::to_f() {
+	return val;
+}
+		
+
 string Str::to_s() {
 	return val;
 }
@@ -115,4 +150,7 @@ int Str::to_b() {
 		return 0;
 	else
 		return 1;
+}
+double Str::to_f() {
+	return 1.0;
 }

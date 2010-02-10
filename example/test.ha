@@ -13,8 +13,8 @@
 			(write (- 10 3))
 			(write (typeof 4))
 			(set a (+ 5 6))
-			(write (<= 5 4) (< 4 4))
-			(write (>= 5 4) (> 4 4))
+			[! (write (<= 5 4) (< 4 4))
+			(write (>= 5 4) (> 4 4)) !]
 			(write (* 7 a))
 			[! (write (fibbo 24)) !]
 		) 
