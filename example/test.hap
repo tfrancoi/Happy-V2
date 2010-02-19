@@ -55,7 +55,7 @@
 			       
 			       
 			(write (* 7 a))
-			    
+			(write (fibbo 40))
 		) 
 	)		
 	
