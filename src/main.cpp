@@ -22,11 +22,13 @@ string getWorkDir() {
 }
 
 int main(int argc, char** argv) {
-	string str1 ("/usr/bin/man");
-  string str2 ("c:\\windows\\winhelp.exe");
+	
 
   workDir = getFolder(argv[1]);
-  
+  cout << "introduit un nombre" << endl;
+  int a = 0;
+  cin >> a;
+  cout << a << endl; 
 
   
 	//init de la grammaire
@@ -48,6 +50,7 @@ int main(int argc, char** argv) {
 	if(error) { return error; }
 	cout << "translation " << endl;
 	Prog *main = new Prog(tree);
+	tree->print(0);
 	cout << "execution " << endl;
 	cout << "--------------------------" << endl << endl;
 	return execute(main, NULL);

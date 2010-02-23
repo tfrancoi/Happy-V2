@@ -18,6 +18,7 @@ set			=> Assignement
 while 	=> While
 return 	=> Return
 Id			=> Call
+midfix	=> Op
 
 Conditions d'entré, on ne connait pas le type spécifique du premier fils
 1.2) Le type générale devient le spécifique.
@@ -51,6 +52,7 @@ Block_arg		? 1 * {of} + n * {Id}																									[2-n]
 Block_instr	? N * {Block_instr, Instr}    																				[1-n]
 Assignement	? 1 * {set} + 1 * {Id} + 1 * {Expr}																		[3-3]
 Call				? 1 * {Id} + n * {Expr}																								[1-n]
+Op					? 1 * {midfix} + 1 * {Expr} + 1 * {Id} + n * {Expr} 									[3-n]
 If 					? 1 * {if} + 1 * {Expr} + 2 * {Block_instr, Instr}										[4-4]	
 While				? 1 * {while} + 1 * {Expr} + 1 *{Block_instr, Instr}									[3-3]
 Return			? 1 * {return} + 1 * {Expr}																						[2-2]
@@ -68,6 +70,7 @@ type générale = ({des types spécifique réécrit} union {spécifique}) inter 
 3) Les réécritures : Réécrit les types les plus spécifique en type générale
 map<string, set<string>>
 Call 				--> {Instr, Expr}
+Op					--> {Instr, Expr}
 Assignement	--> {Instr, Expr}
 If					--> {Instr}
 While				--> {Instr}

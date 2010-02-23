@@ -23,6 +23,7 @@ class Instr {
 class Call : public Instr, public Expression {
 	public:
 		Call(LTerm*);
+		Call(LTerm*, int op);
 		virtual int execute(Env*, Store*);
 		virtual Val eval(Store* s, Env* e);
 		
@@ -79,6 +80,12 @@ class While : public Instr {
 		int executeList(Env*, Store*, std::vector<Instr*>&);
 		Expression* expr;
 		std::vector<Instr*> yes;
+};
+
+class Skip : public Instr {
+	public :
+		Skip(LTerm *);
+		virtual int execute(Env*, Store*);
 };
 
 

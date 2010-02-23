@@ -33,7 +33,7 @@ class Integer : public Expression {
 		Integer(std::string s);
 		virtual Val eval(Store* s, Env* e);
 	private :
-		int val;
+		Val val;
 	
 };
 
@@ -43,17 +43,17 @@ class String : public Expression {
 		String(std::string s);
 		virtual Val eval(Store* s, Env* e);
 	private :
-		std::string val;
+		Val val;
 	
 };
 
 
 class Real : public Expression {
 	public:
-		String(std::string s);
+		Real(std::string s);
 		virtual Val eval(Store* s, Env* e);
 	private :
-		double val;
+		Val val;
 	
 };
 

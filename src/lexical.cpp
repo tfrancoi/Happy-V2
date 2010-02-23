@@ -38,6 +38,7 @@ int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *
 	
 	
 	while ((c = is.get()) != -1)  {
+		
 
 		if(c == '"' && !echapement) {
 			str = 1 - str;
@@ -57,6 +58,9 @@ int lexical_analyser(const char* main_file, const char* preprocess_file, LTerm *
 				temp = temp + c;
 				echapement = 0;
 			}
+		}
+		else if(c == '\'') {
+			cur->add(new TTerm("'", "midfix", file, line));
 		}
 		else if(isSpace(c) || isBrackets(c) != -1) {
 			
@@ -196,7 +200,7 @@ int analyseTerm(const string value, string* type) {
 		int floating = 0;
 		int number = 1; 
 		for(unsigned int i = 1; i < value.size(); i++) {
-			if(value[i] == ',') { 
+			if(value[i] == '.') { 
 				floating++;
 			}
 			else {

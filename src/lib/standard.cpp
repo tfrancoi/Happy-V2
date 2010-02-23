@@ -20,15 +20,17 @@ Val write(Env* e, Store* s, vector<Expression*> args) {
 Val simplePlus(Val arg1, Val arg2) {
 	int type1 = arg1.getType();
 	int type2 = arg2.getType();
-	if(type1 == type2) {
-		if(type1 ==INTEGER) {
-			int i = arg1.to_i() + arg2.to_i();
-			return Val(i);
-		}
-		if(type1 == STRING) {
+	if(type1 ==INTEGER && type2 == INTEGER) {
+		int i = arg1.to_i() + arg2.to_i();
+		return Val(i);
+	}
+	if((type1 == INTEGER && type2 == REAL) || (type2 == INTEGER && type1 == REAL) ||  (type1 == REAL && type2 == REAL)) {
+		double i = arg1.to_f() + arg2.to_f();
+		return Val(i);		
+	}
+	if(type1 == STRING || type2 == STRING) {
 			string i = arg1.to_s() + arg2.to_s();
 			return Val(i);
-		}
 	}
 	
 	
@@ -62,11 +64,13 @@ Val moins(Env* e, Store* s, vector<Expression*> args) {
 	Val v2 = args[1]->eval(s,e);
 	int type1 = v1.getType();
 	int type2 = v2.getType();
-	if(type1 == type2) {
-		if(type1 ==INTEGER) {
-			int i = v1.to_i() - v2.to_i();
-			return Val(i);
-		}
+	if(type1 ==INTEGER && type2 == INTEGER) {
+		int i = v1.to_i() - v2.to_i();
+		return Val(i);
+	}
+	if((type1 == INTEGER && type2 == REAL) || (type2 == INTEGER && type1 == REAL) ||  (type1 == REAL && type2 == REAL)) {
+		double i = v1.to_f() - v2.to_f();
+		return Val(i);		
 	}
 	
 	return Val(0);
@@ -91,6 +95,10 @@ Val egal(Env* e, Store* s, vector<Expression*> args) {
 			return Val(i);
 		}
 	}
+	if((type1 == INTEGER && type2 == REAL) || (type2 == INTEGER && type1 == REAL) ||  (type1 == REAL && type2 == REAL)) {
+		int i = v1.to_f() == v2.to_f();
+		return Val(i);
+	}
 	return Val(0);	
 }
 
@@ -110,6 +118,10 @@ Val less(Env* e, Store* s, vector<Expression*> args) {
 			return Val(i);
 		}
 	}
+	if((type1 == INTEGER && type2 == REAL) || (type2 == INTEGER && type1 == REAL) ||  (type1 == REAL && type2 == REAL)) {
+		int i = v1.to_f() < v2.to_f();
+		return Val(i);
+	}
 	return Val(0);	
 }
 
@@ -126,5 +138,20 @@ Val type(Env* e, Store* s, vector<Expression*> args) {
 	if(type1 ==STRING) {
 			return Val("string");
 	}
+	if(type1 ==REAL) {
+			return Val("real");
+	}
 	return Val("empty");
+}
+
+string input(Env* e, Store* s, vector<Expression*> args) {
+	if(args.size() > 0) {
+		cout << "input function doesn't take any argument" << endl;
+		exit(1);
+	}
+	return "";
+}
+
+Val get_int(Env* e, Store* s, vector<Expression*> args) {
+	return Val();
 }

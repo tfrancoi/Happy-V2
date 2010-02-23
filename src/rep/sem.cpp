@@ -55,6 +55,13 @@ Val::Val(int val) {
 	this->val = i;
 }
 
+Val::Val(double val) {
+		this->type = REAL;
+		Float* f = new Float();
+		f->val = val;
+		this->val = f;
+}
+
 Val::Val(string s) {
 	this->type = STRING;
 	Str* str = new Str();

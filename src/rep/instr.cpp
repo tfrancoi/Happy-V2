@@ -17,6 +17,15 @@ Call::Call(LTerm* tree) {
 		}
 }
 
+Call::Call(LTerm* tree, int op) {
+		TTerm* t = dynamic_cast<TTerm*>((*tree)[2]);
+		name = t->getValue();
+		argument.push_back(create_expression((*tree)[1]));
+		for(int i = 3; i < tree->size(); i++) {
+			argument.push_back(create_expression((*tree)[i]));
+		}
+}
+
 int Call::execute(Env* e, Store* s) {
 	this->eval(s,e);
 	return 0;
@@ -97,6 +106,10 @@ Expression* create_expression(Term* t) {
 		TTerm* tt = dynamic_cast<TTerm*>(t);
 		return new Integer(tt->getValue());
 	}
+	if(t->getType() == get_set_code("float")) {
+		TTerm* tt = dynamic_cast<TTerm*>(t);
+		return new Real(tt->getValue());
+	}
 	if(t->getType() == get_set_code("string")) {
 		TTerm* tt = dynamic_cast<TTerm*>(t);
 		return new String(tt->getValue());
@@ -108,6 +121,10 @@ Expression* create_expression(Term* t) {
 	if(t->getType() == get_set_code("Call")) {
 		LTerm* lt = dynamic_cast<LTerm*>(t);
 		return new Call(lt);
+	}
+	if(t->getType() == get_set_code("Op")) {
+		LTerm* lt = dynamic_cast<LTerm*>(t);
+		return new Call(lt, 0);
 	}
 	if(t->getType() == get_set_code("Assignement")) {
 		LTerm* lt = dynamic_cast<LTerm*>(t);
@@ -197,6 +214,9 @@ int While::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
 	return 0;	
 }
 
+
+Skip::Skip(LTerm *) {}
+int Skip::execute(Env*, Store*) {return 0;}
 
 Instr::Instr() {}
 Instr::~Instr() {}

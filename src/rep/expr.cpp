@@ -9,22 +9,22 @@ Integer::Integer(string s) {
 	int number;
 	istringstream ss( s );
 	ss >> number;
-	val = number;
+	val = Val(number);
 }
 
 
 Val Integer::eval(Store* s, Env* e) {
-	return Val(val);
+	return val;
 }
 
 
 String::String(string s) {
-	val = s;
+	val = Val(s);
 }
 
 
 Val String::eval(Store* s, Env* e) {
-	return Val(val);
+	return val;
 }
 
 
@@ -38,6 +38,16 @@ Val Id::eval(Store* s, Env* e) {
 		cout << "variable " << name  << " not define " << endl;
 	}
 	return v;
+}
+
+Real::Real(std::string s) {
+	double number;
+	istringstream ss( s );
+	ss >> number;
+	val = Val(number);
+}
+Val Real::eval(Store* s, Env* e) {
+	return val;
 }
 
 Expression::Expression() {}

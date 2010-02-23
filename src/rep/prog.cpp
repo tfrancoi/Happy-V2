@@ -136,6 +136,13 @@ int analyse_instr(LTerm* instr, vector<Instr*>& v) {
 		While* boucle = new While(instr);
 		v.push_back(boucle);
 	}
+	if(instr->getType() == get_set_code("Skip")) {
+		Skip* boucle = new Skip(instr);
+		v.push_back(boucle);
+	}
+	if(instr->getType() == get_set_code("Op")) {
+		v.push_back(new Call(instr, 0));
+	}
 	return j;
 }
 

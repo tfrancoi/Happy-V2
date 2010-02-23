@@ -13,10 +13,10 @@ string type[] = {
 	"fun", "Id", "Block_arg", "Instr", "Block_instr", "of", 
 	"If", "While", "Call", "Assignement", "Return", "Skip",
 	"set", "if", "while", "return", "skip", "Expr",
-	"string", "int", "float"
+	"string", "int", "float", "midfix", "Op"
 };
 
-const int type_length = 25;
+const int type_length = 27;
 const int nb_element_block = 2;
 int element1_2[nb_element_block];
 
@@ -53,6 +53,7 @@ void initRule1() {
 	regle1[get_set_code("while")] = get_set_code("While");
 	regle1[get_set_code("Id")] = get_set_code("Call");
 	regle1[get_set_code("of")] = get_set_code("Block_arg");
+	regle1[get_set_code("midfix")] = get_set_code("Op");
 	
 	element1_2[0] = get_set_code("Block_fun");
 	element1_2[1] =get_set_code("Block_instr");
@@ -78,6 +79,7 @@ void initRule2() {
 	string tab10[] = {"if"};
 	string tab11[] = {"while"};
 	string tab12[] = {"return"};
+	string tab13[] = {"midfix"};
 	
 	vector<Paire> v1;
 	v1.push_back(Paire(-1, create_sets(tab1, 2)));
@@ -135,7 +137,12 @@ void initRule2() {
 	v10.push_back(Paire(1, create_sets(tab9, 1)));
 	rule2[get_set_code("Return")] = v10;
 	
-	
+	vector<Paire> v11;
+	v11.push_back(Paire(1, create_sets(tab13, 1)));
+	v11.push_back(Paire(1, create_sets(tab9, 1)));
+	v11.push_back(Paire(1, create_sets(tab3, 1)));
+	v11.push_back(Paire(0, create_sets(tab9, 1)));
+	rule2[get_set_code("Op")] = v11;
 	
 }
 
@@ -145,6 +152,7 @@ void initRewriteRule() {
 	string tab3[] = {"Expr"};
 	string tab4[] = {"Id", "Expr"};
 	rewriteRule[get_set_code("Call")] = create_sets(tab1, 2);
+	rewriteRule[get_set_code("Op")] = create_sets(tab1, 2);
 	rewriteRule[get_set_code("Assignement")] = create_sets(tab1, 2);
 	
 	rewriteRule[get_set_code("If")] = create_sets(tab2, 1);

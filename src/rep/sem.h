@@ -9,7 +9,8 @@
 
 #define EMPTY 0
 #define INTEGER 1
-#define STRING 2
+#define REAL 2
+#define STRING 3
 
 int getType(std::string);
 void initType();
@@ -29,6 +30,7 @@ class Val {
 		Val();
 		Val(int val);
 		Val(std::string);
+		Val(double val);
 		int getType();
 		std::string to_s();
 		int to_i();
