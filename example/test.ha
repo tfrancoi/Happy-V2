@@ -16,7 +16,7 @@
 			[! (write (<= 5 4) (< 4 4))
 			(write (>= 5 4) (> 4 4)) !]
 			(write (* 7 a))
-			[! (write (fibbo 24)) !]
+			(write (fibbo 40))
 		) 
 	)		
 	
