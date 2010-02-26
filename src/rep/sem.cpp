@@ -3,7 +3,25 @@
 #include <sstream>
 #include "sem.h"
 using namespace std;
+Store::Store() {}
 
+Val Store::getVal(int adress) {
+	if(adress >= store.size() || adress < 0) {
+		cout << "Store index error, index out of range" << endl;
+	}
+	return store[adress];
+}
+
+int Store::newVal(Val v) {
+	store.push_back(v);
+	return store.size() - 1;
+}
+void Store::setVal(Val v,int adress) {
+	if(adress >= store.size() || adress < 0) {
+		cout << "Store index error, index out of range" << endl;
+	}
+	store[adress] = v;  			
+}
 
 Env::Env(int nb_var) {
 	tab = new Val[nb_var + 1];
@@ -38,9 +56,10 @@ Val::Val() {
 	this->val = new Empty();
 }
 
-Val::Val(int type, Value* v) {
-	this->type = type;//empty
-	this->val = v;
+Val::Val(int type, int ref) {
+	this->type = type;
+	this->ref = ref;
+	this->val = new Empty();
 }
 
 int Val::getType() {
@@ -70,6 +89,9 @@ Val::Val(string s) {
 } 
 
 string Val::to_s() {
+	if(type == REFERENCE) {
+		return Val(ref).to_s();
+	}
 	return val->to_s();
 }
 
@@ -85,7 +107,12 @@ double Val::to_f() {
 	return val->to_f();
 }
 
-
+void Val::set_ref(int ref) {
+	this->ref = ref;
+}
+int Val::get_ref() {
+	return ref;
+}
 string Empty::to_s() {	
 	return "(-)";
 }

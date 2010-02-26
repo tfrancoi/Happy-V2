@@ -11,6 +11,8 @@
 #define INTEGER 1
 #define REAL 2
 #define STRING 3
+#define REFERENCE 4
+#define ARRAY 5
 
 int getType(std::string);
 void initType();
@@ -21,12 +23,13 @@ class Value {
 		virtual int to_i() = 0;
 		virtual int to_b() = 0;
 		virtual double to_f() = 0;
+		virtual std::vector<Value> to_array() = 0;
 		
 };
 
 class Val {
 	public :
-		Val(int type, Value* v);
+		Val(int type, int ref);
 		Val();
 		Val(int val);
 		Val(std::string);
@@ -36,16 +39,25 @@ class Val {
 		int to_i();
 		int to_b();
 		double to_f();
+		int get_ref();
+		void set_ref(int ref);
 		
 	
 	private :
 		int type;
 		Value* val;
+		int ref;
 	
 };
 
 class Store {
-	
+	public:
+		Store();
+		Val getVal(int adress);
+		int newVal(Val);
+		void setVal(Val,int adress);
+	private:
+		std::vector<Val> store;
 };
 
 
@@ -99,6 +111,11 @@ class Float : public Value {
 		virtual int to_b();
 		virtual double to_f();
 		double val;	
+};
+
+class Array : public Value {
+	
+	
 };
 
 #endif

@@ -74,7 +74,7 @@ Assignement::Assignement(LTerm* list) {
 int Assignement::execute(Env* e, Store* s) {
 	Val v = eval(s,e);
 	
-	if(v.to_s() == "(-)") {
+	if(v.getType() == EMPTY) {
 		return 1;
 	}
 	return 0;
@@ -85,6 +85,9 @@ int Assignement::execute(Env* e, Store* s) {
 
 Val Assignement::eval(Store* s, Env* e) {
 	Val v = this->expr->eval(s,e);
+	/*if(v.getType() == REFERENCE) {
+		cout << "référence set"  << v.to_s() << endl;
+	}*/
 	if(e->set(var_ref, v)) {
 		cout << "variable hors des bornes de l'env boulet de programmeur " << endl;
 		return Val();

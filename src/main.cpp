@@ -25,10 +25,7 @@ int main(int argc, char** argv) {
 	
 
   workDir = getFolder(argv[1]);
-  cout << "introduit un nombre" << endl;
-  int a = 0;
-  cin >> a;
-  cout << a << endl; 
+  
 
   
 	//init de la grammaire

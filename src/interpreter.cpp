@@ -18,10 +18,11 @@ int execute(Prog* p, string args[]) {
 	}
 	
 	Env *env = new Env(main->getNbVar());
+	Store* s = new Store();
 	//on met le tableau d'arg dans l'env
 	
 	//on appel la fonction main
-	main->execute(env, NULL);
+	main->execute(env, s);
 	return 0;
 }
 
@@ -55,4 +56,13 @@ void initNative() {
 	native["="] = new NFunction(&::egal);
 	native["<"] = new NFunction(&::less);
 	native["typeof"] = new NFunction(&::type);
+	native["get_i"] = new NFunction(&::get_int);
+	native["get_r"] = new NFunction(&::get_real);
+	native["get_s"] = new NFunction(&::get_string);
+	native["rand"] = new NFunction(&::random);
+		
+	native["new"] = new NFunction(&::into_store);
+	native["@"] = new NFunction(&::get_into_store);
+	native[":="] = new NFunction(&::change_into_store);
+	
 }
