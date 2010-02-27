@@ -17,7 +17,7 @@
 <Caractère>				--> 'a-z' | 'A-Z' | '0-9' | 'et tout le reste'...
 
 
-<Reserved_char>  	--> '(' | ')' | '"'
+<Reserved_char>  	--> '(' | ')' | '"' | '''
 <Reserved_word> 	--> '[!' | '!]' | '[#' | '#]' | 'if' | 
 'set' | 'while' | 'fun' | 'skip' | 'of' | 'return' | 'private' | 'public' | 'method'
 

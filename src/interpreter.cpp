@@ -2,6 +2,7 @@
 #include <sstream>
 #include "interpreter.h"
 #include "lib/standard.h"
+#include "lib/reference.h"
 
 using namespace std;
 
@@ -50,19 +51,7 @@ Val NFunction::eval(Store* s, Env* e, vector<Expression*> args) {
 
 
 void initNative() {
-	native["write"] = new NFunction(&write);
-	native["+"] = new NFunction(&::plus);
-	native["-"] = new NFunction(&::moins);
-	native["="] = new NFunction(&::egal);
-	native["<"] = new NFunction(&::less);
-	native["typeof"] = new NFunction(&::type);
-	native["get_i"] = new NFunction(&::get_int);
-	native["get_r"] = new NFunction(&::get_real);
-	native["get_s"] = new NFunction(&::get_string);
-	native["rand"] = new NFunction(&::random);
-		
-	native["new"] = new NFunction(&::into_store);
-	native["@"] = new NFunction(&::get_into_store);
-	native[":="] = new NFunction(&::change_into_store);
-	
+	init_arithmetic(native);
+	init_io(native);		
+	init_reference(native);	
 }

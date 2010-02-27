@@ -3,26 +3,39 @@
 #include <sstream>
 #include "sem.h"
 using namespace std;
-Store::Store() {}
 
-Val Store::getVal(int adress) {
+/************************
+ * 											*
+ * 				Store					*
+ * 											*
+ ************************/
+Store::Store() {
+	store.push_back(Val());
+}
+
+Val Store::getVal(unsigned int adress) {
 	if(adress >= store.size() || adress < 0) {
 		cout << "Store index error, index out of range" << endl;
 	}
 	return store[adress];
 }
 
-int Store::newVal(Val v) {
+unsigned int Store::newVal(Val v) {
 	store.push_back(v);
 	return store.size() - 1;
 }
-void Store::setVal(Val v,int adress) {
-	if(adress >= store.size() || adress < 0) {
+void Store::setVal(Val v, unsigned int adress) {
+	if(adress >= store.size()) {
 		cout << "Store index error, index out of range" << endl;
 	}
 	store[adress] = v;  			
 }
 
+/************************
+ * 											*
+ * 				Env						*
+ * 											*
+ ************************/
 Env::Env(int nb_var) {
 	tab = new Val[nb_var + 1];
 	size = nb_var + 1;
@@ -50,14 +63,19 @@ int Env::getSize() {
 	return this->size;
 }
 
-
+/************************
+ * 											*
+ * 					Val					*
+ * 											*
+ ************************/
 Val::Val() {
 	this->type = EMPTY;//empty
 	this->val = new Empty();
+	this->ref = 0;
 }
 
-Val::Val(int type, int ref) {
-	this->type = type;
+Val::Val(unsigned int ref) {
+	this->type = REFERENCE;
 	this->ref = ref;
 	this->val = new Empty();
 }
@@ -72,6 +90,7 @@ Val::Val(int val) {
 	Int* i =  new Int();
 	i->val = val;
 	this->val = i;
+	this->ref = 0;
 }
 
 Val::Val(double val) {
@@ -79,6 +98,7 @@ Val::Val(double val) {
 		Float* f = new Float();
 		f->val = val;
 		this->val = f;
+		this->ref = 0;
 }
 
 Val::Val(string s) {
@@ -86,11 +106,12 @@ Val::Val(string s) {
 	Str* str = new Str();
 	str->val = s;
 	this->val = str;
+	this->ref = 0;
 } 
 
 string Val::to_s() {
 	if(type == REFERENCE) {
-		return Val(ref).to_s();
+		return Val((int) ref).to_s();
 	}
 	return val->to_s();
 }
@@ -107,14 +128,23 @@ double Val::to_f() {
 	return val->to_f();
 }
 
-void Val::set_ref(int ref) {
-	this->ref = ref;
+vector<Val> Val::to_array() {
+		return val->to_array();
 }
-int Val::get_ref() {
+
+unsigned int Val::get_ref() {
 	return ref;
 }
+
+
+
+/************************
+ * 											*
+ * 					Empty				*
+ * 											*
+ ************************/
 string Empty::to_s() {	
-	return "(-)";
+	return "(-> Empty <-)";
 }
 
 int Empty::to_i() {
@@ -129,6 +159,15 @@ double Empty::to_f() {
 	return 0.0;
 }
 
+vector<Val> Empty::to_array() {
+	return vector<Val>();
+}
+
+/************************
+ * 											*
+ * 					Int					*
+ * 											*
+ ************************/
 string Int::to_s() {
 	ostringstream out;
 	out << this->val;
@@ -149,6 +188,11 @@ double Int::to_f() {
 	return this->val;
 }
 
+/************************
+ * 											*
+ * 					Float				*
+ * 											*
+ ************************/
 string Float::to_s() {
 	ostringstream out;
 	out << this->val;
@@ -170,7 +214,11 @@ double Float::to_f() {
 	return val;
 }
 		
-
+/************************
+ * 											*
+ * 					Str					*
+ * 											*
+ ************************/
 string Str::to_s() {
 	return val;
 }
@@ -187,4 +235,13 @@ int Str::to_b() {
 }
 double Str::to_f() {
 	return 1.0;
+}
+
+/************************
+ * 											*
+ * 					Array				*
+ * 											*
+ ************************/
+vector<Val> Array::to_array() {
+	return array;
 }

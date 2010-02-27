@@ -14,48 +14,38 @@
 #define REFERENCE 4
 #define ARRAY 5
 
-int getType(std::string);
-void initType();
 
-class Value {
-	public : 
-		virtual std::string to_s() = 0;
-		virtual int to_i() = 0;
-		virtual int to_b() = 0;
-		virtual double to_f() = 0;
-		virtual std::vector<Value> to_array() = 0;
-		
-};
+class Value;
+
 
 class Val {
 	public :
-		Val(int type, int ref);
-		Val();
-		Val(int val);
-		Val(std::string);
-		Val(double val);
+		Val(unsigned int ref); //crée une référence
+		Val(); //crée une valeur vide
+		Val(int val); //crée un int
+		Val(std::string); //crée un string
+		Val(double val); //crée un double
 		int getType();
 		std::string to_s();
 		int to_i();
 		int to_b();
 		double to_f();
-		int get_ref();
-		void set_ref(int ref);
-		
+		unsigned int get_ref();	
+		std::vector<Val> to_array();
 	
 	private :
 		int type;
 		Value* val;
-		int ref;
+		unsigned int ref;
 	
 };
 
 class Store {
 	public:
 		Store();
-		Val getVal(int adress);
-		int newVal(Val);
-		void setVal(Val,int adress);
+		Val getVal(unsigned int adress);
+		unsigned int newVal(Val);
+		void setVal(Val, unsigned int adress);
 	private:
 		std::vector<Val> store;
 };
@@ -78,15 +68,26 @@ class Env {
 		
 };
 
+class Value {
+	public : 
+		virtual std::string to_s() = 0;
+		virtual int to_i() = 0;
+		virtual int to_b() = 0;
+		virtual double to_f() = 0;
+		virtual std::vector<Val> to_array() = 0;
+		
+};
+
 class Empty : public Value {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
 		virtual int to_b();
 		virtual double to_f();
+		virtual std::vector<Val> to_array();
 };
 
-class Int : public Value {
+class Int : public Empty {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
@@ -95,7 +96,7 @@ class Int : public Value {
 		int val;
 };
 
-class Str : public Value {
+class Str : public Empty {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
@@ -104,7 +105,7 @@ class Str : public Value {
 		std::string val;
 };
 
-class Float : public Value {
+class Float : public Empty {
 	public :
 		virtual std::string to_s();
 		virtual int to_i();
@@ -113,8 +114,10 @@ class Float : public Value {
 		double val;	
 };
 
-class Array : public Value {
-	
+class Array : public Empty {
+	public :
+		virtual std::vector<Val> to_array();
+		std::vector<Val> array;
 	
 };
 

@@ -7,8 +7,6 @@
  * TODO : fix include for file in other directory or in standart library
  * [# include dir.dir2.file   #]
  * [# include std#dirlib.lib  #]
- * TODO : fix when main is call in an other directory, 
- * this directory became the working directory
  */
 
 #include <fstream>
@@ -19,6 +17,7 @@
 #include "lexical.h"
 #include "preprocess.h"
 #include "const_preprocess.h"
+
 
 using namespace std;
 

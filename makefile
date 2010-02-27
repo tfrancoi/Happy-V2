@@ -7,7 +7,7 @@ REP = rep/
 LIB = lib/
 all : happy
 
-happy : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o $(BIN)standard.o
+happy : $(BIN)main.o $(BIN)lexical.o $(BIN)Term.o $(BIN)preprocess.o $(BIN)sets.o $(BIN)grammar.o $(BIN)parser.o $(BIN)Prog.o $(BIN)interpreter.o $(BIN)expr.o $(BIN)sem.o $(BIN)instr.o $(BIN)standard.o $(BIN)reference.o 
 	$(CCW) -o $@ $^
 $(BIN)main.o : $(SRC)main.cpp
 	$(CCW) -o $@ -c $^
@@ -37,6 +37,9 @@ $(BIN)instr.o : $(SRC)$(REP)instr.cpp
 	$(CCW) -o $@ -c $^
 	
 $(BIN)standard.o : $(SRC)$(LIB)standard.cpp
+	$(CCW) -o $@ -c $^
+	
+$(BIN)reference.o : $(SRC)$(LIB)reference.cpp
 	$(CCW) -o $@ -c $^
 clean:
 	rm -rf $(BIN)/*.o

@@ -3,20 +3,28 @@
 #include <ctime>
 #include "../interpreter.h"
 #include "standard.h"
+#include "reference.h"
 
 using namespace std;
 
-Val rtov(Val v, Store* s) {
-	if(v.getType() == REFERENCE) {
-		return s->getVal(v.get_ref());
-	}
-	return v;
+void init_io(map<string, NFunction*> &native) {
+	native["write"] = new NFunction(&write);
+	native["get_i"] = new NFunction(&::get_int);
+	native["get_r"] = new NFunction(&::get_real);
+	native["get_s"] = new NFunction(&::get_string);
+}
+void init_arithmetic(map<string, NFunction*> &native) {		
+	native["+"] = new NFunction(&::plus);
+	native["-"] = new NFunction(&::moins);
+	native["="] = new NFunction(&::egal);
+	native["<"] = new NFunction(&::less);
+	native["typeof"] = new NFunction(&::type);	
+	native["rand"] = new NFunction(&::random);
 }
 
 Val write(Env* e, Store* s, vector<Expression*> args) {
 	for(unsigned int i = 0; i < args.size(); i++) {
-		Val v = rtov(args[i]->eval(s,e), s);
-		
+		Val v = rtov(args[i]->eval(s,e), s);		
 		cout << v.to_s();
 		cout << " ";
 	}
@@ -209,54 +217,6 @@ Val random(Env* e, Store* s, vector<Expression*> args) {
 }
 
 
-Val into_store(Env* e, Store* s, vector<Expression*> args) {
-	if(args.size() > 2) {
-		cout << "new take max one argument" << endl;
-		exit(1);
-	}
-	Val val;
-	if(args.size()) {
-		val = args[0]->eval(s,e);
-	}
-	else {
-		val = Val();
-	}
-	int ref = s->newVal(val);
-	
-	Val v = Val(REFERENCE, ref);
-	//cout << "new ref " << v.get_ref() << endl;
-	return v;	
-}
-
-Val change_into_store(Env* e, Store* s, vector<Expression*> args) {
-	if(args.size() != 2) {
-		cout << ":= take exactly two arguments" << endl;
-		exit(1);
-	}
-	Val v1 = args[0]->eval(s,e);
-	if(v1.getType() != REFERENCE) {
-		cout << ":= need a 	reference as first argument" << endl;
-		exit(1);
-	}
-	int ref = v1.get_ref();
-	s->setVal(args[1]->eval(s,e), ref);
-	return v1;	
-}
-
-
-
-Val get_into_store(Env* e, Store* s, vector<Expression*> args) {
-	if(args.size() != 1) {
-		cout << "@ take only one argument" << endl;
-		exit(1);
-	}
-	Val v1 = args[0]->eval(s,e);
-	if(v1.getType() != REFERENCE) {
-		cout << "@ take only ref argument" << endl;
-		exit(1);
-	}
-	return s->getVal(v1.get_ref());	
-}
 
 
 

@@ -35,21 +35,21 @@ int main(int argc, char** argv) {
 	init();
 	LTerm *tree = new LTerm();
 	int error = 0; //erreur renvoyer par chaque sous process
-	cout << "preprocess " << endl;
+	//cout << "preprocess " << endl;
 	error = preprocess((const char*) argv[1], out.c_str());
 	if(error) { return error; }
-	cout << "Lexical " << endl;
+	//cout << "Lexical " << endl;
 	lexical_analyser((const char*) argv[1], out.c_str(), tree);
 	if(error) { return error; }
-	cout << "Parser " << endl;
+	//cout << "Parser " << endl;
 	tree = prog_tree(tree);
 	error = analyse_tree(tree);
 	if(error) { return error; }
-	cout << "translation " << endl;
+	//cout << "translation " << endl;
 	Prog *main = new Prog(tree);
-	tree->print(0);
-	cout << "execution " << endl;
-	cout << "--------------------------" << endl << endl;
+	//tree->print(0);
+	//cout << "execution " << endl;
+	//cout << "--------------------------" << endl << endl;
 	return execute(main, NULL);
 	
 	
