@@ -50,6 +50,3 @@ Val Real::eval(Store* s, Env* e) {
 	return val;
 }
 
-Expression::Expression() {}
-Expression::~Expression() {}
-Val Expression::eval(Store* s, Env* e) { return Val(); }

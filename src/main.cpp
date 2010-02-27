@@ -22,16 +22,12 @@ string getWorkDir() {
 }
 
 int main(int argc, char** argv) {
-	
-
   workDir = getFolder(argv[1]);
   
-
-  
-	//init de la grammaire
+	
 	string out = argv[1];
 	out = out + "p";
-	
+	//init de la grammaire
 	init();
 	LTerm *tree = new LTerm();
 	int error = 0; //erreur renvoyer par chaque sous process

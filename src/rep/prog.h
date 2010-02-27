@@ -17,15 +17,15 @@ class Function {
 		Function(LTerm*);
 		std::string getName();
 		int execute(Env*, Store*);
-		int getNbVar();
-		int getArity();
+		unsigned int getNbVar();
+		unsigned int getArity();
 	private :		
 		void analyse_arg(LTerm*);
 		std::vector<Instr*> instr;
 		std::string name;
 		std::map<std::string, int> vars;
-		int arity;
-		int nb_var;
+		unsigned int arity;
+		unsigned int nb_var;
 		
 };
 
@@ -46,8 +46,8 @@ int get_var_ref(std::string);
 void set_var_ref(int j, std::string name);
 void add_var(std::string s);
 
-int analyse_block(LTerm*, std::vector<Instr*>&);
-int analyse_instr(LTerm*, std::vector<Instr*>&);
+void analyse_block(LTerm*, std::vector<Instr*>&);
+void analyse_instr(LTerm*, std::vector<Instr*>&);
 		
 
 #endif

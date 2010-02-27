@@ -11,12 +11,10 @@ Expression* create_expression(Term* t);
 
 class Instr {
 	public:
-		Instr();
-		virtual ~Instr();
 		/**
 		 * @return error code, 0 if nothing wrong happened.
 		 */ 
-		virtual int execute(Env*, Store*);
+		virtual int execute(Env*, Store*) = 0;
 	
 };
 

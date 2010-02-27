@@ -49,7 +49,7 @@ Val Call::eval(Store* s, Env* e) {
 			cout << "wrong arity during calling " << name << ", expected " << f->getArity() << ", " <<  argument.size() << " given " << endl;
 			exit(1);
 		}
-		for(int i = 0; i < argument.size(); i++) {
+		for(unsigned int i = 0; i < argument.size(); i++) {
 			ne->set(i, argument[i]->eval(s,e));
 			
 		}
@@ -137,7 +137,7 @@ Expression* create_expression(Term* t) {
 		ass->setVarRef(get_var_ref(ass->getVarName()));
 		return ass;
 	}
-	return new Expression();
+	return NULL;
 }
 
 
@@ -221,6 +221,4 @@ int While::executeList(Env* e, Store* s, std::vector<Instr*>& instr) {
 Skip::Skip(LTerm *) {}
 int Skip::execute(Env*, Store*) {return 0;}
 
-Instr::Instr() {}
-Instr::~Instr() {}
-int Instr::execute(Env* e, Store* s) {cout << "ainsi soit-im" << endl; return 0;}
+

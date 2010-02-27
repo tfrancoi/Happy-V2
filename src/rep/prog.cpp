@@ -50,11 +50,11 @@ string Function::getName() {
 	return this->name;	
 }
 
-int Function::getNbVar() {
+unsigned int Function::getNbVar() {
 	return this->nb_var;
 }
 
-int Function::getArity() {
+unsigned int Function::getArity() {
 	return this->arity;
 }
 
@@ -65,10 +65,6 @@ void Function::analyse_arg(LTerm* arg) {
 		::add_var(t->getValue());
 	}		
 }
-
-		
-
-
 
 int Function::execute(Env* e, Store* s) {		
 	for(unsigned int i = 0; i < instr.size(); i++) {
@@ -102,16 +98,14 @@ void set_var_ref(int j, string name) {
 
 
 
-int analyse_block(LTerm* block, vector<Instr*>& v) {
+void analyse_block(LTerm* block, vector<Instr*>& v) {
 	for(int i = 0; i < block->size(); i++) {
 		LTerm* instr = dynamic_cast<LTerm*>( (*block)[i]);
 		analyse_instr(instr, v);
 	}
-	
-	return j;
 }
 		
-int analyse_instr(LTerm* instr, vector<Instr*>& v) {
+void analyse_instr(LTerm* instr, vector<Instr*>& v) {
 	
 	if(instr->getType() == get_set_code("Block_instr")) {
 		analyse_block(instr, v);
@@ -143,6 +137,5 @@ int analyse_instr(LTerm* instr, vector<Instr*>& v) {
 	if(instr->getType() == get_set_code("Op")) {
 		v.push_back(new Call(instr, 0));
 	}
-	return j;
 }
 
