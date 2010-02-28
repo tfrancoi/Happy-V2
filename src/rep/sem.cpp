@@ -80,6 +80,14 @@ Val::Val(unsigned int ref) {
 	this->val = new Empty();
 }
 
+Val::Val(vector<Val> v) {
+	this->type = ARRAY;
+	this->ref = 0;
+	Array *ar = new Array();
+	ar->array = v;
+	this->val = ar;
+}
+
 int Val::getType() {
 	
 	return this->type;
@@ -228,10 +236,7 @@ int Str::to_i() {
 }
 
 int Str::to_b() {
-	if(val == "") 
-		return 0;
-	else
-		return 1;
+	return val == "";
 }
 double Str::to_f() {
 	return 1.0;
@@ -244,4 +249,8 @@ double Str::to_f() {
  ************************/
 vector<Val> Array::to_array() {
 	return array;
+}
+
+int Array::to_b() {
+	return array.size() > 0;
 }

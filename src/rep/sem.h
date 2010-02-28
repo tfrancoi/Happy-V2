@@ -25,6 +25,7 @@ class Val {
 		Val(int val); //crée un int
 		Val(std::string); //crée un string
 		Val(double val); //crée un double
+		Val(std::vector<Val> v); //crée un array
 		int getType();
 		std::string to_s();
 		int to_i();
@@ -117,6 +118,7 @@ class Float : public Empty {
 class Array : public Empty {
 	public :
 		virtual std::vector<Val> to_array();
+		virtual int to_b();
 		std::vector<Val> array;
 	
 };
