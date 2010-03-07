@@ -11,4 +11,10 @@ void init_reference(std::map<std::string, NFunction*> &native);
 Val into_store(Env* e, Store* s, std::vector<Expression*> args);
 Val get_into_store(Env* e, Store* s, std::vector<Expression*> args);
 Val change_into_store(Env* e, Store* s, std::vector<Expression*> args);
+
+//fonction on array
+Val array(Env* e, Store* s, std::vector<Expression*> args);
+Val append(Env* e, Store* s, std::vector<Expression*> args);
+Val get_index(Env* e, Store* s, std::vector<Expression*> args);
+Val len(Env* e, Store* s, std::vector<Expression*> args);
 #endif

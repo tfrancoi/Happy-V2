@@ -25,14 +25,14 @@ class Val {
 		Val(int val); //crée un int
 		Val(std::string); //crée un string
 		Val(double val); //crée un double
-		Val(std::vector<Val> v); //crée un array
+		Val(std::vector<Val>* v); //crée un array
 		int getType();
 		std::string to_s();
 		int to_i();
 		int to_b();
 		double to_f();
 		unsigned int get_ref();	
-		std::vector<Val> to_array();
+		std::vector<Val>* to_array();
 	
 	private :
 		int type;
@@ -75,7 +75,7 @@ class Value {
 		virtual int to_i() = 0;
 		virtual int to_b() = 0;
 		virtual double to_f() = 0;
-		virtual std::vector<Val> to_array() = 0;
+		virtual std::vector<Val>* to_array() = 0;
 		
 };
 
@@ -85,7 +85,7 @@ class Empty : public Value {
 		virtual int to_i();
 		virtual int to_b();
 		virtual double to_f();
-		virtual std::vector<Val> to_array();
+		virtual std::vector<Val>* to_array();
 };
 
 class Int : public Empty {
@@ -117,9 +117,9 @@ class Float : public Empty {
 
 class Array : public Empty {
 	public :
-		virtual std::vector<Val> to_array();
+		virtual std::vector<Val>* to_array();
 		virtual int to_b();
-		std::vector<Val> array;
+		std::vector<Val>* array;
 	
 };
 

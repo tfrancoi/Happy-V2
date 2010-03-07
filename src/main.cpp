@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 #include "preprocess.h"
 #include "lexical.h"
@@ -21,31 +22,35 @@ string getWorkDir() {
 	return workDir;
 }
 
+int analyse_arg(int argc, char** argv, char* file) {
+	if(argc == 2) {
+		strcpy(file, argv[1]);
+		return 0;
+	}
+	return 9;
+}
+
 int main(int argc, char** argv) {
-  workDir = getFolder(argv[1]);
-  
-	
-	string out = argv[1];
-	out = out + "p";
-	//init de la grammaire
-	init();
-	LTerm *tree = new LTerm();
+	char* file = new char[100];
+	int result = analyse_arg(argc, argv, file);
+  workDir = getFolder(file);
+  init(); //init de la grammaire
 	int error = 0; //erreur renvoyer par chaque sous process
-	//cout << "preprocess " << endl;
-	error = preprocess((const char*) argv[1], out.c_str());
-	if(error) { return error; }
-	//cout << "Lexical " << endl;
-	lexical_analyser((const char*) argv[1], out.c_str(), tree);
-	if(error) { return error; }
-	//cout << "Parser " << endl;
-	tree = prog_tree(tree);
-	error = analyse_tree(tree);
-	if(error) { return error; }
-	//cout << "translation " << endl;
-	Prog *main = new Prog(tree);
-	//tree->print(0);
-	//cout << "execution " << endl;
-	//cout << "--------------------------" << endl << endl;
+	string out = file;
+	LTerm *tree = new LTerm();
+	Prog *main;
+	switch(result) {
+		case 0 : out = out + "p";
+						 error = preprocess((const char*) file, out.c_str());
+						 if(error) { return error; }
+		case 1 : lexical_analyser((const char*) argv[1], out.c_str(), tree);
+						 if(error) { return error; }
+		case 2 : tree = prog_tree(tree);
+						 error = analyse_tree(tree);
+						 if(error) { return error; }
+		case 3 : main = new Prog(tree);
+	}
+	
 	return execute(main, NULL);
 	
 	

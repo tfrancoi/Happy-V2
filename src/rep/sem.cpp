@@ -80,7 +80,7 @@ Val::Val(unsigned int ref) {
 	this->val = new Empty();
 }
 
-Val::Val(vector<Val> v) {
+Val::Val(vector<Val> *v) {
 	this->type = ARRAY;
 	this->ref = 0;
 	Array *ar = new Array();
@@ -136,7 +136,7 @@ double Val::to_f() {
 	return val->to_f();
 }
 
-vector<Val> Val::to_array() {
+vector<Val>* Val::to_array() {
 		return val->to_array();
 }
 
@@ -167,8 +167,8 @@ double Empty::to_f() {
 	return 0.0;
 }
 
-vector<Val> Empty::to_array() {
-	return vector<Val>();
+vector<Val>* Empty::to_array() {
+	return new vector<Val>();
 }
 
 /************************
@@ -247,10 +247,10 @@ double Str::to_f() {
  * 					Array				*
  * 											*
  ************************/
-vector<Val> Array::to_array() {
+vector<Val>* Array::to_array() {
 	return array;
 }
 
 int Array::to_b() {
-	return array.size() > 0;
+	return array->size() > 0;
 }
