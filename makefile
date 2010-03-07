@@ -1,5 +1,5 @@
 CC = g++ 
-CCW = g++ -Wall
+CCW = g++
 BIN = bin/
 SRC = src/
 SET = set/
