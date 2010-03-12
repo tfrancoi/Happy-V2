@@ -9,15 +9,15 @@
 
 class NFunction  {
 	public :
-		NFunction(Val (*f)(Env*, Store*, std::vector<Expression*>));
-		int execute(Env*, Store*, std::vector<Expression*>);
-		Val eval(Store* s, Env* e, std::vector<Expression*> args);
+		NFunction(Val (*f)(Env*, Store*, std::vector<Expression*>, int line, std::string));
+		Val eval(Store* s, Env* e, std::vector<Expression*> args, int line, std::string);
 	
 	private :
-		Val (*f)(Env*, Store*, std::vector<Expression*>);
+		Val (*f)(Env*, Store*, std::vector<Expression*>, int line, std::string);
 };
 
 void initNative();
+
 int execute(Prog*, std::string[]);
 
 Function* getProgFunction(std::string);

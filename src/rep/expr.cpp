@@ -5,7 +5,22 @@
 
 using namespace std;
 
-Integer::Integer(string s) {
+SNode::SNode(Term* t) {
+	this->f = t->getFile();
+	this->l = t->getLine();
+}
+
+int SNode::line() {
+	return l;
+}
+string SNode::file() {
+	return f;
+}
+
+Expression::Expression(Term* t) : SNode(t) {}
+Val Expression::eval(Store* s, Env* e) {return Val();}
+
+Integer::Integer(string s, Term* t) : Expression(t)  {
 	int number;
 	istringstream ss( s );
 	ss >> number;
@@ -18,7 +33,7 @@ Val Integer::eval(Store* s, Env* e) {
 }
 
 
-String::String(string s) {
+String::String(string s, Term* t) : Expression(t) {
 	val = Val(s);
 }
 
@@ -28,7 +43,7 @@ Val String::eval(Store* s, Env* e) {
 }
 
 
-Id::Id(string s, int var_ref) {
+Id::Id(string s, int var_ref, Term* t) : Expression(t) {
 	this->name = s;
 	this->ref = var_ref;
 }
@@ -40,7 +55,7 @@ Val Id::eval(Store* s, Env* e) {
 	return v;
 }
 
-Real::Real(std::string s) {
+Real::Real(std::string s, Term* t) : Expression(t) {
 	double number;
 	istringstream ss( s );
 	ss >> number;

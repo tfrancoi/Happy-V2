@@ -1,4 +1,6 @@
 (fun main (of arg) (
+	(+ 5)
+	(write "salut")
 	(set a (new 6))
 	(set b (new 9))
 	(write a)

@@ -22,7 +22,7 @@ void init_arithmetic(map<string, NFunction*> &native) {
 	native["rand"] = new NFunction(&::random);
 }
 
-Val write(Env* e, Store* s, vector<Expression*> args) {
+Val write(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	for(unsigned int i = 0; i < args.size(); i++) {
 		Val v = rtov(args[i]->eval(s,e), s);		
 		cout << v.to_s();
@@ -55,9 +55,9 @@ Val simplePlus(Val arg1, Val arg2) {
 	
 }
 
-Val plus(Env* e, Store* s, vector<Expression*> args) {
+Val plus(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() < 2) {
-		cout << "cannot use operator + for less then 2 arguments" << endl;
+		cout << "cannot use operator + for less then 2 arguments" << endl << "\t at line " << line << " in file " << file  << endl;
 		exit(1);
 	}
 	Val v1 = rtov(args[0]->eval(s,e), s);
@@ -72,7 +72,7 @@ Val plus(Env* e, Store* s, vector<Expression*> args) {
 }
 
 
-Val moins(Env* e, Store* s, vector<Expression*> args) {
+Val moins(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 2) {
 		cout << "cannot use operator - for less or more then 2 arguments" << endl;
 		exit(1);
@@ -95,7 +95,7 @@ Val moins(Env* e, Store* s, vector<Expression*> args) {
 	return Val(0);
 }
 
-Val egal(Env* e, Store* s, vector<Expression*> args) {
+Val egal(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 2) {
 		cout << "cannot use operator = for less then 2 arguments" << endl;
 		exit(1);
@@ -122,7 +122,7 @@ Val egal(Env* e, Store* s, vector<Expression*> args) {
 }
 
 
-Val less(Env* e, Store* s, vector<Expression*> args) {
+Val less(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 2) {
 		cout << "cannot use operator < for less or more then 2 arguments" << endl;
 		exit(1);
@@ -144,7 +144,7 @@ Val less(Env* e, Store* s, vector<Expression*> args) {
 	return Val(0);	
 }
 
-Val type(Env* e, Store* s, vector<Expression*> args) {
+Val type(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 1) {
 		cout << "cannot use operator typeof for more then 1 arguments" << endl;
 		exit(1);
@@ -167,7 +167,7 @@ Val type(Env* e, Store* s, vector<Expression*> args) {
 	return Val("empty");
 }
 
-Val get_int(Env* e, Store* s, vector<Expression*> args) {
+Val get_int(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() > 0) {
 		cout << "input function doesn't take any argument" << endl;
 		exit(1);
@@ -177,7 +177,7 @@ Val get_int(Env* e, Store* s, vector<Expression*> args) {
   return Val(a);
 }
 
-Val get_real(Env* e, Store* s, vector<Expression*> args) {
+Val get_real(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() > 0) {
 		cout << "input function doesn't take any argument" << endl;
 		exit(1);
@@ -187,7 +187,7 @@ Val get_real(Env* e, Store* s, vector<Expression*> args) {
   return Val(a);
 }
 
-Val get_string(Env* e, Store* s, vector<Expression*> args) {
+Val get_string(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() > 0) {
 		cout << "input function doesn't take any argument" << endl;
 		exit(1);
@@ -199,7 +199,7 @@ Val get_string(Env* e, Store* s, vector<Expression*> args) {
 }
 
 
-Val random(Env* e, Store* s, vector<Expression*> args) {
+Val random(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 1) {
 		cout << "rand take only one arg" << endl;
 		exit(1);

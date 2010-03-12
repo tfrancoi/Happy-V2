@@ -43,7 +43,7 @@ class Assignement : public Instr, public Expression {
 			int var_ref;
 };
 
-class Return : public Instr {
+class Return : public Instr, public SNode {
 	public :
 		Return(LTerm*);
 		virtual int execute(Env*, Store*);
@@ -52,7 +52,7 @@ class Return : public Instr {
 };
 
 
-class If : public Instr {
+class If : public Instr, public SNode {
 	public :
 		If(LTerm*);
 		virtual int execute(Env*, Store*);
@@ -69,7 +69,7 @@ class If : public Instr {
 
 
 
-class While : public Instr {
+class While : public Instr, public SNode {
 	public :
 		While(LTerm*);
 		virtual int execute(Env*, Store*);
@@ -80,7 +80,7 @@ class While : public Instr {
 		std::vector<Instr*> yes;
 };
 
-class Skip : public Instr {
+class Skip : public Instr, public SNode {
 	public :
 		Skip(LTerm *);
 		virtual int execute(Env*, Store*);
