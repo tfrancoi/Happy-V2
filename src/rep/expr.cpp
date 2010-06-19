@@ -50,3 +50,10 @@ Val Real::eval(Store* s, Env* e) {
 	return val;
 }
 
+ValExpr::ValExpr(Val v) {
+	val = v;
+}
+Val ValExpr::eval(Store* s, Env* e) {
+	return val;
+}
+

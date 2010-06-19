@@ -56,6 +56,15 @@ class Real : public Expression {
 };
 
 
+class ValExpr : public Expression {
+	public:
+		ValExpr(Val v);
+		virtual Val eval(Store* s, Env*e);
+	private :
+		Val val;
+	
+};
+
 
 
 #endif

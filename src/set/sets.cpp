@@ -5,7 +5,7 @@
 **  Nettoyage et mis en c++ pure : Thibault Francois
 */
 
-                               // MS Visual C++ file
+
 #include "sets.h"
 
 #include <string>

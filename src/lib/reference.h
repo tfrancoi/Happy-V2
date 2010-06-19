@@ -17,4 +17,5 @@ Val array(Env* e, Store* s, std::vector<Expression*> args);
 Val append(Env* e, Store* s, std::vector<Expression*> args);
 Val get_index(Env* e, Store* s, std::vector<Expression*> args);
 Val len(Env* e, Store* s, std::vector<Expression*> args);
+Val list(Env* e, Store* s, std::vector<Expression*> args);
 #endif

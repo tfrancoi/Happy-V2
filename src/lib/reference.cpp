@@ -14,6 +14,7 @@ void init_reference(map<string, NFunction*> &native) {
 	native["<<"] = new NFunction(&::append);
 	native["#"] = new NFunction(&::get_index);
 	native["len"] = new NFunction(&::len);
+	native["list"] = new NFunction(&::list);
 }
 
 Val rtov(Val v, Store* s) {
@@ -141,4 +142,12 @@ Val len(Env* e, Store* s, vector<Expression*> args) {
 	vector<Val>* array = tab.to_array();
 	
 	return Val((int) array->size()); 
+}
+
+Val list(Env* e, Store* s, vector<Expression*> args) {
+	Val tab = array(e,s, vector<Expression*>());
+	//fix me
+	ValExpr* ex = new ValExpr(tab);
+	args.insert(args.begin(), ex);
+	return append(e,s, args);
 }
