@@ -6,8 +6,14 @@
 using namespace std;
 
 SNode::SNode(Term* t) {
-	this->f = t->getFile();
-	this->l = t->getLine();
+	if(t == NULL) {
+		this->f = "unknown";
+		this->l = 0;
+	}
+	else {
+		this->f = t->getFile();
+		this->l = t->getLine();
+	}
 }
 
 int SNode::line() {
@@ -65,7 +71,7 @@ Val Real::eval(Store* s, Env* e) {
 	return val;
 }
 
-ValExpr::ValExpr(Val v) {
+ValExpr::ValExpr(Val v) : Expression(NULL) {
 	val = v;
 }
 Val ValExpr::eval(Store* s, Env* e) {

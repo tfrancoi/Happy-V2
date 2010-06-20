@@ -163,6 +163,9 @@ Val type(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(type1 ==REFERENCE) {
 			return Val("ref");
 	}
+	if(type1 ==ARRAY) {
+			return Val("list");
+	}
 
 	return Val("empty");
 }

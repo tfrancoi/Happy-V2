@@ -10,11 +10,12 @@ void init_reference(map<string, NFunction*> &native) {
 	native["new"] = new NFunction(&::into_store);
 	native["@"] = new NFunction(&::get_into_store);
 	native[":="] = new NFunction(&::change_into_store);
-	native["array"] = new NFunction(&::array);
+	native["list"] = new NFunction(&::list);
+	native["!"] = new NFunction(&::list);
 	native["<<"] = new NFunction(&::append);
 	native["#"] = new NFunction(&::get_index);
 	native["len"] = new NFunction(&::len);
-	native["list"] = new NFunction(&::list);
+	
 }
 
 Val rtov(Val v, Store* s) {	
@@ -135,7 +136,7 @@ Val len(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	Val tab = rtov(args[0]->eval(s,e), s);
 	
 	if(tab.getType() != ARRAY) {
-		cout << "len need an array" << endl;
+		cout << "len need an array at line " << line << endl;
 		exit(1);
 	}
 	vector<Val>* array = tab.to_array();
@@ -143,10 +144,13 @@ Val len(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	return Val((int) array->size()); 
 }
 
-Val list(Env* e, Store* s, vector<Expression*> args) {
-	Val tab = array(e,s, vector<Expression*>());
-	//fix me
+Val list(Env* e, Store* s, vector<Expression*> args, int line, string file) {
+	Val tab = array(e,s, vector<Expression*>(), line, file);
+	if(args.size() < 1) {
+		return tab;
+	}
 	ValExpr* ex = new ValExpr(tab);
 	args.insert(args.begin(), ex);
-	return append(e,s, args);
+	append(e,s, args, line, file);
+	return tab;
 }
