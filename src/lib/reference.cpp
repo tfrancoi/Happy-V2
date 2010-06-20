@@ -17,8 +17,7 @@ void init_reference(map<string, NFunction*> &native) {
 	native["list"] = new NFunction(&::list);
 }
 
-Val rtov(Val v, Store* s) {
-	
+Val rtov(Val v, Store* s) {	
 	if(v.getType() == REFERENCE) {
 		return s->getVal(v.get_ref());
 	}
@@ -26,7 +25,7 @@ Val rtov(Val v, Store* s) {
 }
 
 
-Val into_store(Env* e, Store* s, vector<Expression*> args) {
+Val into_store(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() > 2) {
 		cout << "new take max one argument" << endl;
 		exit(1);
@@ -45,7 +44,7 @@ Val into_store(Env* e, Store* s, vector<Expression*> args) {
 	return v;	
 }
 
-Val change_into_store(Env* e, Store* s, vector<Expression*> args) {
+Val change_into_store(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 2) {
 		cout << ":= take exactly two arguments" << endl;
 		exit(1);
@@ -60,7 +59,7 @@ Val change_into_store(Env* e, Store* s, vector<Expression*> args) {
 	return v1;	
 }
 
-Val get_into_store(Env* e, Store* s, vector<Expression*> args) {
+Val get_into_store(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 1) {
 		cout << "@ take only one argument" << endl;
 		exit(1);
@@ -73,7 +72,7 @@ Val get_into_store(Env* e, Store* s, vector<Expression*> args) {
 	return s->getVal(v1.get_ref());	
 }
 
-Val array(Env* e, Store* s, vector<Expression*> args) {
+Val array(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 0) {
 		cout << "Array take no argument" << endl;
 		exit(1);
@@ -85,7 +84,7 @@ Val array(Env* e, Store* s, vector<Expression*> args) {
 	
 }
 
-Val append(Env* e, Store* s, vector<Expression*> args) {
+Val append(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() < 1) {
 		cout << "<< take at least two argument" << endl;
 		exit(1);
@@ -104,7 +103,7 @@ Val append(Env* e, Store* s, vector<Expression*> args) {
 	return ref;	
 }
 
-Val get_index(Env* e, Store* s, vector<Expression*> args) {
+Val get_index(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 2 && args.size() != 3 ) {
 		cout << "# take two or tree argument" << endl;
 		exit(1);
@@ -128,7 +127,7 @@ Val get_index(Env* e, Store* s, vector<Expression*> args) {
 	return (*array)[i.to_i()]; 
 }
 
-Val len(Env* e, Store* s, vector<Expression*> args) {
+Val len(Env* e, Store* s, vector<Expression*> args, int line, string file) {
 	if(args.size() != 1) {
 		cout << "len take exactly one argument" << endl;
 		exit(1);
@@ -136,7 +135,7 @@ Val len(Env* e, Store* s, vector<Expression*> args) {
 	Val tab = rtov(args[0]->eval(s,e), s);
 	
 	if(tab.getType() != ARRAY) {
-		cout << "len take as first argument an array" << endl;
+		cout << "len need an array" << endl;
 		exit(1);
 	}
 	vector<Val>* array = tab.to_array();

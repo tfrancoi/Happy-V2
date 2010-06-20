@@ -36,17 +36,12 @@ NFunction* getNativeFunction(string name) {
 }
 
 
-NFunction::NFunction(Val (*f)(Env*, Store*, vector<Expression*>)) {
+NFunction::NFunction(Val (*f)(Env*, Store*, vector<Expression*>, int line, string file)) {
 	this->f = f;
 }
 
-int NFunction::execute(Env* e, Store* s, vector<Expression*> args) {
-	this->f(e,s,args);
-	return 0;
-}
-
-Val NFunction::eval(Store* s, Env* e, vector<Expression*> args) {
-	return this->f(e,s,args);
+Val NFunction::eval(Store* s, Env* e, vector<Expression*> args, int line, string file) {
+	return this->f(e,s,args,line,file);
 }
 
 

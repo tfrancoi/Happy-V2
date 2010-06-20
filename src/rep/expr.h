@@ -3,21 +3,33 @@
 #include <string>
 #include "sem.h"
 
-class Expression {
+
+class SNode {
 	public :
+		SNode(Term* t);
+		int line();
+		std::string file();
+	private : 
+		int l;
+		std::string f;
+};
+
+class Expression : public SNode {
+	public :
+		Expression(Term* t);
 		/**
 		 * @param s : le tas, l'endroit ou les objets sont alloués dynamiquement
 		 *        e : environement ou pile, l'endroit ou les variables qui sont dans le scope
 		 * 				se voient attribuer une valeur
 		 * @return un objet val qui représente la valeur renvoyée
 		 */ 
-		virtual Val eval(Store* s, Env* e) = 0;
+		virtual Val eval(Store* s, Env* e);
 };
 
 
 class Id : public Expression {
 	public:
-		Id(std::string s, int var_ref);
+		Id(std::string s, int var_ref, Term* t);
 		virtual Val eval(Store* s, Env* e);
 		
 	private :
@@ -28,7 +40,7 @@ class Id : public Expression {
 
 class Integer : public Expression {
 	public:
-		Integer(std::string s);
+		Integer(std::string s, Term* t);
 		virtual Val eval(Store* s, Env* e);
 	private :
 		Val val;
@@ -38,7 +50,7 @@ class Integer : public Expression {
 
 class String : public Expression {
 	public:
-		String(std::string s);
+		String(std::string s, Term* t);
 		virtual Val eval(Store* s, Env* e);
 	private :
 		Val val;
@@ -48,7 +60,7 @@ class String : public Expression {
 
 class Real : public Expression {
 	public:
-		Real(std::string s);
+		Real(std::string s, Term* t);
 		virtual Val eval(Store* s, Env* e);
 	private :
 		Val val;
