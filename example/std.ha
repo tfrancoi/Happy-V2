@@ -18,4 +18,15 @@
 	
 	(fun * (of a b) (return (*s a b 0)))
 	
+	(fun add (of array liste) ( 
+		(set i 0)
+		(while (' i < (len liste)) (
+			(' array << ('liste # i))
+			(set i ('i + 1))
+		))
+		
+	))
+	
+	
+	
 )
