@@ -50,3 +50,8 @@ void initNative() {
 	init_io(native);		
 	init_reference(native);	
 }
+
+void runtime_error(string msg, int line, string file) {
+	cout << msg << endl;
+	cout << "\t at line " << line << " in file " << file << endl;
+}

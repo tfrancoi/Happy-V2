@@ -35,6 +35,7 @@ Val Call::eval(Store* s, Env* e) {
 	if(f == NULL) {
 			NFunction *nf = ::getNativeFunction(name);
 			if(nf == NULL) {
+				//on essaye de faire appel à ce que contient la variable
 				cout << "undefined symbol "  << name << endl;
 			}
 			else {

@@ -24,5 +24,6 @@ Function* getProgFunction(std::string);
 
 NFunction* getNativeFunction(std::string);
 
+void runtime_error(std::string msg, int line, std::string file);
 
 #endif

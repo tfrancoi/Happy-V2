@@ -2,12 +2,13 @@
 #include <iostream>
 #include <sstream>
 #include "sem.h"
+
 using namespace std;
 
 /************************
- * 											*
- * 				Store					*
- * 											*
+ * 						*
+ * 			Store		*
+ * 						*
  ************************/
 Store::Store() {
 	store.push_back(Val());
@@ -32,9 +33,9 @@ void Store::setVal(Val v, unsigned int adress) {
 }
 
 /************************
- * 											*
- * 				Env						*
- * 											*
+ * 						*
+ * 			Env			*
+ * 						*
  ************************/
 Env::Env(int nb_var) {
 	tab = new Val[nb_var + 1];
@@ -64,9 +65,9 @@ int Env::getSize() {
 }
 
 /************************
- * 											*
- * 					Val					*
- * 											*
+ * 						*
+ * 			Val			*
+ * 						*
  ************************/
 Val::Val() {
 	this->type = EMPTY;//empty
@@ -87,6 +88,14 @@ Val::Val(vector<Val> *v) {
 	ar->array = v;
 	this->val = ar;
 }
+/*
+Val::Val(map<string, Val> *v) {
+	this->type = OBJECT;
+	this->ref = 0;
+	Object *o = new Object();
+	o->object = v;
+	this->val = o;
+}*/
 
 int Val::getType() {
 	
@@ -147,9 +156,9 @@ unsigned int Val::get_ref() {
 
 
 /************************
- * 											*
- * 					Empty				*
- * 											*
+ * 						*
+ * 		Empty			*
+ * 						*
  ************************/
 string Empty::to_s() {	
 	return "(-> Empty <-)";
@@ -170,11 +179,14 @@ double Empty::to_f() {
 vector<Val>* Empty::to_array() {
 	return new vector<Val>();
 }
-
+/*
+map<string, Val>* Empty::to_object() {
+	return new map<string, Val>();
+}*/
 /************************
- * 											*
- * 					Int					*
- * 											*
+ * 						*
+ *			Int			*
+ * 						*
  ************************/
 string Int::to_s() {
 	ostringstream out;
@@ -197,9 +209,9 @@ double Int::to_f() {
 }
 
 /************************
- * 											*
- * 					Float				*
- * 											*
+ * 						*
+ * 		Float			*
+ * 						*
  ************************/
 string Float::to_s() {
 	ostringstream out;
@@ -223,9 +235,9 @@ double Float::to_f() {
 }
 		
 /************************
- * 											*
- * 					Str					*
- * 											*
+ * 						*
+ * 			Str			*
+ * 						*
  ************************/
 string Str::to_s() {
 	return val;
@@ -243,9 +255,9 @@ double Str::to_f() {
 }
 
 /************************
- * 											*
- * 					Array				*
- * 											*
+ * 						*
+ * 		Array			*
+ * 						*
  ************************/
 vector<Val>* Array::to_array() {
 	return array;
@@ -254,3 +266,13 @@ vector<Val>* Array::to_array() {
 int Array::to_b() {
 	return array->size() > 0;
 }
+
+/************************
+ * 						*
+ * 		Object			*
+ * 						*
+ ************************/
+/*
+map<string, Val>* Object::to_object() {
+	return object;
+}*/

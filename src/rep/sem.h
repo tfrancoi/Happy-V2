@@ -13,6 +13,7 @@
 #define STRING 3
 #define REFERENCE 4
 #define ARRAY 5
+#define OBJECT 6
 
 
 class Value;
@@ -26,6 +27,7 @@ class Val {
 		Val(std::string); //crée un string
 		Val(double val); //crée un double
 		Val(std::vector<Val>* v); //crée un array
+		Val(std::map<std::string, Val>* o); //crée un objet
 		int getType();
 		std::string to_s();
 		int to_i();
@@ -76,6 +78,7 @@ class Value {
 		virtual int to_b() = 0;
 		virtual double to_f() = 0;
 		virtual std::vector<Val>* to_array() = 0;
+		//virtual std::map<std::string, Val>* to_object() = 0;
 		
 };
 
@@ -86,6 +89,7 @@ class Empty : public Value {
 		virtual int to_b();
 		virtual double to_f();
 		virtual std::vector<Val>* to_array();
+		//virtual std::map<std::string, Val>* to_object();
 };
 
 class Int : public Empty {
@@ -119,8 +123,20 @@ class Array : public Empty {
 	public :
 		virtual std::vector<Val>* to_array();
 		virtual int to_b();
+		//virtual std::map<std::string, Val>* to_object();
 		std::vector<Val>* array;
 	
 };
+/*
+class Object : public Empty {
+	public :
+		//virtual std::string to_s();
+		//virtual int to_b();
+		//virtual std::vector<Val>* to_array();
+		virtual std::map<std::string, Val>* to_object();
+		std::map<std::string, Val>* object;
+		
+		
+};*/
 
 #endif
