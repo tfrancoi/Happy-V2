@@ -4,6 +4,8 @@
 #include <vector>
 #include "../interpreter.h"
 
+
+
 void init_io(std::map<std::string, NFunction*> &native);
 void init_arithmetic(std::map<std::string, NFunction*> &native);
 //output functions

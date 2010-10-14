@@ -12,7 +12,7 @@
 (fun print (of arg) (
 	(set i 0)
 	(write (typeof arg))
-	(while (< i (len arg)) ( 
+	(while (' i < (len arg)) ( 
 		(write ('a # i))
 		(set i ('i + 1))
 	))

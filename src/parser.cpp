@@ -35,7 +35,7 @@ int analyse_node(LTerm *tree) {
 	
 	sets r = rewriteCheck(tree);
 	if(r.cardinality() == 0) {
-		cout << "Error unexpected element while rewrite at line " << tree->getLine() << " in file " << tree->getFile() << endl;
+		cout << "Error unexpected element during rewrite at line " << tree->getLine() << " in file " << tree->getFile() << endl;
 		return 2;
 	}
 	if(r.cardinality() > 1)  {

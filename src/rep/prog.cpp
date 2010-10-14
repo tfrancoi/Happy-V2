@@ -6,6 +6,7 @@
 using namespace std;
 
 map<std::string, int>* vars_ref;
+map<int, std::string>* vars_names_ref;
 int j = 0;
 
 
@@ -37,6 +38,7 @@ void Prog::analyse_block(LTerm *tree) {
 Function::Function(LTerm *tree) {
 	j = 0;
 	vars_ref = &(this->vars);
+	vars_names_ref = &(this->vars_names);
 	TTerm* t = dynamic_cast<TTerm*>( (*tree)[1]);
 	this->name = t->getValue();
 	LTerm* arg = dynamic_cast<LTerm*>( (*tree)[2]);
@@ -79,6 +81,10 @@ int Function::execute(Env* e, Store* s) {
 	return 0;
 }
 
+string Function::getVarName(int index) {
+	return vars_names[index];
+}
+
 void add_var(string s) {
 	if(get_var_ref(s) == 0) {
 		set_var_ref(j, s);
@@ -93,6 +99,7 @@ int get_var_ref(string s) {
 
 void set_var_ref(int j, string name) {
 	(*vars_ref)[name] = j;
+	(*vars_names_ref)[j] = name;
 }
 
 

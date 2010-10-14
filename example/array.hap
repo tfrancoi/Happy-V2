@@ -1,0 +1,66 @@
+   
+[# begin std.ha #]
+(
+	    [# begin stdp.ha #]
+
+	
+
+(fun *s (of a b r) 
+	(if (= 0 a) 
+		(return r)
+		(return (*s (- a 1) b (+ r b)))
+	)
+)
+	
+
+[# end stdp.ha #]
+
+		
+	(fun > (of a b) (return (< b a)))
+	(fun >= (of a b) 
+		(if (= a b) 
+			(return 1)
+			(return (< b a))
+		)
+	)
+	
+	(fun <= (of a b)  
+		(if (= a b) 
+			(return 1)
+			(return (< a b))
+		)
+	)
+	
+	(fun * (of a b) (return (*s a b 0)))
+	
+	(fun add (of array liste) ( 
+		(set i 0)
+		(while (' i < (len liste)) (
+			(' array << ('liste # i))
+			(set i ('i + 1))
+		))
+		
+	))
+	
+	
+	
+)
+[# end std.ha #]
+(fun main (of arg) (
+	
+	(set a (! 1 2 3 4))
+	('a << 1 2)
+	(print a)
+	('a # 0 "salut")
+	(print a)
+
+))
+
+(fun print (of arg) (
+	(set i 0)
+	(write (typeof arg))
+	(while (' i < (len arg)) ( 
+		(write ('a # i))
+		(set i ('i + 1))
+	))
+))

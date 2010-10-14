@@ -6,7 +6,7 @@
 #include "../interpreter.h"
 
 using namespace std;
-
+using namespace rep;
 
 Call::Call(LTerm* tree) : Expression(tree) {
 		TTerm* t = dynamic_cast<TTerm*>((*tree)[0]);
@@ -31,26 +31,38 @@ int Call::execute(Env* e, Store* s)  {
 }
 
 Val Call::eval(Store* s, Env* e) {
-	Function *f = ::getProgFunction(name);
+	::Function *f = ::getProgFunction(name);
 	if(f == NULL) {
 			NFunction *nf = ::getNativeFunction(name);
 			if(nf == NULL) {
 				//on essaye de faire appel à ce que contient la variable
-				cout << "undefined symbol "  << name << endl;
+				
+				//il y a encore un espoir que le type de la variable soit fun
+				Val v = e->get(name);
+				if(v.getType() == FUNCTION) {
+					f = v.to_function();
+				}
+				else {
+					cout << "undefined symbol "  << name << endl;
+				}
+				
 			}
 			else {
 				//on execute la NFunction
 				return nf->eval(s,e,argument, this->line(), this->file());
 			}
 	} 
-	else {
+	
+	if(f != NULL) {
 		Env *ne = new Env(f->getNbVar());
 		if(argument.size() != f->getArity()) {
 			cout << "wrong arity during calling " << name << ", expected " << f->getArity() << ", " <<  argument.size() << " given " << endl;
 			exit(1);
 		}
 		for(unsigned int i = 0; i < argument.size(); i++) {
-			ne->set(i, argument[i]->eval(s,e));
+			
+			ne->set(i, argument[i]->eval(s,e), f->getVarName(i));
+			
 			
 		}
 		f->execute(ne, s);
@@ -88,7 +100,7 @@ Val Assignement::eval(Store* s, Env* e) {
 	/*if(v.getType() == REFERENCE) {
 		cout << "référence set"  << v.to_s() << endl;
 	}*/
-	if(e->set(var_ref, v)) {
+	if(e->set(var_ref, v, name)) {
 		cout << "variable hors des bornes de l'env boulet de programmeur " << endl;
 		return Val();
 	}
@@ -146,6 +158,7 @@ Return::Return(LTerm* list) : SNode(list) {
 }
 
 int Return::execute(Env* e, Store* s) {
+	//on place la valeur du return dans la dernière case de l'environement
 	e->set(e->getSize() - 1, this->expr->eval(s,e));
 	return 99;
 }

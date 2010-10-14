@@ -4,6 +4,7 @@
 #include "sem.h"
 
 using namespace std;
+using namespace rep;
 
 /************************
  * 						*
@@ -53,11 +54,27 @@ int Env::set(int index, Val value) {
 	return 0;
 }
 
+int Env::set(int index, Val value, string name) {
+	int error = set(index, value);
+	if(error == 1)
+		return error;
+	names[name] = index + 1;
+	return error;	
+}
+
 Val Env::get(int index) {
 	if(index < 0 || index >= this->size) 
 		return Val();//une valeur d'erreur
 	
 	return tab[index];
+}
+
+Val Env::get(string name) {
+	int index = names[name];
+	if(index == 0) 
+		return Val();
+	//cout << index << " " << endl;
+	return tab[index - 1];
 }
 
 int Env::getSize() {
@@ -87,6 +104,14 @@ Val::Val(vector<Val> *v) {
 	Array *ar = new Array();
 	ar->array = v;
 	this->val = ar;
+}
+
+Val::Val(::Function* f) {
+	this->type = FUNCTION;
+	this->ref = 0;
+	rep::Function* fun = new rep::Function();
+	fun->fun = f;
+	this->val = fun;
 }
 /*
 Val::Val(map<string, Val> *v) {
@@ -153,6 +178,10 @@ unsigned int Val::get_ref() {
 	return ref;
 }
 
+::Function* Val::to_function() {
+	return val->to_function();
+}
+
 
 
 /************************
@@ -160,51 +189,55 @@ unsigned int Val::get_ref() {
  * 		Empty			*
  * 						*
  ************************/
-string Empty::to_s() {	
+string rep::Empty::to_s() {	
 	return "(-> Empty <-)";
 }
 
-int Empty::to_i() {
+int rep::Empty::to_i() {
 	return 0;
 }
 
-int Empty::to_b() {
+int rep::Empty::to_b() {
 	return 0;
 }
 
-double Empty::to_f() {
+double rep::Empty::to_f() {
 	return 0.0;
 }
 
-vector<Val>* Empty::to_array() {
+vector<Val>* rep::Empty::to_array() {
 	return new vector<Val>();
 }
-/*
-map<string, Val>* Empty::to_object() {
-	return new map<string, Val>();
-}*/
+
+obj::Object* Empty::to_object() {
+	return NULL;
+}
+
+::Function* Empty::to_function() {
+	return NULL;
+}
 /************************
  * 						*
  *			Int			*
  * 						*
  ************************/
-string Int::to_s() {
+string rep::Int::to_s() {
 	ostringstream out;
 	out << this->val;
 	return out.str();
 	
 }
 
-int Int::to_i() {
+int rep::Int::to_i() {
 	return this->val;
 }
 
-int Int::to_b() {
+int rep::Int::to_b() {
 	return this->val;	
 }
 
 
-double Int::to_f() {
+double rep::Int::to_f() {
 	return this->val;
 }
 
@@ -213,24 +246,24 @@ double Int::to_f() {
  * 		Float			*
  * 						*
  ************************/
-string Float::to_s() {
+string rep::Float::to_s() {
 	ostringstream out;
 	out << this->val;
 	return out.str();
 }
 
-int Float::to_i() {
+int rep::Float::to_i() {
 	return (int) val;
 }
 
-int Float::to_b() {
+int rep::Float::to_b() {
 	if(val) 
 		return 1;
 	else
 		return 0;
 }
 
-double Float::to_f() {
+double rep::Float::to_f() {
 	return val;
 }
 		
@@ -239,18 +272,18 @@ double Float::to_f() {
  * 			Str			*
  * 						*
  ************************/
-string Str::to_s() {
+string rep::Str::to_s() {
 	return val;
 }
 
-int Str::to_i() {
+int rep::Str::to_i() {
 	return 1;
 }
 
-int Str::to_b() {
+int rep::Str::to_b() {
 	return val == "";
 }
-double Str::to_f() {
+double rep::Str::to_f() {
 	return 1.0;
 }
 
@@ -259,11 +292,11 @@ double Str::to_f() {
  * 		Array			*
  * 						*
  ************************/
-vector<Val>* Array::to_array() {
+vector<Val>* rep::Array::to_array() {
 	return array;
 }
 
-int Array::to_b() {
+int rep::Array::to_b() {
 	return array->size() > 0;
 }
 
@@ -275,4 +308,22 @@ int Array::to_b() {
 /*
 map<string, Val>* Object::to_object() {
 	return object;
+}*/
+
+
+/************************
+ * 						*
+ * 		Function		*
+ * 						*
+ * **********************/
+::Function* rep::Function::to_function() {
+	return fun;
+}
+
+string rep::Function::to_s() {
+	return this->to_function()->getName();
+}
+/*
+string rep::Function::to_s() {
+	return 
 }*/

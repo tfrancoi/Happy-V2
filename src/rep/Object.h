@@ -11,25 +11,30 @@
 #define INNER_CLASS = 1
 #define OUTER_CLASS = 2
 
-class Type {
-	public : 
-		std::name;
-		Type* heritFrom;
-}
+class Val;
 
-class Object {
-	public :
-		Object();
-		get(std::string, const int CONTEXT);
-		set(std::string, Val);
-		define(std::string, const int ACCESS);
+namespace obj {
+	class Class {
+		public :
+			Class(Class* inherit);
+			void define(std::string var_name, const int ACCESS);
+		private :
+			Class* heritFrom;			
+			std::map<std::string, int> access;
+	};
 	
-	private : 
-		Type type;
-		std::map<std::string, Val> values;
-		std::map<std::string, int> accesses;
+	class Object {
+		public :
+			Val get(std::string key, const int CONTEXT);
+			bool set(std::string key, Val);
+			
 		
+		private : 
+			Class type;
+			std::map<std::string, Val> values;		
+	};
 	
-};
+	
+}
 
 #endif

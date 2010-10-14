@@ -3,6 +3,8 @@
 #include <string>
 #include "sem.h"
 
+#define EXPRESSION 0
+#define ID 1
 
 class SNode {
 	public :
@@ -17,6 +19,7 @@ class SNode {
 class Expression : public SNode {
 	public :
 		Expression(Term* t);
+		virtual int getType();
 		/**
 		 * @param s : le tas, l'endroit ou les objets sont alloués dynamiquement
 		 *        e : environement ou pile, l'endroit ou les variables qui sont dans le scope
@@ -31,7 +34,8 @@ class Id : public Expression {
 	public:
 		Id(std::string s, int var_ref, Term* t);
 		virtual Val eval(Store* s, Env* e);
-		
+		virtual int getType();
+		std::string getName();
 	private :
 		std::string name;
 		int ref;

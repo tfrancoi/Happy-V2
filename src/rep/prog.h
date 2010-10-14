@@ -8,25 +8,10 @@
 #include "expr.h"
 #include "instr.h"
 #include "../Term.h"
+#include "Function.h"
 
 
 
-class Function {
-	public :
-		Function(LTerm*);
-		std::string getName();
-		int execute(Env*, Store*);
-		unsigned int getNbVar();
-		unsigned int getArity();
-	private :		
-		void analyse_arg(LTerm*);
-		std::vector<Instr*> instr;
-		std::string name;
-		std::map<std::string, int> vars;
-		unsigned int arity;
-		unsigned int nb_var;
-		
-};
 
 class Prog {
 	public:

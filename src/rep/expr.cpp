@@ -2,6 +2,8 @@
 #include <sstream>
 #include <iostream>
 #include "expr.h"
+#include "prog.h"
+#include "../interpreter.h"
 
 using namespace std;
 
@@ -24,6 +26,8 @@ string SNode::file() {
 }
 
 Expression::Expression(Term* t) : SNode(t) {}
+int Expression::getType() { return EXPRESSION; }
+
 Val Expression::eval(Store* s, Env* e) {return Val();}
 
 Integer::Integer(string s, Term* t) : Expression(t)  {
@@ -53,10 +57,26 @@ Id::Id(string s, int var_ref, Term* t) : Expression(t) {
 	this->name = s;
 	this->ref = var_ref;
 }
+
+int Id::getType() {
+	return ID;
+}
+
+string Id::getName() {
+	return this->name;
+}
 Val Id::eval(Store* s, Env* e) {
 	Val v = e->get(ref);
-	if(v.to_s() == "(-)") {
-		cout << "variable " << name  << " not define " << endl;
+	if(v.to_s() == "(-> Empty <-)") {
+		
+		Function *f = ::getProgFunction(name);
+		if(f == NULL) {
+			cout << "variable " << name  << " not define " << endl;
+		}
+		else {
+			//cout << "on a trouvé la fonction" << endl;
+			return Val(f);
+		}
 	}
 	return v;
 }
