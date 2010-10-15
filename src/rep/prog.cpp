@@ -4,6 +4,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace function;
 
 map<std::string, int>* vars_ref;
 map<int, std::string>* vars_names_ref;
@@ -14,12 +15,12 @@ Prog::Prog(LTerm *tree) {
 	this->analyse_block(tree);
 }
 
-Function* Prog::getFunction(string name) {
+function::Function* Prog::getFunction(string name) {
 	return functions[name];
 }
 
 void Prog::analyse_fun(LTerm *tree) {
-	Function *f = new Function(tree);
+	function::Function *f = new function::Function(tree);
 	functions[f->getName()] = f;	
 }
 
@@ -35,7 +36,7 @@ void Prog::analyse_block(LTerm *tree) {
 	}
 }
 
-Function::Function(LTerm *tree) {
+function::Function::Function(LTerm *tree) {
 	j = 0;
 	vars_ref = &(this->vars);
 	vars_names_ref = &(this->vars_names);
@@ -48,19 +49,19 @@ Function::Function(LTerm *tree) {
 	this->nb_var = j;
 }
 
-string Function::getName() {
+string function::Function::getName() {
 	return this->name;	
 }
 
-unsigned int Function::getNbVar() {
+unsigned int function::Function::getNbVar() {
 	return this->nb_var;
 }
 
-unsigned int Function::getArity() {
+unsigned int function::Function::getArity() {
 	return this->arity;
 }
 
-void Function::analyse_arg(LTerm* arg) {
+void function::Function::analyse_arg(LTerm* arg) {
 	this->arity = arg->size() - 1;
 	for(int i = 1; i < arg->size(); i++) {
 		TTerm *t = dynamic_cast<TTerm*>((*arg)[i]);
@@ -68,7 +69,7 @@ void Function::analyse_arg(LTerm* arg) {
 	}		
 }
 
-int Function::execute(Env* e, Store* s) {		
+int function::Function::execute(Env* e, Store* s) {		
 	for(unsigned int i = 0; i < instr.size(); i++) {
 		int result = instr[i]->execute(e,s);
 		if(result == 99) {
@@ -81,8 +82,12 @@ int Function::execute(Env* e, Store* s) {
 	return 0;
 }
 
-string Function::getVarName(int index) {
+string function::Function::getVarName(int index) {
 	return vars_names[index];
+}
+
+int function::Function::getType() {
+	return USER_FUNCTION;
 }
 
 void add_var(string s) {

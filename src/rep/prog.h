@@ -16,12 +16,12 @@
 class Prog {
 	public:
 		Prog(LTerm* );
-		Function* getFunction(std::string );
+		function::Function* getFunction(std::string );
 		
 	private:
 		void analyse_block(LTerm*);
 		void analyse_fun(LTerm*);
-		std::map<std::string, Function*> functions;
+		std::map<std::string, function::Function*> functions;
 	
 	
 };

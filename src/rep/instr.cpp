@@ -31,27 +31,26 @@ int Call::execute(Env* e, Store* s)  {
 }
 
 Val Call::eval(Store* s, Env* e) {
-	::Function *f = ::getProgFunction(name);
-	if(f == NULL) {
-			NFunction *nf = ::getNativeFunction(name);
-			if(nf == NULL) {
-				//on essaye de faire appel à ce que contient la variable
-				
-				//il y a encore un espoir que le type de la variable soit fun
-				Val v = e->get(name);
-				if(v.getType() == FUNCTION) {
-					f = v.to_function();
-				}
-				else {
-					cout << "undefined symbol "  << name << endl;
-				}
-				
-			}
-			else {
-				//on execute la NFunction
-				return nf->eval(s,e,argument, this->line(), this->file());
-			}
-	} 
+	function::Function *f = NULL; 
+	NFunction *nf = NULL; 
+	Val v = e->get(this->name);
+	if(VERBOSE)
+		cout << "call => " << name << endl;
+		
+	if(v.getType() == FUNCTION) {
+		if(v.to_function()->getType() == NATIVE_FUNCTION) {
+			nf = dynamic_cast<NFunction*>(v.to_function());
+		}
+		else {
+			f = dynamic_cast<function::Function*>(v.to_function());
+		}
+	}
+	else {		
+		f = ::getProgFunction(name);
+		nf = ::getNativeFunction(name);
+	}
+	
+	
 	
 	if(f != NULL) {
 		Env *ne = new Env(f->getNbVar());
@@ -59,19 +58,18 @@ Val Call::eval(Store* s, Env* e) {
 			cout << "wrong arity during calling " << name << ", expected " << f->getArity() << ", " <<  argument.size() << " given " << endl;
 			exit(1);
 		}
-		for(unsigned int i = 0; i < argument.size(); i++) {
-			
-			ne->set(i, argument[i]->eval(s,e), f->getVarName(i));
-			
-			
+		for(unsigned int i = 0; i < argument.size(); i++) {			
+			ne->set(i, argument[i]->eval(s,e), f->getVarName(i));			
 		}
 		f->execute(ne, s);
-		//TODO implémenter le return et retourner la dernière valeur de l'env
 		Val v = ne->get(f->getNbVar()); 
 		delete ne;
-		return v;
-		
+		return v;		
 	}
+	if(nf != NULL) {
+		return nf->eval(s,e,argument, this->line(), this->file());
+	}
+	cout << "undefined symbol "  << name << endl;
 	return Val();
 }
 

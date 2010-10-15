@@ -12,7 +12,7 @@ map<string, NFunction*> native;
 int execute(Prog* p, string args[]) {
 	initNative();
 	prog = p;
-	Function* main = getProgFunction("main");
+	function::Function* main = getProgFunction("main");
 	if(main == NULL) {
 		cout << "No main function, no entry point for the programme, execution abort" << endl;
 		return 6;
@@ -27,7 +27,7 @@ int execute(Prog* p, string args[]) {
 	return 0;
 }
 
-Function* getProgFunction(string name) {
+function::Function* getProgFunction(string name) {
 	return prog->getFunction(name);
 }
 
@@ -38,6 +38,10 @@ NFunction* getNativeFunction(string name) {
 
 NFunction::NFunction(Val (*f)(Env*, Store*, vector<Expression*>, int line, string file)) {
 	this->f = f;
+}
+
+int NFunction::getType() {
+	return NATIVE_FUNCTION;
 }
 
 Val NFunction::eval(Store* s, Env* e, vector<Expression*> args, int line, string file) {

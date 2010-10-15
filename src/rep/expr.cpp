@@ -69,9 +69,15 @@ Val Id::eval(Store* s, Env* e) {
 	Val v = e->get(ref);
 	if(v.to_s() == "(-> Empty <-)") {
 		
-		Function *f = ::getProgFunction(name);
+		function::Function *f = ::getProgFunction(name);
+		NFunction *nf = ::getNativeFunction(name);
 		if(f == NULL) {
-			cout << "variable " << name  << " not define " << endl;
+			if(nf == NULL) {
+				cout << "variable " << name  << " not define " << endl;
+			}
+			else {
+				return Val(nf);
+			}
 		}
 		else {
 			//cout << "on a trouvé la fonction" << endl;

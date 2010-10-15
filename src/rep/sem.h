@@ -24,7 +24,7 @@ namespace obj {
 }
 
 namespace rep {
-	class Value;
+	class Empty;
 }
 
 class Val {
@@ -35,7 +35,7 @@ class Val {
 			Val(std::string); //crée un string
 			Val(double); //crée un double
 			Val(std::vector<Val>*); //crée un array
-			Val(Function*);
+			Val(GenericFunction*);
 			Val(obj::Object*); //crée un objet
 			int getType();
 			std::string to_s();
@@ -45,11 +45,11 @@ class Val {
 			unsigned int get_ref();	
 			std::vector<Val>* to_array();
 			obj::Object* to_object();
-			::Function* to_function();	
+			GenericFunction* to_function();	
 		
 		private :
 			int type;
-			rep::Value* val;
+			rep::Empty* val;
 			unsigned int ref;
 		
 	};
@@ -90,18 +90,8 @@ class Val {
 
 	
 namespace rep {
-	class Value {
-		public : 
-			virtual std::string to_s() = 0;
-			virtual int to_i() = 0;
-			virtual int to_b() = 0;
-			virtual double to_f() = 0;
-			virtual std::vector<Val>* to_array() = 0;
-			virtual obj::Object* to_object() = 0;
-			virtual ::Function* to_function() = 0;			
-	};
 
-	class Empty : public Value {
+	class Empty {
 		public :
 			virtual std::string to_s();
 			virtual int to_i();
@@ -109,7 +99,7 @@ namespace rep {
 			virtual double to_f();
 			virtual std::vector<Val>* to_array();
 			virtual obj::Object* to_object();
-			virtual ::Function* to_function();
+			virtual GenericFunction* to_function();
 	};
 
 	class Int : public Empty {
@@ -162,9 +152,9 @@ namespace rep {
 	
 	class Function : public Empty {
 		public :
-			virtual ::Function* to_function();
+			virtual GenericFunction* to_function();
 			virtual std::string to_s();
-			::Function* fun;
+			GenericFunction* fun;
 	};
 }
 #endif

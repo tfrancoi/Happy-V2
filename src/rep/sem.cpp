@@ -106,7 +106,7 @@ Val::Val(vector<Val> *v) {
 	this->val = ar;
 }
 
-Val::Val(::Function* f) {
+Val::Val(GenericFunction* f) {
 	this->type = FUNCTION;
 	this->ref = 0;
 	rep::Function* fun = new rep::Function();
@@ -178,7 +178,7 @@ unsigned int Val::get_ref() {
 	return ref;
 }
 
-::Function* Val::to_function() {
+GenericFunction* Val::to_function() {
 	return val->to_function();
 }
 
@@ -213,7 +213,7 @@ obj::Object* Empty::to_object() {
 	return NULL;
 }
 
-::Function* Empty::to_function() {
+GenericFunction* Empty::to_function() {
 	return NULL;
 }
 /************************
@@ -316,12 +316,18 @@ map<string, Val>* Object::to_object() {
  * 		Function		*
  * 						*
  * **********************/
-::Function* rep::Function::to_function() {
+::GenericFunction* rep::Function::to_function() {
 	return fun;
 }
 
 string rep::Function::to_s() {
-	return this->to_function()->getName();
+	if(fun->getType() == NATIVE_FUNCTION) {
+		return "Native Function";
+	}
+	else {
+		function::Function* f = dynamic_cast<function::Function*>(fun);
+		return f->getName();
+	}
 }
 /*
 string rep::Function::to_s() {
